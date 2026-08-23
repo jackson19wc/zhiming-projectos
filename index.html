@@ -270,21 +270,50 @@ async function aNot(type,title,body,targets){const {data}=await sb.from('notific
 function setupRealtime(){sb.channel('db-changes').on('postgres_changes',{event:'*',schema:'public',table:'projects'},async()=>{const {data}=await sb.from('projects').select('*');STATE.projects=data||[];if(document.getElementById('pg-pj').classList.contains('on'))rPJ();rSPJ();}).on('postgres_changes',{event:'*',schema:'public',table:'tasks'},async()=>{const {data}=await sb.from('tasks').select('*').order('due_date');STATE.tasks=data||[];if(document.getElementById('pg-tk').classList.contains('on'))rTK();rSPJ();}).on('postgres_changes',{event:'*',schema:'public',table:'notifications'},async()=>{const {data}=await sb.from('notifications').select('*').order('created_at',{ascending:false}).limit(50);STATE.notifications=data||[];uNB();rNL();}).subscribe()}
 async function doLogin(){const email=document.getElementById('lu').value.trim(),pw=document.getElementById('lp').value;const {error}=await sb.auth.signInWithPassword({email,password:pw});if(error){document.getElementById('le').style.display='block';return}document.getElementById('le').style.display='none'}
 async function doLogout(e){e.stopPropagation();await sb.auth.signOut()}
-sb.auth.onAuthStateChange(async(event,session)=>{
-  if(event==='SIGNED_IN'&&session){
+async function handleSignIn(session) {
     document.getElementById('loading').style.display='flex';
-    const {data:prof}=await sb.from('profiles').select('*').eq('id',session.user.id).single();
-    CU=prof||{id:session.user.id,name:session.user.email,role:'staff',dept:'剪輯師',color:'#5B8AF0'};
-    await dbLoad();
-    document.getElementById('sbav').style.background=CU.color+'33';document.getElementById('sbav').style.color=CU.color;document.getElementById('sbav').textContent=CU.name[0];
-    document.getElementById('sbun').textContent=CU.name;document.getElementById('sbur').textContent=CU.role==='admin'?'管理員':CU.role==='manager'?'主管':CU.dept;
-    document.querySelectorAll('.adm').forEach(el=>el.style.display=isAdm()?'flex':'none');
-    document.getElementById('tba').innerHTML=`<div style="width:8px;height:8px;border-radius:50%;background:var(--gn)" title="已連線 Supabase"></div>${isAdm()?'<button class="btn bg sm" onclick="oAddTask()">＋ 任務</button><button class="btn bp sm" onclick="oAddPJ()">＋ 專案</button>':'<button class="btn bg sm" onclick="oAddTask()">＋ 新增任務</button>'}`;
-    fillTF();setupRealtime();uNB();rSPJ();rDB();
-    document.getElementById('loading').style.display='none';document.getElementById('ls').classList.remove('on');document.getElementById('app').classList.add('on');
+    document.getElementById('ls').classList.remove('on');
+    try {
+      const {data:prof}=await sb.from('profiles').select('*').eq('id',session.user.id).single();
+      CU=prof||{id:session.user.id,name:session.user.email,role:'staff',dept:'剪輯師',color:'#5B8AF0'};
+      await dbLoad();
+      document.getElementById('sbav').style.background=CU.color+'33';document.getElementById('sbav').style.color=CU.color;document.getElementById('sbav').textContent=CU.name[0];
+      document.getElementById('sbun').textContent=CU.name;document.getElementById('sbur').textContent=CU.role==='admin'?'管理員':CU.role==='manager'?'主管':CU.dept;
+      document.querySelectorAll('.adm').forEach(el=>el.style.display=isAdm()?'flex':'none');
+      document.getElementById('tba').innerHTML=`<div style="width:8px;height:8px;border-radius:50%;background:var(--gn)" title="已連線 Supabase"></div>${isAdm()?'<button class="btn bg sm" onclick="oAddTask()">＋ 任務</button><button class="btn bp sm" onclick="oAddPJ()">＋ 專案</button>':'<button class="btn bg sm" onclick="oAddTask()">＋ 新增任務</button>'}`;
+      fillTF();setupRealtime();uNB();rSPJ();rDB();
+      document.getElementById('loading').style.display='none';
+      document.getElementById('app').classList.add('on');
+    } catch(err) {
+      console.error('Login error:', err);
+      document.getElementById('loading').style.display='none';
+      document.getElementById('ls').classList.add('on');
+    }
+  }
+// 主動 check session (處理頁面重載時 onAuthStateChange 不觸發的情況)
+async function initApp() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    await handleSignIn(session);
+  } else {
+    document.getElementById('loading').style.display='none';
+    document.getElementById('ls').classList.add('on');
+  }
+}
+sb.auth.onAuthStateChange(async(event,session)=>{
+  if((event==='SIGNED_IN'||event==='INITIAL_SESSION')&&session){
+    await handleSignIn(session);
   }else if(event==='SIGNED_OUT'){CU=null;document.getElementById('app').classList.remove('on');document.getElementById('ls').classList.add('on');document.getElementById('loading').style.display='none';}
-  else{document.getElementById('loading').style.display='none';document.getElementById('ls').classList.add('on');}
 });
+// 初始化
+initApp();
+// 安全網：8秒後若還在 loading，強制顯示登入頁
+setTimeout(()=>{
+  if(document.getElementById('loading').style.display!=='none'){
+    document.getElementById('loading').style.display='none';
+    document.getElementById('ls').classList.add('on');
+  }
+},8000);
 function toggleDept(d){deptOpen[d]=!deptOpen[d];document.getElementById('dept-'+d).style.display=deptOpen[d]?'block':'none';document.getElementById(d+'-arr').textContent=deptOpen[d]?'▾':'▸'}
 function fillTF(){const list=isAdm()?STATE.profiles:[CU];document.getElementById('tf1').innerHTML='<option value="">所有成員</option>'+list.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');document.getElementById('tf2').innerHTML='<option value="">所有專案</option>'+STATE.projects.map(p=>`<option value="${p.id}">${p.client_name}</option>`).join('')}
 const TITLES={db:'總覽儀表板',pj:'專案管理',tk:'任務分配',sh:'拍攝排程',wl:'人員負載',kp:'考核目標',ac:'帳號管理',au:'操作紀錄',an:'公告欄',pd:'專案詳情',pf:'成效分析',bdb:'業務儀表板',leads:'潛在客戶名單',talks:'洽談中客戶',contracts:'合作客戶',goals:'業績目標',mtg:'會議紀錄',clog:'客戶互動紀錄',cal:'發布行事曆'};
