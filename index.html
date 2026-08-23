@@ -268,7 +268,33 @@ async function dbLoad(){
 async function aLog(action,detail){await sb.from('audit_logs').insert({user_id:CU.id,action,detail})}
 async function aNot(type,title,body,targets){const {data}=await sb.from('notifications').insert({type,title,body,target_ids:targets,created_by:CU.id}).select().single();if(data)STATE.notifications.unshift(data);uNB()}
 function setupRealtime(){sb.channel('db-changes').on('postgres_changes',{event:'*',schema:'public',table:'projects'},async()=>{const {data}=await sb.from('projects').select('*');STATE.projects=data||[];if(document.getElementById('pg-pj').classList.contains('on'))rPJ();rSPJ();}).on('postgres_changes',{event:'*',schema:'public',table:'tasks'},async()=>{const {data}=await sb.from('tasks').select('*').order('due_date');STATE.tasks=data||[];if(document.getElementById('pg-tk').classList.contains('on'))rTK();rSPJ();}).on('postgres_changes',{event:'*',schema:'public',table:'notifications'},async()=>{const {data}=await sb.from('notifications').select('*').order('created_at',{ascending:false}).limit(50);STATE.notifications=data||[];uNB();rNL();}).subscribe()}
-async function doLogin(){const email=document.getElementById('lu').value.trim(),pw=document.getElementById('lp').value;const {error}=await sb.auth.signInWithPassword({email,password:pw});if(error){document.getElementById('le').style.display='block';return}document.getElementById('le').style.display='none'}
+async function doLogin(){
+  const email=document.getElementById('lu').value.trim();
+  const pw=document.getElementById('lp').value;
+  const le=document.getElementById('le');
+  le.style.display='none';
+  le.textContent='登入中...';
+  le.style.color='var(--am)';
+  le.style.display='block';
+  try {
+    const {data,error}=await sb.auth.signInWithPassword({email,password:pw});
+    if(error){
+      le.textContent='錯誤：'+error.message;
+      le.style.color='var(--rd)';
+      return;
+    }
+    if(data?.session){
+      le.style.display='none';
+      await handleSignIn(data.session);
+    } else {
+      le.textContent='登入失敗，請再試一次';
+      le.style.color='var(--rd)';
+    }
+  } catch(e){
+    le.textContent='連線錯誤：'+e.message;
+    le.style.color='var(--rd)';
+  }
+}
 async function doLogout(e){e.stopPropagation();await sb.auth.signOut()}
 async function handleSignIn(session) {
     document.getElementById('loading').style.display='flex';
