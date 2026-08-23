@@ -392,7 +392,32 @@ function rWL(){const act=STATE.projects.filter(p=>p.active&&p.status==='進行�
 function sSHf(f,btn){SHF=f;document.querySelectorAll('#pg-sh .fc').forEach(b=>b.classList.remove('on'));btn.classList.add('on');rSH()}
 function rSH(){const pn=STATE.shoots.filter(s=>!s.shoot_date).length,cf=STATE.shoots.filter(s=>s.status==='已確認').length,dn=STATE.shoots.filter(s=>s.status==='已完成').length;document.getElementById('shk').innerHTML=`<div class="kc ca"><div class="kl">待定日期</div><div class="kv">${pn}</div></div><div class="kc cb"><div class="kl">已確認</div><div class="kv">${cf}</div></div><div class="kc cg"><div class="kl">已完成</div><div class="kv">${dn}</div></div>`;document.getElementById('shth').innerHTML=['客戶','拍攝日期','距今','拍攝內容','類型','狀態','剪輯師','緊急度','📅 Google Calendar','備註'].map(h=>`<th style="padding:8px 12px;background:var(--sf2);border-bottom:1px solid var(--bd);font-size:11px;color:var(--tx3);text-align:left;font-family:var(--ui);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap">${h}</th>`).join('');let l=SHF==='all'?[...STATE.shoots]:STATE.shoots.filter(s=>s.status===SHF);const sBdg={已確認:'bbl',待確認:'bpe',已完成:'ba',需重排:'bst'};const td='padding:10px 12px;border-bottom:1px solid var(--bd)';document.getElementById('shb').innerHTML=[...l].sort((a,b)=>{if(!a.shoot_date&&!b.shoot_date)return 0;if(!a.shoot_date)return 1;if(!b.shoot_date)return -1;return a.shoot_date.localeCompare(b.shoot_date)}).map(s=>{const d=s.shoot_date?dd(s.shoot_date):null,dc=d===null?'#8A8F9C':d<0?'#F03D3D':d<=3?'#F5A524':'#3DD68C';const ub=d===null?'<span class="bdg bdn">待定</span>':d<0?'<span class="bdg bst">已過期</span>':d<=2?'<span class="bdg bst">極緊急</span>':d<=5?'<span class="bdg bpe">本週</span>':'<span class="bdg ba">充裕</span>';return `<tr><td style="${td};font-weight:600">${s.client_name}</td><td style="${td};font-family:var(--mn);font-size:12px">${s.shoot_date?fd(s.shoot_date):'<span style="color:#F5A524">待定</span>'}</td><td style="${td};font-size:12px;font-weight:600;color:${dc}">${d!==null?dl(s.shoot_date):'—'}</td><td style="${td};font-size:12px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.content}</td><td style="${td}"><span class="tg">${s.shoot_type}</span></td><td style="${td}"><span class="bdg ${sBdg[s.status]||'bpe'}">${s.status}</span></td><td style="${td};font-size:12px;color:${gU(s.editor_id).color}">${gU(s.editor_id).name}</td><td style="${td}">${ub}</td><td style="${td}"><a href="${gcalLink(s)}" target="_blank" class="btn bg xs">📅 加入</a></td><td style="${td};font-size:11px;color:var(--tx3)">${s.notes||'—'}</td></tr>`}).join('')}
 function rKP(){if(!isAdm()){document.getElementById('kpg').innerHTML='<div style="color:var(--tx3)">無權限</div>';return}const act=STATE.projects.filter(p=>p.active&&p.status==='進行中');function kRow(lb,ac,tg,ok){return `<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><span style="font-size:13px;color:var(--tx2)">${lb}</span><div style="display:flex;align-items:center;gap:8px"><span style="font-size:14px;font-weight:700">${ac}</span><span style="font-size:11px;color:var(--tx3)">/ ${tg}</span><span>${ok?'✅':'❌'}</span></div></div><div class="pw"><div class="pb ${ok?'pbg':'pba'}" style="width:${Math.min(100,typeof ac==='string'?parseInt(ac):ac/parseInt(tg)*100)}%"></div></div></div>`}document.getElementById('kpg').innerHTML=STATE.profiles.map(u=>{const isEd=u.dept==='剪輯師';const up=isEd?act.filter(p=>p.editor_id===u.id):act.filter(p=>p.planner_id===u.id);const tV=up.reduce((a,p)=>a+p.total_videos,0),dV=up.reduce((a,p)=>a+p.done_videos,0);const cr=tV>0?Math.round(dV/tV*100):0;return `<div class="pnl"><div class="ph"><div style="display:flex;align-items:center;gap:10px"><div class="av" style="width:30px;height:30px;font-size:12px;background:${u.color}33;color:${u.color}">${u.name[0]}</div><div><div style="font-family:var(--ui);font-size:13px;font-weight:600">${u.name}</div><div style="font-size:11px;color:var(--tx3)">${u.dept}</div></div></div><span class="bdg ${cr>=85?'ba':'bpe'}">${cr}%</span></div><div style="padding:16px">${!isEd?kRow('每日企劃量',u.cap_pl+'支','10支/天',u.cap_pl>=10):''}${isEd?kRow('每日剪輯量',u.cap_ed+'部','3部/天',u.cap_ed>=3):''}${kRow('完成率',cr+'%','85%',cr>=85)}</div></div>`}).join('')}
-function rAC(){document.getElementById('acl').innerHTML='<div class="al ain" style="padding:14px 16px;margin-bottom:0;border-radius:0"><span>ℹ️</span><div>帳號在 <strong>Supabase Dashboard → Authentication → Users</strong> 管理。點「Invite User」即可邀請新成員。<br><br>成員接受邀請後，可在此頁設定其角色與工作量（點「編輯」）。</div></div>'+STATE.profiles.map(u=>{const rl={admin:'管理員',manager:'主管',staff:'員工'},rc={admin:'radm',manager:'rmgr',staff:'rstf'};return `<div class="acr"><div class="av" style="background:${u.color}33;color:${u.color};width:34px;height:34px">${u.name[0]}</div><div style="flex:1"><div style="font-weight:600">${u.name}</div><div style="font-size:11px;color:var(--tx3)">${u.dept}</div></div><span class="rb ${rc[u.role]||'rstf'}">${rl[u.role]||'員工'}</span>${isAdm()?`<button class="btn bg xs" onclick="oEAc('${u.id}')">編輯</button>`:''}</div>`}).join('')}
+function rAC(){
+  const el = document.getElementById('acl');
+  el.innerHTML = '<div class="al ain" style="padding:12px 16px;margin-bottom:0;border-radius:0;border-bottom:1px solid var(--bd)"><span>ℹ️</span><div style="font-size:12px">帳號在 <strong>Supabase → Authentication → Users</strong> 邀請新成員。邀請前請先到 Authentication → URL Configuration 設定 Site URL。</div></div>'
+  + STATE.profiles.map(u=>{
+    const rl={admin:'管理員',manager:'主管',staff:'員工'};
+    const rc={admin:'radm',manager:'rmgr',staff:'rstf'};
+    const depts=['企劃/拍攝','剪輯師','業務','行政'];
+    return '<div class="acr" style="align-items:flex-start;padding:14px 16px">'
+      +'<div class="av" style="background:'+u.color+'33;color:'+u.color+';width:36px;height:36px;flex-shrink:0;margin-top:2px">'+u.name[0]+'</div>'
+      +'<div style="flex:1;min-width:0">'
+        +'<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px">'
+          +'<div style="font-weight:600;font-size:14px">'+u.name+'</div>'
+          +'<span class="rb '+rc[u.role]+'">'+rl[u.role]+'</span>'
+          +'<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:'+(u.active!==false?'var(--gnd)':'var(--rdd)')+';color:'+(u.active!==false?'var(--gn)':'var(--rd)')+';">'+(u.active!==false?'啟用':'停用')+'</span>'
+        +'</div>'
+        +'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:4px 16px;font-size:12px;color:var(--tx3)">'
+          +'<div>部門：<span style="color:var(--tx)">'+u.dept+'</span></div>'
+          +'<div>企劃量：<span style="color:var(--tx)">'+u.cap_pl+'支/天</span></div>'
+          +'<div>剪輯量：<span style="color:var(--tx)">'+u.cap_ed+'部/天</span></div>'
+          +(u.notes?'<div style="grid-column:1/-1">備註：<span style="color:var(--tx2)">'+u.notes+'</span></div>':'')
+        +'</div>'
+      +'</div>'
+      +(isAdm()?'<button class="btn bg xs" style="flex-shrink:0;margin-top:2px" onclick="oEAc(\''+u.id+'\')">編輯</button>':'')
+    +'</div>';
+  }).join('');
+}
 function rAU(){document.getElementById('aul').innerHTML=STATE.auditLogs.map(a=>{const u=gU(a.user_id);return `<div class="arl"><div style="font-family:var(--mn);font-size:11px;color:var(--tx3);min-width:130px;flex-shrink:0">${a.created_at?.slice(0,16)}</div><div style="font-size:12px;font-weight:600;min-width:50px;color:${u.color}">${u.name}</div><div style="font-size:12px;flex:1"><strong>${a.action}</strong>：${a.detail}</div></div>`}).join('')}
 function rAN(){document.getElementById('ana').innerHTML=isAdm()?'<button class="btn bp sm" onclick="oAddAn()">📢 發布公告</button>':'';const l=STATE.announcements.filter(a=>isAdm()||a.target_ids?.includes('all')||a.target_ids?.includes(CU.id));document.getElementById('anl').innerHTML=l.map(a=>{const u=gU(a.author_id),tl=(a.target_ids||[]).map(t=>t==='all'?'所有人':gU(t).name);return `<div class="anc"${a.pinned?' style="border-left:3px solid var(--ac)"':''}><div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px"><div style="display:flex;align-items:center;gap:8px">${a.pinned?'<span>📌</span>':''}<div><div style="font-weight:600;font-size:14px">${a.title}</div><div style="font-size:11px;color:var(--tx3)">${u.name}·${a.created_at?.slice(0,10)}</div></div></div>${isAdm()?`<button class="btn bg xs" onclick="delAn('${a.id}')">刪除</button>`:''}</div><div style="font-size:13px;color:var(--tx2);line-height:1.6">${a.body}</div><div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:10px">${tl.map(t=>`<span class="tg">${t}</span>`).join('')}</div></div>`}).join('')}
 async function delAn(id){await sb.from('announcements').delete().eq('id',id);STATE.announcements=STATE.announcements.filter(a=>a.id!==id);rAN()}
@@ -479,8 +504,82 @@ async function sbGoals(){const g=STATE.salesGoals;async function upd(type,tgt,cu
 function oLeadDetail(id){const ld=STATE.leads.find(x=>x.id===id);if(!ld)return;const recs=STATE.talkRecords.filter(r=>r.lead_id===id).sort((a,b)=>b.record_date.localeCompare(a.record_date));document.getElementById('spt').textContent=ld.brand;document.getElementById('spb').innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px"><span class="lead-stage ${stageCls(ld.stage)}">${stageLabel(ld.stage)}</span><span class="tg">${ld.industry}</span><span class="tg">${ld.region}</span>${isAdm()?`<select class="sb2" style="max-width:120px;font-size:12px" onchange="moveLead('${ld.id}',this.value);oLeadDetail('${ld.id}')"><option value="${ld.stage}">${stageLabel(ld.stage)}</option>${['lead','talk','trial','contract','dropped'].filter(s=>s!==ld.stage).map(s=>`<option value="${s}">→ ${stageLabel(s)}</option>`).join('')}</select>`:''}</div><div style="margin-bottom:16px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px"><div><label class="fl">稱謂</label>${ld.contact_title||'—'}</div><div><label class="fl">手機</label>${ld.contact_phone||'—'}</div><div><label class="fl">Email</label>${ld.contact_email||'—'}</div><div><label class="fl">LINE</label>${ld.contact_line?`<a href="${ld.contact_line}" target="_blank" style="color:var(--ac)">點此</a>`:'—'}</div></div></div><div style="margin-bottom:16px"><div class="fl">社群頻道</div><div style="display:flex;gap:8px;flex-wrap:wrap">${[['FB',ld.fb_url,'#1877F2'],['IG',ld.ig_url,'#E1306C'],['TK',ld.tiktok_url,'var(--ac)'],['YT',ld.yt_url,'#FF0000'],['網站',ld.web_url,'var(--ac)']].map(([n,u,c])=>u?`<a href="${u}" target="_blank" style="color:${c};font-size:12px;padding:2px 8px;border-radius:4px;background:${c}22">${n}</a>`:'').join('')}</div></div>${recs.length?`<div style="font-family:var(--ui);font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">接洽紀錄</div>${recs.map(r=>`<div class="cl-row"><div class="cl-date">${r.record_date}</div><div style="flex:1"><div style="font-size:12px;font-weight:500">${r.contact_type} · ${r.summary}</div><div class="cl-follow">⚡ ${r.follow_up}</div></div></div>`).join('')}`:''}<div style="display:flex;gap:8px;margin-top:12px"><button class="btn bor2 sm" onclick="oEditLead('${ld.id}')">✏️ 編輯</button><button class="btn bg sm" onclick="oAddTalkRec('${ld.id}')">＋ 接洽紀錄</button><button class="btn bg sm" onclick="oAddQuote('${ld.id}')">＋ 報價</button></div>`;openP()}
 function oTP(id){const t=STATE.tasks.find(x=>x.id===id);if(!t)return;const allStats=['企劃中','主管審批','待拍攝','待剪輯','剪輯審批','排程中','已發布'];document.getElementById('spt').textContent='任務詳情';document.getElementById('spb').innerHTML=`<div class="fr"><label class="fl">任務名稱</label><input id="sp-nm" value="${t.name.replace(/"/g,'&quot;')}"></div><div class="fg"><div class="fr"><label class="fl">負責人</label><select id="sp-as">${STATE.profiles.map(a=>`<option value="${a.id}" ${a.id===t.assignee_id?'selected':''}>${a.name}</option>`).join('')}</select></div><div class="fr"><label class="fl">關聯專案</label><select id="sp-pj"><option value="">無</option>${STATE.projects.map(p=>`<option value="${p.id}" ${p.id===t.project_id?'selected':''}>${p.client_name}</option>`).join('')}</select></div></div><div class="fg"><div class="fr"><label class="fl">截止日</label><input id="sp-dl" type="date" value="${t.due_date||''}"></div><div class="fr"><label class="fl">狀態</label><select id="sp-st">${allStats.map(o=>`<option ${o===t.status?'selected':''}>${o}</option>`).join('')}</select></div></div><div class="fr"><label class="fl">備註</label><textarea id="sp-nt" rows="2">${t.notes||''}</textarea></div>${isAdm()&&['主管審批','剪輯審批'].includes(t.status)?`<div class="fr"><button class="btn bs sm" onclick="quickApprove('${t.id}');closeP()">✅ 審批通過 → ${t.status==='主管審批'?'待拍攝':'排程中'}</button></div>`:''}<div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end"><button class="btn bg" onclick="closeP()">取消</button><button class="btn bp" onclick="saveTP('${id}')">儲存變更</button></div>`;openP()}
 async function saveTP(id){const t=STATE.tasks.find(x=>x.id===id);if(!t)return;const ns=document.getElementById('sp-st').value;const upd={name:document.getElementById('sp-nm').value,assignee_id:document.getElementById('sp-as').value,project_id:document.getElementById('sp-pj').value||null,due_date:document.getElementById('sp-dl').value||null,status:ns,notes:document.getElementById('sp-nt').value,updated_at:new Date().toISOString()};await sb.from('tasks').update(upd).eq('id',id);Object.assign(t,upd);await aLog('編輯任務',`更新 <${t.name}>`);closeP();rTK()}
-function oEAc(id){const u=STATE.profiles.find(x=>x.id===id);if(!u)return;document.getElementById('mt').textContent=`編輯：${u.name}`;document.getElementById('mb').innerHTML=`<div class="fg"><div class="fr"><label class="fl">部門</label><select id="ede"><option ${u.dept==='企劃/拍攝'?'selected':''}>企劃/拍攝</option><option ${u.dept==='剪輯師'?'selected':''}>剪輯師</option><option ${u.dept==='業務'?'selected':''}>業務</option><option ${u.dept==='行政'?'selected':''}>行政</option></select></div><div class="fr"><label class="fl">角色</label><select id="erl"><option value="staff" ${u.role==='staff'?'selected':''}>員工</option><option value="manager" ${u.role==='manager'?'selected':''}>主管</option><option value="admin" ${u.role==='admin'?'selected':''}>管理員</option></select></div></div><div class="fg3"><div class="fr"><label class="fl">負責專案數</label><input id="ecj" type="number" value="${u.cap_pj||0}"></div><div class="fr"><label class="fl">企劃量（支/天）</label><input id="ecp" type="number" value="${u.cap_pl||0}"></div><div class="fr"><label class="fl">剪輯量（部/天）</label><input id="ece" type="number" value="${u.cap_ed||0}"></div></div>`;document.getElementById('mf').innerHTML=`<button class="btn bg" onclick="closeM()">取消</button><button class="btn bp" onclick="sbEAc('${id}')">儲存</button>`;openM()}
-async function sbEAc(id){const u=STATE.profiles.find(x=>x.id===id);if(!u)return;const upd={dept:document.getElementById('ede').value,role:document.getElementById('erl').value,cap_pj:parseInt(document.getElementById('ecj').value)||0,cap_pl:parseInt(document.getElementById('ecp').value)||0,cap_ed:parseInt(document.getElementById('ece').value)||0};await sb.from('profiles').update(upd).eq('id',id);Object.assign(u,upd);await aLog('編輯帳號',`<${u.name}>`);closeM();rAC()}
+function oEAc(id){
+  const u=STATE.profiles.find(x=>x.id===id);if(!u)return;
+  const colorOptions=['#5B8AF0','#3DD68C','#F5A524','#F03D3D','#A78BFA','#F97316','#06b6d4','#ec4899'];
+  document.getElementById('mt').textContent='編輯成員：'+u.name;
+  document.getElementById('mb').innerHTML=`
+    <div class="fg">
+      <div class="fr"><label class="fl">顯示名稱</label><input id="enm" value="${u.name}"></div>
+      <div class="fr"><label class="fl">部門</label>
+        <select id="ede">
+          <option ${u.dept==='企劃/拍攝'?'selected':''}>企劃/拍攝</option>
+          <option ${u.dept==='剪輯師'?'selected':''}>剪輯師</option>
+          <option ${u.dept==='業務'?'selected':''}>業務</option>
+          <option ${u.dept==='行政'?'selected':''}>行政</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg">
+      <div class="fr"><label class="fl">角色</label>
+        <select id="erl">
+          <option value="staff" ${u.role==='staff'?'selected':''}>員工</option>
+          <option value="manager" ${u.role==='manager'?'selected':''}>主管</option>
+          <option value="admin" ${u.role==='admin'?'selected':''}>管理員</option>
+        </select>
+      </div>
+      <div class="fr"><label class="fl">直屬主管</label>
+        <select id="esup">
+          <option value="">無</option>
+          ${STATE.profiles.filter(p=>p.id!==id&&(p.role==='manager'||p.role==='admin')).map(p=>`<option value="${p.id}" ${u.sup_id===p.id?'selected':''}>${p.name}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="fg3">
+      <div class="fr"><label class="fl">負責專案數</label><input id="ecj" type="number" min="0" value="${u.cap_pj||0}"></div>
+      <div class="fr"><label class="fl">企劃量（支/天）</label><input id="ecp" type="number" min="0" value="${u.cap_pl||0}"></div>
+      <div class="fr"><label class="fl">剪輯量（部/天）</label><input id="ece" type="number" min="0" value="${u.cap_ed||0}"></div>
+    </div>
+    <div class="fr"><label class="fl">個人色彩標籤</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;padding:8px;background:var(--sf3);border-radius:6px">
+        ${colorOptions.map(c=>`<div onclick="document.getElementById('ecl').value='${c}';document.querySelectorAll('.color-opt').forEach(x=>x.style.outline='none');this.style.outline='2px solid #fff'" class="color-opt" style="width:28px;height:28px;border-radius:50%;background:${c};cursor:pointer;outline:${u.color===c?'2px solid #fff':'none'};outline-offset:2px"></div>`).join('')}
+        <input id="ecl" value="${u.color}" style="width:90px;font-family:var(--mn);font-size:12px">
+      </div>
+    </div>
+    <div class="fg">
+      <div class="fr"><label class="fl">帳號狀態</label>
+        <select id="eact">
+          <option value="1" ${u.active!==false?'selected':''}>啟用</option>
+          <option value="0" ${u.active===false?'selected':''}>停用</option>
+        </select>
+      </div>
+    </div>
+    <div class="fr"><label class="fl">備註（考核目標、特殊說明等）</label>
+      <textarea id="enotes" rows="3">${u.notes||''}</textarea>
+    </div>`;
+  document.getElementById('mf').innerHTML='<button class="btn bg" onclick="closeM()">取消</button><button class="btn bp" onclick="sbEAc(\''+id+'\')">儲存</button>';
+  openM();
+}
+async function sbEAc(id){
+  const u=STATE.profiles.find(x=>x.id===id);if(!u)return;
+  const upd={
+    name:document.getElementById('enm').value,
+    dept:document.getElementById('ede').value,
+    role:document.getElementById('erl').value,
+    sup_id:document.getElementById('esup').value||null,
+    cap_pj:parseInt(document.getElementById('ecj').value)||0,
+    cap_pl:parseInt(document.getElementById('ecp').value)||0,
+    cap_ed:parseInt(document.getElementById('ece').value)||0,
+    color:document.getElementById('ecl').value,
+    active:document.getElementById('eact').value==='1',
+    notes:document.getElementById('enotes').value,
+  };
+  const {error}=await sb.from('profiles').update(upd).eq('id',id);
+  if(error){alert('儲存失敗：'+error.message);return;}
+  Object.assign(u,upd);
+  await aLog('編輯成員資料','<'+u.name+'> 資料更新');
+  closeM();rAC();rSPJ();
+}
 function oEditIP(pid){const p=STATE.projects.find(x=>x.id===pid);if(!p)return;const ip=p.ip_settings||{};document.getElementById('mt').textContent=`IP設定：${p.client_name}`;document.getElementById('mb').innerHTML=`<div class="fr"><label class="fl">人設定位</label><input id="ips" value="${ip.ps||''}"></div><div class="fr"><label class="fl">目標受眾</label><input id="ipa" value="${ip.au||''}"></div><div class="fr"><label class="fl">內容風格</label><input id="ipy" value="${ip.sy||''}"></div><div class="fr"><label class="fl">對標帳號（逗號分隔）</label><input id="ipc" value="${(ip.co||[]).join('、')}"></div>`;document.getElementById('mf').innerHTML=`<button class="btn bg" onclick="closeM()">取消</button><button class="btn bp" onclick="sbIP('${pid}')">儲存</button>`;openM()}
 async function sbIP(pid){const p=STATE.projects.find(x=>x.id===pid);if(!p)return;const ip={ps:document.getElementById('ips').value,au:document.getElementById('ipa').value,sy:document.getElementById('ipy').value,co:document.getElementById('ipc').value.split(/[,、]+/).map(s=>s.trim()).filter(Boolean)};await sb.from('projects').update({ip_settings:ip,updated_at:new Date().toISOString()}).eq('id',pid);p.ip_settings=ip;closeM();renderPD(pid)}
 function oEPJ(pid){const p=STATE.projects.find(x=>x.id===pid);if(!p)return;document.getElementById('mt').textContent=`編輯：${p.client_name}`;document.getElementById('mb').innerHTML=`<div class="fg"><div class="fr"><label class="fl">開始日期（本期）</label><input id="esd" type="date" value="${p.start_date||''}"></div><div class="fr"><label class="fl">期數</label><input id="eper" type="number" value="${p.period}"></div></div><div class="fg"><div class="fr"><label class="fl">拍攝狀態</label><select id="esh">${['待安排','已約','已完拍','暫停'].map(s=>`<option ${s===p.shoot_status?'selected':''}>${s}</option>`).join('')}</select></div><div class="fr"><label class="fl">剪輯師</label><select id="eed">${STATE.profiles.filter(a=>a.dept==='剪輯師').map(a=>`<option value="${a.id}" ${a.id===p.editor_id?'selected':''}>${a.name}</option>`).join('')}</select></div></div><div class="fr"><label class="fl">企劃表連結</label><input id="epl" value="${p.plan_link||''}"></div><div class="fr"><label class="fl">備註</label><textarea id="ent" rows="2">${p.notes||''}</textarea></div>`;document.getElementById('mf').innerHTML=`<button class="btn bg" onclick="closeM()">取消</button><button class="btn bp" onclick="sbEPJ('${pid}')">儲存</button>`;openM()}
