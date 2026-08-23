@@ -297,25 +297,46 @@ async function doLogin(){
 }
 async function doLogout(e){e.stopPropagation();await sb.auth.signOut()}
 async function handleSignIn(session) {
-    document.getElementById('loading').style.display='flex';
-    document.getElementById('ls').classList.remove('on');
-    try {
-      const {data:prof}=await sb.from('profiles').select('*').eq('id',session.user.id).single();
-      CU=prof||{id:session.user.id,name:session.user.email,role:'staff',dept:'剪輯師',color:'#5B8AF0'};
-      await dbLoad();
-      document.getElementById('sbav').style.background=CU.color+'33';document.getElementById('sbav').style.color=CU.color;document.getElementById('sbav').textContent=CU.name[0];
-      document.getElementById('sbun').textContent=CU.name;document.getElementById('sbur').textContent=CU.role==='admin'?'管理員':CU.role==='manager'?'主管':CU.dept;
-      document.querySelectorAll('.adm').forEach(el=>el.style.display=isAdm()?'flex':'none');
-      document.getElementById('tba').innerHTML=`<div style="width:8px;height:8px;border-radius:50%;background:var(--gn)" title="已連線 Supabase"></div>${isAdm()?'<button class="btn bg sm" onclick="oAddTask()">＋ 任務</button><button class="btn bp sm" onclick="oAddPJ()">＋ 專案</button>':'<button class="btn bg sm" onclick="oAddTask()">＋ 新增任務</button>'}`;
-      fillTF();setupRealtime();uNB();rSPJ();rDB();
-      document.getElementById('loading').style.display='none';
-      document.getElementById('app').classList.add('on');
-    } catch(err) {
-      console.error('Login error:', err);
-      document.getElementById('loading').style.display='none';
-      document.getElementById('ls').classList.add('on');
+  const loading = document.getElementById('loading');
+  const ls = document.getElementById('ls');
+  const app = document.getElementById('app');
+  loading.style.display='flex';
+  ls.classList.remove('on');
+  app.classList.remove('on');
+  try {
+    // Load profile
+    const {data:prof, error:profErr} = await sb.from('profiles').select('*').eq('id',session.user.id).single();
+    if(profErr && profErr.code !== 'PGRST116') {
+      console.warn('Profile fetch error:', profErr.message);
     }
+    CU = prof || {id:session.user.id, name:session.user.email.split('@')[0], role:'admin', dept:'企劃/拍攝', color:'#5B8AF0'};
+    // Load all data
+    await dbLoad();
+    // Setup UI
+    const av = document.getElementById('sbav');
+    av.style.background = CU.color+'33';
+    av.style.color = CU.color;
+    av.textContent = (CU.name||'?')[0];
+    document.getElementById('sbun').textContent = CU.name||session.user.email;
+    document.getElementById('sbur').textContent = CU.role==='admin'?'管理員':CU.role==='manager'?'主管':CU.dept;
+    document.querySelectorAll('.adm').forEach(el=>el.style.display=isAdm()?'flex':'none');
+    document.getElementById('tba').innerHTML = '<div style="width:8px;height:8px;border-radius:50%;background:var(--gn)" title="已連線 Supabase"></div>'+(isAdm()?'<button class="btn bg sm" onclick="oAddTask()">＋ 任務</button><button class="btn bp sm" onclick="oAddPJ()">＋ 專案</button>':'<button class="btn bg sm" onclick="oAddTask()">＋ 新增任務</button>');
+    fillTF();
+    setupRealtime();
+    uNB();
+    rSPJ();
+    // Show app
+    loading.style.display='none';
+    app.classList.add('on');
+    // Render dashboard
+    rDB();
+  } catch(err) {
+    console.error('handleSignIn error:', err);
+    loading.style.display='none';
+    ls.classList.add('on');
+    alert('登入發生錯誤：'+err.message);
   }
+}
 // 主動 check session (處理頁面重載時 onAuthStateChange 不觸發的情況)
 async function initApp() {
   const { data: { session } } = await sb.auth.getSession();
