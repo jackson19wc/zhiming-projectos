@@ -269,7 +269,10 @@ async function dbLoad(){
 }
 async function aLog(action,detail){await sb.from('audit_logs').insert({user_id:CU.id,action,detail})}
 async function aNot(type,title,body,targets){const {data}=await sb.from('notifications').insert({type,title,body,target_ids:targets,created_by:CU.id}).select().single();if(data)STATE.notifications.unshift(data);uNB()}
-function setupRealtime(){sb.channel('db-changes').on('postgres_changes',{event:'*',schema:'public',table:'projects'},async()=>{const {data}=await sb.from('projects').select('*');STATE.projects=data||[];if(document.getElementById('pg-pj').classList.contains('on'))rPJ();rSPJ();}).on('postgres_changes',{event:'*',schema:'public',table:'tasks'},async()=>{const {data}=await sb.from('tasks').select('*').order('due_date');STATE.tasks=data||[];if(document.getElementById('pg-tk').classList.contains('on'))rTK();rSPJ();}).on('postgres_changes',{event:'*',schema:'public',table:'notifications'},async()=>{const {data}=await sb.from('notifications').select('*').order('created_at',{ascending:false}).limit(50);STATE.notifications=data||[];uNB();rNL();}).subscribe()}
+let _realtimeSetup=false;
+function setupRealtime(){
+  if(_realtimeSetup)return;
+  _realtimeSetup=true;sb.channel('db-changes').on('postgres_changes',{event:'*',schema:'public',table:'projects'},async()=>{const {data}=await sb.from('projects').select('*');STATE.projects=data||[];if(document.getElementById('pg-pj').classList.contains('on'))rPJ();rSPJ();}).on('postgres_changes',{event:'*',schema:'public',table:'tasks'},async()=>{const {data}=await sb.from('tasks').select('*').order('due_date');STATE.tasks=data||[];if(document.getElementById('pg-tk').classList.contains('on'))rTK();rSPJ();}).on('postgres_changes',{event:'*',schema:'public',table:'notifications'},async()=>{const {data}=await sb.from('notifications').select('*').order('created_at',{ascending:false}).limit(50);STATE.notifications=data||[];uNB();rNL();}).subscribe()}
 async function doLogin(){
   const email=document.getElementById('lu').value.trim();
   const pw=document.getElementById('lp').value;
@@ -298,7 +301,10 @@ async function doLogin(){
   }
 }
 async function doLogout(e){e.stopPropagation();await sb.auth.signOut()}
+let _signingIn=false;
 async function handleSignIn(session) {
+  if(_signingIn)return;
+  _signingIn=true;
   const loading = document.getElementById('loading');
   const ls = document.getElementById('ls');
   const app = document.getElementById('app');
@@ -330,13 +336,15 @@ async function handleSignIn(session) {
     // Show app
     loading.style.display='none';
     app.classList.add('on');
+    _signingIn=false;
     // Render dashboard
     rDB();
   } catch(err) {
     console.error('handleSignIn error:', err);
     loading.style.display='none';
     ls.classList.add('on');
-    alert('登入發生錯誤：'+err.message);
+    _signingIn=false;
+    console.error('登入發生錯誤：',err.message);
   }
 }
 // 主動 check session (處理頁面重載時 onAuthStateChange 不觸發的情況)
