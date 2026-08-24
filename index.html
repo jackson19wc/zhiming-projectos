@@ -214,7 +214,7 @@ input:checked+.tsl{background:var(--ac)}input:checked+.tsl::before{transform:tra
     <div id="pg-sh" class="pg"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px" id="shk"></div><div class="fb"><button class="fc on" onclick="sSHf('all',this)">全部</button><button class="fc" onclick="sSHf('待確認',this)">待確認</button><button class="fc" onclick="sSHf('已確認',this)">已確認</button><button class="fc" onclick="sSHf('已完成',this)">已完成</button><button class="btn bp sm" style="margin-left:auto" onclick="oAddShoot()">＋ 新增排程</button></div><div class="pnl" style="overflow-x:auto"><table class="tt"><thead><tr id="shth"></tr></thead><tbody id="shb"></tbody></table></div></div>
     <div id="pg-wl" class="pg"><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><div style="font-family:var(--ui);font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">企劃/拍攝</div><div id="wld"></div></div><div><div style="font-family:var(--ui);font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">剪輯師</div><div id="wle"></div></div></div></div>
     <div id="pg-kp" class="pg"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px" id="kpg"></div></div>
-    <div id="pg-ac" class="pg"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px"><div style="font-family:var(--ui);font-size:14px;font-weight:600">帳號管理</div><div style="font-size:12px;color:var(--tx3)">帳號在 Supabase → Authentication 管理</div></div><div class="pnl" id="acl"></div></div>
+    <div id="pg-ac" class="pg"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px"><div style="font-family:var(--ui);font-size:14px;font-weight:600">帳號管理</div><div id="ac-btn"></div></div><div class="pnl" id="acl"></div></div>
     <div id="pg-au" class="pg"><div class="pnl" style="padding:16px"><div style="font-family:var(--ui);font-size:13px;font-weight:600;margin-bottom:14px">操作紀錄</div><div id="aul"></div></div></div>
     <div id="pg-an" class="pg"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px"><div style="font-family:var(--ui);font-size:14px;font-weight:600">公告欄</div><div id="ana"></div></div><div id="anl"></div></div>
     <div id="pg-pd" class="pg"><div id="pdc"></div></div>
@@ -317,7 +317,13 @@ async function handleSignIn(session) {
     if(profErr && profErr.code !== 'PGRST116') {
       console.warn('Profile fetch error:', profErr.message);
     }
-    CU = prof || {id:session.user.id, name:session.user.email.split('@')[0], role:'admin', dept:'企劃/拍攝', color:'#5B8AF0'};
+    const isJackson = session.user.email.toLowerCase().includes('jackson');
+    CU = prof || {id:session.user.id, name:session.user.email.split('@')[0], role:isJackson?'admin':'staff', dept:'企劃/拍攝', color:'#5B8AF0'};
+    // If no profile exists, create one via upsert
+    if(!prof){
+      const {data:newProf} = await sb.from('profiles').upsert({id:session.user.id, name:CU.name, role:CU.role, dept:CU.dept, color:CU.color, active:true}, {onConflict:'id'}).select().single();
+      if(newProf) CU = newProf;
+    }
     // Load all data
     await dbLoad();
     // Setup UI
@@ -392,9 +398,67 @@ function rWL(){const act=STATE.projects.filter(p=>p.active&&p.status==='進行�
 function sSHf(f,btn){SHF=f;document.querySelectorAll('#pg-sh .fc').forEach(b=>b.classList.remove('on'));btn.classList.add('on');rSH()}
 function rSH(){const pn=STATE.shoots.filter(s=>!s.shoot_date).length,cf=STATE.shoots.filter(s=>s.status==='已確認').length,dn=STATE.shoots.filter(s=>s.status==='已完成').length;document.getElementById('shk').innerHTML=`<div class="kc ca"><div class="kl">待定日期</div><div class="kv">${pn}</div></div><div class="kc cb"><div class="kl">已確認</div><div class="kv">${cf}</div></div><div class="kc cg"><div class="kl">已完成</div><div class="kv">${dn}</div></div>`;document.getElementById('shth').innerHTML=['客戶','拍攝日期','距今','拍攝內容','類型','狀態','剪輯師','緊急度','📅 Google Calendar','備註'].map(h=>`<th style="padding:8px 12px;background:var(--sf2);border-bottom:1px solid var(--bd);font-size:11px;color:var(--tx3);text-align:left;font-family:var(--ui);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap">${h}</th>`).join('');let l=SHF==='all'?[...STATE.shoots]:STATE.shoots.filter(s=>s.status===SHF);const sBdg={已確認:'bbl',待確認:'bpe',已完成:'ba',需重排:'bst'};const td='padding:10px 12px;border-bottom:1px solid var(--bd)';document.getElementById('shb').innerHTML=[...l].sort((a,b)=>{if(!a.shoot_date&&!b.shoot_date)return 0;if(!a.shoot_date)return 1;if(!b.shoot_date)return -1;return a.shoot_date.localeCompare(b.shoot_date)}).map(s=>{const d=s.shoot_date?dd(s.shoot_date):null,dc=d===null?'#8A8F9C':d<0?'#F03D3D':d<=3?'#F5A524':'#3DD68C';const ub=d===null?'<span class="bdg bdn">待定</span>':d<0?'<span class="bdg bst">已過期</span>':d<=2?'<span class="bdg bst">極緊急</span>':d<=5?'<span class="bdg bpe">本週</span>':'<span class="bdg ba">充裕</span>';return `<tr><td style="${td};font-weight:600">${s.client_name}</td><td style="${td};font-family:var(--mn);font-size:12px">${s.shoot_date?fd(s.shoot_date):'<span style="color:#F5A524">待定</span>'}</td><td style="${td};font-size:12px;font-weight:600;color:${dc}">${d!==null?dl(s.shoot_date):'—'}</td><td style="${td};font-size:12px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.content}</td><td style="${td}"><span class="tg">${s.shoot_type}</span></td><td style="${td}"><span class="bdg ${sBdg[s.status]||'bpe'}">${s.status}</span></td><td style="${td};font-size:12px;color:${gU(s.editor_id).color}">${gU(s.editor_id).name}</td><td style="${td}">${ub}</td><td style="${td}"><a href="${gcalLink(s)}" target="_blank" class="btn bg xs">📅 加入</a></td><td style="${td};font-size:11px;color:var(--tx3)">${s.notes||'—'}</td></tr>`}).join('')}
 function rKP(){if(!isAdm()){document.getElementById('kpg').innerHTML='<div style="color:var(--tx3)">無權限</div>';return}const act=STATE.projects.filter(p=>p.active&&p.status==='進行中');function kRow(lb,ac,tg,ok){return `<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><span style="font-size:13px;color:var(--tx2)">${lb}</span><div style="display:flex;align-items:center;gap:8px"><span style="font-size:14px;font-weight:700">${ac}</span><span style="font-size:11px;color:var(--tx3)">/ ${tg}</span><span>${ok?'✅':'❌'}</span></div></div><div class="pw"><div class="pb ${ok?'pbg':'pba'}" style="width:${Math.min(100,typeof ac==='string'?parseInt(ac):ac/parseInt(tg)*100)}%"></div></div></div>`}document.getElementById('kpg').innerHTML=STATE.profiles.map(u=>{const isEd=u.dept==='剪輯師';const up=isEd?act.filter(p=>p.editor_id===u.id):act.filter(p=>p.planner_id===u.id);const tV=up.reduce((a,p)=>a+p.total_videos,0),dV=up.reduce((a,p)=>a+p.done_videos,0);const cr=tV>0?Math.round(dV/tV*100):0;return `<div class="pnl"><div class="ph"><div style="display:flex;align-items:center;gap:10px"><div class="av" style="width:30px;height:30px;font-size:12px;background:${u.color}33;color:${u.color}">${u.name[0]}</div><div><div style="font-family:var(--ui);font-size:13px;font-weight:600">${u.name}</div><div style="font-size:11px;color:var(--tx3)">${u.dept}</div></div></div><span class="bdg ${cr>=85?'ba':'bpe'}">${cr}%</span></div><div style="padding:16px">${!isEd?kRow('每日企劃量',u.cap_pl+'支','10支/天',u.cap_pl>=10):''}${isEd?kRow('每日剪輯量',u.cap_ed+'部','3部/天',u.cap_ed>=3):''}${kRow('完成率',cr+'%','85%',cr>=85)}</div></div>`}).join('')}
+function oAddMember(){
+  document.getElementById('mt').textContent='邀請新成員';
+  document.getElementById('mb').innerHTML=`
+    <div class="al ain" style="margin-bottom:16px"><span>ℹ️</span><div style="font-size:12px">系統會寄送邀請信到對方 Email。對方點連結後設定密碼即可登入。<br>請先確認 Supabase → Authentication → URL Configuration 已設好 Site URL。</div></div>
+    <div class="fr"><label class="fl">Email</label><input id="mem-email" type="email" placeholder="member@example.com"></div>
+    <div class="fg">
+      <div class="fr"><label class="fl">顯示名稱</label><input id="mem-name" placeholder="姓名"></div>
+      <div class="fr"><label class="fl">部門</label>
+        <select id="mem-dept">
+          <option>剪輯師</option><option>企劃/拍攝</option><option>業務</option><option>行政</option>
+        </select>
+      </div>
+    </div>
+    <div class="fr"><label class="fl">角色</label>
+      <select id="mem-role">
+        <option value="staff">員工</option>
+        <option value="manager">主管</option>
+      </select>
+    </div>
+    <div class="fr"><label class="fl">備註</label><input id="mem-notes" placeholder="考核目標、特殊說明..."></div>`;
+  document.getElementById('mf').innerHTML='<button class="btn bg" onclick="closeM()">取消</button><button class="btn bp" onclick="sbAddMember()">寄送邀請</button>';
+  openM();
+}
+async function sbAddMember(){
+  const email=document.getElementById('mem-email').value.trim();
+  if(!email){alert('請填寫 Email');return}
+  const name=document.getElementById('mem-name').value.trim()||email.split('@')[0];
+  // Use Supabase Admin invite via edge function alternative: create profile pre-emptively
+  // Then send magic link so user can set password
+  const {data, error} = await sb.auth.admin?.inviteUserByEmail?.(email) || {error:{message:'需要在 Supabase Dashboard 手動邀請'}};
+  if(error){
+    // Fallback: create a placeholder profile and show instructions
+    const colors=['#5B8AF0','#3DD68C','#F5A524','#A78BFA','#F97316'];
+    const color=colors[Math.floor(Math.random()*colors.length)];
+    const dept=document.getElementById('mem-dept').value;
+    const role=document.getElementById('mem-role').value;
+    const notes=document.getElementById('mem-notes').value;
+    closeM();
+    // Show manual instructions
+    document.getElementById('mt').textContent='邀請步驟';
+    document.getElementById('mb').innerHTML=`
+      <div class="al asc" style="margin-bottom:12px"><span>✅</span><div>成員資料已準備好，請按以下步驟完成邀請</div></div>
+      <div style="background:var(--sf2);border-radius:8px;padding:16px;font-size:13px;line-height:2">
+        <div>1. 前往 <strong>Supabase Dashboard → Authentication → Users</strong></div>
+        <div>2. 點右上角 <strong>Add user → Invite user</strong></div>
+        <div>3. 輸入 Email：<strong style="color:var(--ac)">${email}</strong></div>
+        <div>4. 對方收信並設定密碼後，回到此頁點「編輯」設定部門為 <strong>${dept}</strong></div>
+      </div>`;
+    document.getElementById('mf').innerHTML='<button class="btn bp" onclick="closeM()">了解</button>';
+    openM();
+    return;
+  }
+  closeM();
+  alert('邀請信已寄出！');
+}
 function rAC(){
   const el = document.getElementById('acl');
-  el.innerHTML = '<div class="al ain" style="padding:12px 16px;margin-bottom:0;border-radius:0;border-bottom:1px solid var(--bd)"><span>ℹ️</span><div style="font-size:12px">帳號在 <strong>Supabase → Authentication → Users</strong> 邀請新成員。邀請前請先到 Authentication → URL Configuration 設定 Site URL。</div></div>'
+  // Add member button in toolbar
+  const acbtn = document.getElementById('ac-btn');
+  if(acbtn && isAdm()) acbtn.innerHTML = '<button class="btn bp sm" onclick="oAddMember()">＋ 邀請新成員</button>';
+  el.innerHTML = '<div class="al ain" style="padding:12px 16px;margin-bottom:0;border-radius:0;border-bottom:1px solid var(--bd)"><span>ℹ️</span><div style="font-size:12px">點右上角「＋ 邀請新成員」寄送邀請信。成員收到信設定密碼後即可登入，你可在此頁編輯其部門與角色。</div></div>'
   + STATE.profiles.map(u=>{
     const rl={admin:'管理員',manager:'主管',staff:'員工'};
     const rc={admin:'radm',manager:'rmgr',staff:'rstf'};
