@@ -318,7 +318,7 @@ async function handleSignIn(session) {
       console.warn('Profile fetch error:', profErr.message);
     }
     const isJackson = session.user.email.toLowerCase().includes('jackson');
-    CU = prof || {id:session.user.id, name:session.user.email.split('@')[0], role:isJackson?'admin':'staff', dept:'企劃/拍攝', color:'#5B8AF0'};
+    CU = prof || {id:session.user.id, name:session.user.email.split('@')[0], role:isJackson?'admin':'staff', dept:isJackson?'企劃/拍攝':'剪輯師', color:isJackson?'#F97316':'#5B8AF0'};
     // If no profile exists, create one via upsert
     if(!prof){
       const {data:newProf} = await sb.from('profiles').upsert({id:session.user.id, name:CU.name, role:CU.role, dept:CU.dept, color:CU.color, active:true}, {onConflict:'id'}).select().single();
@@ -394,70 +394,130 @@ function sTKf(k,v){TF[k]=v;rTK()}
 function rTK(){let l=STATE.tasks;if(!isAdm())l=l.filter(t=>t.assignee_id===CU.id);if(TF.q)l=l.filter(t=>t.name.toLowerCase().includes(TF.q.toLowerCase()));if(TF.as)l=l.filter(t=>t.assignee_id===TF.as);if(TF.st)l=l.filter(t=>t.status===TF.st);if(TF.pj)l=l.filter(t=>t.project_id===TF.pj);l=l.sort((a,b)=>dd(a.due_date)-dd(b.due_date));const stCls={企劃中:'btl',主管審批:'bpu',待拍攝:'bdn',待剪輯:'bpe',剪輯審批:'bpu',排程中:'bbl',已發布:'ba'};document.getElementById('tkb').innerHTML=l.map(t=>{const u=gU(t.assignee_id),d=dd(t.due_date),dc=d<0?'dov':d<=3?'dsn':'dok';const pj=STATE.projects.find(p=>p.id===t.project_id);const prClr=t.priority==='高'?'var(--rd)':t.priority==='中'?'var(--am)':'var(--gn)';return `<tr><td><div class="tc" style="justify-content:center;padding:4px 6px"><span style="font-size:13px;cursor:pointer;opacity:.4" onclick="delT('${t.id}')">🗑</span></div></td><td style="min-width:200px"><div class="tc"><span style="width:8px;height:8px;border-radius:50%;flex-shrink:0;background:${prClr}"></span><span style="font-size:13px">${t.name}</span></div></td><td><div class="tc"><span style="font-size:12px;color:var(--tx3)">${pj?pj.client_name:'—'}</span></div></td><td><div class="tc"><span class="tg" style="font-size:11px;color:${u.color}">${u.name}</span></div></td><td><div class="tc"><span class="tg">${t.priority}</span></div></td><td><div class="tc"><span class="bdg ${stCls[t.status]||'bdn'}">${t.status}</span>${['主管審批','剪輯審批'].includes(t.status)&&isAdm()?`<button class="btn bs xs" style="margin-left:4px;white-space:nowrap" onclick="quickApprove('${t.id}')">✅批</button>`:''}</div></td><td><div class="tc"><span class="dcl ${dc}">${fd(t.due_date)}</span><span class="dcl ${dc}" style="margin-left:4px;font-size:10px">${dl(t.due_date)}</span></div></td><td><div class="tc"><button class="btn bg xs" onclick="oTP('${t.id}')">詳情</button></div></td></tr>`}).join('')}
 async function delT(id){if(!confirm('確定刪除？'))return;await sb.from('tasks').delete().eq('id',id);STATE.tasks=STATE.tasks.filter(x=>x.id!==id);rTK()}
 async function quickApprove(id){const t=STATE.tasks.find(x=>x.id===id);if(!t)return;const ns=t.status==='主管審批'?'待拍攝':'排程中';await sb.from('tasks').update({status:ns,updated_at:new Date().toISOString()}).eq('id',id);t.status=ns;await aLog('審批任務',`<${t.name}> → ${ns}`);rTK()}
-function rWL(){const act=STATE.projects.filter(p=>p.active&&p.status==='進行中');function card(u){const isEd=u.dept==='剪輯師';const up=isEd?act.filter(p=>p.editor_id===u.id):act.filter(p=>p.planner_id===u.id);const pn=up.reduce((a,p)=>a+(p.total_videos-p.done_videos),0);const dailyCap=isEd?u.cap_ed:u.cap_pl;const warnDays=dailyCap>0?Math.round(pn/dailyCap):0;const lp=dailyCap>0?Math.min(100,Math.round(pn/(dailyCap*20)*100)):0;const isWarn=dailyCap>0&&pn<dailyCap*3&&pn>0;const lc=pn===0?'#555A66':isWarn?'#F03D3D':lp>=80?'#F5A524':'#3DD68C';return `<div class="mc"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div class="av" style="background:${u.color}33;color:${u.color}">${u.name[0]}</div><div><div style="font-weight:600;font-size:14px">${u.name}</div><div style="font-size:11px;color:var(--tx3)">${u.dept} · 每日${dailyCap}${isEd?'部':'支'}</div></div><div style="margin-left:auto;text-align:right"><div style="font-size:18px;font-weight:700;color:${lc}">${pn}片</div><div style="font-size:10px;color:${lc}">${pn===0?'無待辦':isWarn?`⚠ 僅${warnDays}天量`:`約${warnDays}天`}</div></div></div>${isWarn?`<div class="al aur" style="font-size:12px;padding:8px 12px;margin-bottom:10px"><span>⚠</span><div>待辦量低於 3 天工作量，請補充任務</div></div>`:''}<div class="pw" style="margin-bottom:10px"><div class="pb" style="width:${lp}%;background:${lc}"></div></div><div style="display:flex;flex-wrap:wrap;gap:5px">${up.map(p=>`<span class="tg" style="font-size:11px">${p.client_name}<span style="color:var(--tx3)"> ${p.total_videos-p.done_videos}片</span></span>`).join('')}</div></div>`}document.getElementById('wld').innerHTML=STATE.profiles.filter(u=>u.dept==='企劃/拍攝'||u.cap_pl>0).map(card).join('');document.getElementById('wle').innerHTML=STATE.profiles.filter(u=>u.dept==='剪輯師').map(card).join('')}
+function rWL(){const act=STATE.projects.filter(p=>p.active&&p.status==='進行中');function card(u){const isEd=u.dept==='剪輯師';const up=isEd?act.filter(p=>p.editor_id===u.id):act.filter(p=>p.planner_id===u.id);const pn=up.reduce((a,p)=>a+(p.total_videos-p.done_videos),0);const dailyCap=isEd?u.cap_ed:u.cap_pl;const warnDays=dailyCap>0?Math.round(pn/dailyCap):0;const lp=dailyCap>0?Math.min(100,Math.round(pn/(dailyCap*20)*100)):0;const isWarn=dailyCap>0&&pn<dailyCap*3&&pn>0;const lc=pn===0?'#555A66':isWarn?'#F03D3D':lp>=80?'#F5A524':'#3DD68C';return `<div class="mc"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div class="av" style="background:${u.color}33;color:${u.color}">${u.name[0]}</div><div><div style="font-weight:600;font-size:14px">${u.name}</div><div style="font-size:11px;color:var(--tx3)">${u.dept} · 每日${dailyCap}${isEd?'部':'支'}</div></div><div style="margin-left:auto;text-align:right"><div style="font-size:18px;font-weight:700;color:${lc}">${pn}片</div><div style="font-size:10px;color:${lc}">${pn===0?'無待辦':isWarn?`⚠ 僅${warnDays}天量`:`約${warnDays}天`}</div></div></div>${isWarn?`<div class="al aur" style="font-size:12px;padding:8px 12px;margin-bottom:10px"><span>⚠</span><div>待辦量低於 3 天工作量，請補充任務</div></div>`:''}<div class="pw" style="margin-bottom:10px"><div class="pb" style="width:${lp}%;background:${lc}"></div></div><div style="display:flex;flex-wrap:wrap;gap:5px">${up.map(p=>`<span class="tg" style="font-size:11px">${p.client_name}<span style="color:var(--tx3)"> ${p.total_videos-p.done_videos}片</span></span>`).join('')}</div></div>`}document.getElementById('wld').innerHTML=STATE.profiles.filter(u=>u.dept==='企劃/拍攝'||u.cap_pl>0).map(card).join('')||'<div style="color:var(--tx3);font-size:13px">尚無企劃人員</div>';
+  document.getElementById('wle').innerHTML=STATE.profiles.filter(u=>u.dept==='剪輯師').map(card).join('')||'<div style="color:var(--tx3);font-size:13px">尚無剪輯師</div>';
+}
 function sSHf(f,btn){SHF=f;document.querySelectorAll('#pg-sh .fc').forEach(b=>b.classList.remove('on'));btn.classList.add('on');rSH()}
 function rSH(){const pn=STATE.shoots.filter(s=>!s.shoot_date).length,cf=STATE.shoots.filter(s=>s.status==='已確認').length,dn=STATE.shoots.filter(s=>s.status==='已完成').length;document.getElementById('shk').innerHTML=`<div class="kc ca"><div class="kl">待定日期</div><div class="kv">${pn}</div></div><div class="kc cb"><div class="kl">已確認</div><div class="kv">${cf}</div></div><div class="kc cg"><div class="kl">已完成</div><div class="kv">${dn}</div></div>`;document.getElementById('shth').innerHTML=['客戶','拍攝日期','距今','拍攝內容','類型','狀態','剪輯師','緊急度','📅 Google Calendar','備註'].map(h=>`<th style="padding:8px 12px;background:var(--sf2);border-bottom:1px solid var(--bd);font-size:11px;color:var(--tx3);text-align:left;font-family:var(--ui);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap">${h}</th>`).join('');let l=SHF==='all'?[...STATE.shoots]:STATE.shoots.filter(s=>s.status===SHF);const sBdg={已確認:'bbl',待確認:'bpe',已完成:'ba',需重排:'bst'};const td='padding:10px 12px;border-bottom:1px solid var(--bd)';document.getElementById('shb').innerHTML=[...l].sort((a,b)=>{if(!a.shoot_date&&!b.shoot_date)return 0;if(!a.shoot_date)return 1;if(!b.shoot_date)return -1;return a.shoot_date.localeCompare(b.shoot_date)}).map(s=>{const d=s.shoot_date?dd(s.shoot_date):null,dc=d===null?'#8A8F9C':d<0?'#F03D3D':d<=3?'#F5A524':'#3DD68C';const ub=d===null?'<span class="bdg bdn">待定</span>':d<0?'<span class="bdg bst">已過期</span>':d<=2?'<span class="bdg bst">極緊急</span>':d<=5?'<span class="bdg bpe">本週</span>':'<span class="bdg ba">充裕</span>';return `<tr><td style="${td};font-weight:600">${s.client_name}</td><td style="${td};font-family:var(--mn);font-size:12px">${s.shoot_date?fd(s.shoot_date):'<span style="color:#F5A524">待定</span>'}</td><td style="${td};font-size:12px;font-weight:600;color:${dc}">${d!==null?dl(s.shoot_date):'—'}</td><td style="${td};font-size:12px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.content}</td><td style="${td}"><span class="tg">${s.shoot_type}</span></td><td style="${td}"><span class="bdg ${sBdg[s.status]||'bpe'}">${s.status}</span></td><td style="${td};font-size:12px;color:${gU(s.editor_id).color}">${gU(s.editor_id).name}</td><td style="${td}">${ub}</td><td style="${td}"><a href="${gcalLink(s)}" target="_blank" class="btn bg xs">📅 加入</a></td><td style="${td};font-size:11px;color:var(--tx3)">${s.notes||'—'}</td></tr>`}).join('')}
 function rKP(){if(!isAdm()){document.getElementById('kpg').innerHTML='<div style="color:var(--tx3)">無權限</div>';return}const act=STATE.projects.filter(p=>p.active&&p.status==='進行中');function kRow(lb,ac,tg,ok){return `<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><span style="font-size:13px;color:var(--tx2)">${lb}</span><div style="display:flex;align-items:center;gap:8px"><span style="font-size:14px;font-weight:700">${ac}</span><span style="font-size:11px;color:var(--tx3)">/ ${tg}</span><span>${ok?'✅':'❌'}</span></div></div><div class="pw"><div class="pb ${ok?'pbg':'pba'}" style="width:${Math.min(100,typeof ac==='string'?parseInt(ac):ac/parseInt(tg)*100)}%"></div></div></div>`}document.getElementById('kpg').innerHTML=STATE.profiles.map(u=>{const isEd=u.dept==='剪輯師';const up=isEd?act.filter(p=>p.editor_id===u.id):act.filter(p=>p.planner_id===u.id);const tV=up.reduce((a,p)=>a+p.total_videos,0),dV=up.reduce((a,p)=>a+p.done_videos,0);const cr=tV>0?Math.round(dV/tV*100):0;return `<div class="pnl"><div class="ph"><div style="display:flex;align-items:center;gap:10px"><div class="av" style="width:30px;height:30px;font-size:12px;background:${u.color}33;color:${u.color}">${u.name[0]}</div><div><div style="font-family:var(--ui);font-size:13px;font-weight:600">${u.name}</div><div style="font-size:11px;color:var(--tx3)">${u.dept}</div></div></div><span class="bdg ${cr>=85?'ba':'bpe'}">${cr}%</span></div><div style="padding:16px">${!isEd?kRow('每日企劃量',u.cap_pl+'支','10支/天',u.cap_pl>=10):''}${isEd?kRow('每日剪輯量',u.cap_ed+'部','3部/天',u.cap_ed>=3):''}${kRow('完成率',cr+'%','85%',cr>=85)}</div></div>`}).join('')}
 function oAddMember(){
-  document.getElementById('mt').textContent='邀請新成員';
+  const colors=['#5B8AF0','#3DD68C','#F5A524','#A78BFA','#F97316','#06b6d4','#ec4899','#F03D3D'];
+  document.getElementById('mt').textContent='新增成員';
   document.getElementById('mb').innerHTML=`
-    <div class="al ain" style="margin-bottom:16px"><span>ℹ️</span><div style="font-size:12px">系統會寄送邀請信到對方 Email。對方點連結後設定密碼即可登入。<br>請先確認 Supabase → Authentication → URL Configuration 已設好 Site URL。</div></div>
-    <div class="fr"><label class="fl">Email</label><input id="mem-email" type="email" placeholder="member@example.com"></div>
+    <div class="al ain" style="margin-bottom:16px"><span>ℹ️</span>
+      <div style="font-size:12px">填寫資料後系統會自動建立帳號並寄送密碼重設信給成員。成員收信後點連結設定密碼即可登入。</div>
+    </div>
     <div class="fg">
-      <div class="fr"><label class="fl">顯示名稱</label><input id="mem-name" placeholder="姓名"></div>
+      <div class="fr"><label class="fl">Email（登入帳號）</label><input id="mem-email" type="email" placeholder="member@example.com"></div>
+      <div class="fr"><label class="fl">顯示名稱</label><input id="mem-name" placeholder="姓名（中文）"></div>
+    </div>
+    <div class="fg">
       <div class="fr"><label class="fl">部門</label>
         <select id="mem-dept">
-          <option>剪輯師</option><option>企劃/拍攝</option><option>業務</option><option>行政</option>
+          <option>剪輯師</option>
+          <option>企劃/拍攝</option>
+          <option>業務</option>
+          <option>行政</option>
+        </select>
+      </div>
+      <div class="fr"><label class="fl">角色</label>
+        <select id="mem-role">
+          <option value="staff">員工</option>
+          <option value="manager">主管</option>
+          <option value="admin">管理員</option>
         </select>
       </div>
     </div>
-    <div class="fr"><label class="fl">角色</label>
-      <select id="mem-role">
-        <option value="staff">員工</option>
-        <option value="manager">主管</option>
-      </select>
+    <div class="fg3">
+      <div class="fr"><label class="fl">企劃量（支/天）</label><input id="mem-pl" type="number" min="0" value="0"></div>
+      <div class="fr"><label class="fl">剪輯量（部/天）</label><input id="mem-ed" type="number" min="0" value="0"></div>
+      <div class="fr"><label class="fl">負責專案數</label><input id="mem-pj" type="number" min="0" value="0"></div>
+    </div>
+    <div class="fr"><label class="fl">個人色彩標籤</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;padding:8px;background:var(--sf3);border-radius:6px">
+        ${colors.map((c,i)=>`<div onclick="document.getElementById('mem-color').value='${c}';document.querySelectorAll('.mco').forEach(x=>x.style.outline='none');this.style.outline='2px solid #fff'" class="mco" style="width:26px;height:26px;border-radius:50%;background:${c};cursor:pointer;outline:${i===0?'2px solid #fff':'none'};outline-offset:2px"></div>`).join('')}
+        <input id="mem-color" value="${colors[0]}" style="width:80px;font-family:var(--mn);font-size:12px">
+      </div>
     </div>
     <div class="fr"><label class="fl">備註</label><input id="mem-notes" placeholder="考核目標、特殊說明..."></div>`;
-  document.getElementById('mf').innerHTML='<button class="btn bg" onclick="closeM()">取消</button><button class="btn bp" onclick="sbAddMember()">寄送邀請</button>';
+  document.getElementById('mf').innerHTML='<button class="btn bg" onclick="closeM()">取消</button><button class="btn bp" onclick="sbAddMember()">建立帳號</button>';
+  openM('lg');
+}
+
+async function sbAddMember(){
+  const email = document.getElementById('mem-email').value.trim();
+  const name = document.getElementById('mem-name').value.trim();
+  if(!email){alert('請填寫 Email');return}
+  if(!name){alert('請填寫顯示名稱');return}
+
+  const dept = document.getElementById('mem-dept').value;
+  const role = document.getElementById('mem-role').value;
+  const color = document.getElementById('mem-color').value||'#5B8AF0';
+  const cap_pl = parseInt(document.getElementById('mem-pl').value)||0;
+  const cap_ed = parseInt(document.getElementById('mem-ed').value)||0;
+  const cap_pj = parseInt(document.getElementById('mem-pj').value)||0;
+  const notes = document.getElementById('mem-notes').value;
+
+  // Step 1: Create auth user via Supabase signUp (creates account, sends confirmation)
+  const {data: signUpData, error: signUpErr} = await sb.auth.signUp({
+    email,
+    password: Math.random().toString(36).slice(2,10)+'A1!', // random temp password
+    options: {
+      data: { name, role, dept },
+      emailRedirectTo: window.location.origin
+    }
+  });
+
+  if(signUpErr){
+    // User might already exist
+    if(signUpErr.message.includes('already registered')){
+      // Try to find existing user profile and update it
+      alert('此 Email 已有帳號，請直接在帳號管理頁編輯該成員資料。');
+      closeM(); return;
+    }
+    alert('建立失敗：'+signUpErr.message); return;
+  }
+
+  const userId = signUpData?.user?.id;
+  if(!userId){ alert('建立失敗，請稍後再試'); return; }
+
+  // Step 2: Upsert profile with full info
+  const {error: profErr} = await sb.from('profiles').upsert({
+    id: userId, name, role, dept, color,
+    cap_pl, cap_ed, cap_pj, notes, active: true
+  }, {onConflict:'id'});
+
+  if(profErr){ console.warn('Profile upsert error:', profErr.message); }
+
+  // Step 3: Send password reset so user can set their own password
+  await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin
+  });
+
+  // Step 4: Reload profiles and show success
+  const {data} = await sb.from('profiles').select('*').order('name');
+  STATE.profiles = data||[];
+  await aLog('新增成員', name+' <'+email+'>');
+  closeM();
+
+  // Show success modal
+  document.getElementById('mt').textContent='✅ 成員已建立';
+  document.getElementById('mb').innerHTML=`
+    <div class="al asc" style="margin-bottom:16px"><span>✅</span><div><strong>${name}</strong> 的帳號已建立成功！</div></div>
+    <div style="background:var(--sf2);border-radius:8px;padding:16px;font-size:13px;line-height:2.2">
+      <div>📧 系統已寄送密碼設定信到 <strong style="color:var(--ac)">${email}</strong></div>
+      <div>🔑 成員收信後點連結設定密碼即可登入</div>
+      <div>⚙️ 部門：<strong>${dept}</strong>　角色：<strong>${{admin:'管理員',manager:'主管',staff:'員工'}[role]}</strong></div>
+    </div>`;
+  document.getElementById('mf').innerHTML='<button class="btn bp" onclick="closeM();rAC()">完成</button>';
   openM();
 }
-async function sbAddMember(){
-  const email=document.getElementById('mem-email').value.trim();
-  if(!email){alert('請填寫 Email');return}
-  const name=document.getElementById('mem-name').value.trim()||email.split('@')[0];
-  // Use Supabase Admin invite via edge function alternative: create profile pre-emptively
-  // Then send magic link so user can set password
-  const {data, error} = await sb.auth.admin?.inviteUserByEmail?.(email) || {error:{message:'需要在 Supabase Dashboard 手動邀請'}};
-  if(error){
-    // Fallback: create a placeholder profile and show instructions
-    const colors=['#5B8AF0','#3DD68C','#F5A524','#A78BFA','#F97316'];
-    const color=colors[Math.floor(Math.random()*colors.length)];
-    const dept=document.getElementById('mem-dept').value;
-    const role=document.getElementById('mem-role').value;
-    const notes=document.getElementById('mem-notes').value;
-    closeM();
-    // Show manual instructions
-    document.getElementById('mt').textContent='邀請步驟';
-    document.getElementById('mb').innerHTML=`
-      <div class="al asc" style="margin-bottom:12px"><span>✅</span><div>成員資料已準備好，請按以下步驟完成邀請</div></div>
-      <div style="background:var(--sf2);border-radius:8px;padding:16px;font-size:13px;line-height:2">
-        <div>1. 前往 <strong>Supabase Dashboard → Authentication → Users</strong></div>
-        <div>2. 點右上角 <strong>Add user → Invite user</strong></div>
-        <div>3. 輸入 Email：<strong style="color:var(--ac)">${email}</strong></div>
-        <div>4. 對方收信並設定密碼後，回到此頁點「編輯」設定部門為 <strong>${dept}</strong></div>
-      </div>`;
-    document.getElementById('mf').innerHTML='<button class="btn bp" onclick="closeM()">了解</button>';
-    openM();
-    return;
-  }
-  closeM();
-  alert('邀請信已寄出！');
-}
+
 function rAC(){
   const el = document.getElementById('acl');
   // Add member button in toolbar
   const acbtn = document.getElementById('ac-btn');
-  if(acbtn && isAdm()) acbtn.innerHTML = '<button class="btn bp sm" onclick="oAddMember()">＋ 邀請新成員</button>';
+  if(acbtn) acbtn.innerHTML = isAdm()?'<button class="btn bp sm" onclick="oAddMember()">＋ 新增成員</button>':'';
   el.innerHTML = '<div class="al ain" style="padding:12px 16px;margin-bottom:0;border-radius:0;border-bottom:1px solid var(--bd)"><span>ℹ️</span><div style="font-size:12px">點右上角「＋ 邀請新成員」寄送邀請信。成員收到信設定密碼後即可登入，你可在此頁編輯其部門與角色。</div></div>'
   + STATE.profiles.map(u=>{
     const rl={admin:'管理員',manager:'主管',staff:'員工'};
