@@ -202,14 +202,34 @@ input:checked+.tsl{background:var(--gn)}input:checked+.tsl::before{transform:tra
 .rpt-sec h3{font-family:var(--ui);font-size:13px;font-weight:700;color:var(--ac);text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--bd)}
 .rpt-kv{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:13px;margin-bottom:6px}
 .rpt-kv b{color:var(--tx3);font-weight:500}
+.rpt-strip{display:flex;flex-wrap:wrap;gap:0;background:var(--sf);border:1px solid var(--bd);border-radius:10px;margin-bottom:16px;overflow:hidden}
+.rpt-strip>div{flex:1;min-width:120px;padding:14px 16px;border-right:1px solid var(--bd)}
+.rpt-strip>div:last-child{border-right:none}
+.rpt-strip .kl{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.rpt-strip .kv{font-size:20px;font-weight:700}
+.rpt-strat{background:var(--sf2);border-left:3px solid var(--ac);border-radius:6px;padding:10px 14px;font-size:12.5px;line-height:1.5}
+.rpt-sec table.tt tbody tr:nth-child(even) td{background:var(--sf2)}
+@page{size:A4 landscape;margin:12mm}
 @media print{
   #sb,#sb-toggle,#tb,#sb-backdrop{display:none !important}
-  #app{display:block !important;height:auto}
-  #mn{width:100% !important}
-  #ct{padding:0 !important;overflow:visible !important}
-  .rpt-sec{border:1px solid #ccc;break-inside:avoid}
-  body{background:#fff;color:#000}
+  #app{display:block !important;height:auto !important}
+  #mn{width:100% !important;height:auto !important;overflow:visible !important;display:block !important}
+  #ct{padding:0 !important;overflow:visible !important;height:auto !important}
+  .pg{padding:0 !important;overflow:visible !important}
   .rpt-noprint{display:none !important}
+  body,#report-content{background:#fff !important;color:#161a20 !important;font-size:11.5px}
+  .rpt-sec,.rpt-strip{background:#fff !important;border:1px solid #dde1e8 !important;break-inside:avoid;box-shadow:none !important}
+  .rpt-strip>div{border-right:1px solid #eceff3 !important}
+  .rpt-sec h3{color:#1d4ed8 !important;border-bottom-color:#e5e8ee !important}
+  .rpt-kv b{color:#6b7280 !important}
+  .rpt-strip .kl{color:#6b7280 !important}
+  .rpt-strip .kv{color:#161a20 !important}
+  .rpt-hdr{background:#1d4ed8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rpt-strat{background:#f3f6fd !important;border-left-color:#1d4ed8 !important;color:#161a20 !important}
+  table.tt{color:#161a20 !important;font-size:11px}
+  table.tt th{background:#f3f4f6 !important;color:#555 !important;border-color:#dde1e8 !important}
+  table.tt td{border-color:#eceff3 !important}
+  table.tt tbody tr:nth-child(even) td{background:#fafbfc !important}
 }
 .per-btn.on{background:var(--acd);border-color:rgba(91,138,240,.3);color:var(--ac)}
 #ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:190;display:none}#ov.on{display:block}
@@ -394,47 +414,44 @@ function rReport(pid){
   const grand=totTT+totIG+totFB+totYT;
   const periodEnd=pDL(p);
   const strategies=(p.next_strategy||'').split('\n').map(s=>s.trim()).filter(Boolean);
+  const genDate=fd(tdfToday());
   document.getElementById('report-content').innerHTML=`
     <div class="rpt-noprint" style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
       <button class="btn bg sm" onclick="oPD('${pid}')">← 返回專案</button>
       <div style="font-size:18px;font-weight:700;flex:1">${esc(p.client_name)} 結案報告</div>
       <button class="btn bp sm" onclick="window.print()">🖨 列印 / 另存 PDF</button>
     </div>
-    <div style="background:linear-gradient(135deg,var(--ac),#2D3FE0);border-radius:10px;padding:20px 24px;margin-bottom:16px;color:#fff">
-      <div style="font-size:11px;opacity:.8;letter-spacing:.05em">短影音操作 - 結案報告</div>
-      <div style="font-size:22px;font-weight:700;margin-top:4px">${esc(p.client_name)}</div>
-    </div>
-    <div class="rpt-sec">
-      <h3>1. 專案基本資訊</h3>
-      <div class="rpt-kv"><b>專案名稱</b><span>${esc(p.client_name)}</span></div>
-      <div class="rpt-kv"><b>操作期間</b><span>${p.start_date||'—'} ～ ${periodEnd||'—'}（第${p.period}期）</span></div>
-      <div class="rpt-kv"><b>核心目標</b><span>${esc(p.core_goal||'（尚未填寫，請至專案編輯補上）')}</span></div>
-      <div class="rpt-kv"><b>本月核心策略</b><span style="white-space:pre-wrap">${esc(p.core_strategy||'（尚未填寫）')}</span></div>
-    </div>
-    <div class="rpt-sec">
-      <h3>2. 核心 KPI 數據總覽</h3>
-      <div class="g5" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px">
-        <div class="kc cb"><div class="kl">全網總觀看數</div><div class="kv">${grand.toLocaleString()}</div></div>
-        <div class="kc cg"><div class="kl">粉絲增長</div><div class="kv">${(p.fan_growth||0).toLocaleString()}</div></div>
-        <div class="kc ca"><div class="kl">Meta 互動數</div><div class="kv">${(p.meta_interactions||0).toLocaleString()}</div></div>
+    <div class="rpt-hdr" style="background:linear-gradient(135deg,var(--ac),#2D3FE0);border-radius:10px;padding:18px 24px;margin-bottom:14px;color:#fff;display:flex;justify-content:space-between;align-items:flex-end">
+      <div>
+        <div style="font-size:10px;opacity:.85;letter-spacing:.08em;font-weight:600">SHORT-FORM VIDEO PERFORMANCE REPORT</div>
+        <div style="font-size:24px;font-weight:700;margin-top:4px">${esc(p.client_name)}</div>
+        <div style="font-size:11px;opacity:.8;margin-top:2px">第${p.period}期 · ${p.start_date||'—'} ～ ${periodEnd||'—'}</div>
       </div>
-      <div class="g5" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:10px">
-        <div class="kc"><div class="kl">YouTube 觀看總量</div><div class="kv" style="font-size:18px">${totYT.toLocaleString()}</div></div>
-        <div class="kc"><div class="kl">Instagram 觀看總量</div><div class="kv" style="font-size:18px">${totIG.toLocaleString()}</div></div>
-        <div class="kc"><div class="kl">Facebook 觀看總量</div><div class="kv" style="font-size:18px">${totFB.toLocaleString()}</div></div>
-        <div class="kc"><div class="kl">TikTok 觀看總量</div><div class="kv" style="font-size:18px">${totTT.toLocaleString()}</div></div>
-      </div>
-      <div style="font-size:13px;color:var(--tx3)">當月片數：<b style="color:var(--tx)">${vids.length}</b> 支</div>
+      <div style="font-size:10px;opacity:.75;text-align:right">報告產出日期<br>${genDate}</div>
+    </div>
+    <div class="rpt-sec" style="padding:14px 20px">
+      <div class="rpt-kv" style="grid-template-columns:90px 1fr"><b>核心目標</b><span>${esc(p.core_goal||'（尚未填寫，請至專案編輯補上）')}</span></div>
+      <div class="rpt-kv" style="grid-template-columns:90px 1fr;margin-bottom:0"><b>本月策略</b><span style="white-space:pre-wrap">${esc(p.core_strategy||'（尚未填寫）')}</span></div>
+    </div>
+    <div class="rpt-strip">
+      <div><div class="kl">全網總觀看數</div><div class="kv" style="color:var(--ac)">${grand.toLocaleString()}</div></div>
+      <div><div class="kl">粉絲增長</div><div class="kv" style="color:var(--gn)">+${(p.fan_growth||0).toLocaleString()}</div></div>
+      <div><div class="kl">Meta 互動數</div><div class="kv" style="color:var(--am)">${(p.meta_interactions||0).toLocaleString()}</div></div>
+      <div><div class="kl">當月片數</div><div class="kv">${vids.length}</div></div>
+      <div><div class="kl">YouTube</div><div class="kv" style="font-size:16px">${totYT.toLocaleString()}</div></div>
+      <div><div class="kl">Instagram</div><div class="kv" style="font-size:16px">${totIG.toLocaleString()}</div></div>
+      <div><div class="kl">Facebook</div><div class="kv" style="font-size:16px">${totFB.toLocaleString()}</div></div>
+      <div><div class="kl">TikTok</div><div class="kv" style="font-size:16px">${totTT.toLocaleString()}</div></div>
     </div>
     <div class="rpt-sec">
-      <h3>3. 每檔短影音各平台詳細數據與企劃成效明細</h3>
-      <div style="overflow-x:auto"><table class="tt"><thead><tr><th>發文主題</th><th>發布日期</th><th>TikTok</th><th>Instagram</th><th>Facebook</th><th>YouTube</th><th>單支總計</th><th style="min-width:220px">團隊企劃核心成效分析與方向</th></tr></thead><tbody>
-      ${vids.map(t=>{const tot=(t.v_tiktok||0)+(t.v_ig||0)+(t.v_fb||0)+(t.v_yt||0);return `<tr><td style="padding:8px 12px;border-bottom:1px solid var(--bd);font-weight:500">${esc(t.name)}</td><td style="padding:8px 12px;border-bottom:1px solid var(--bd);font-family:var(--mn);font-size:12px">${t.due_date?fd(t.due_date):'—'}</td><td style="padding:8px 12px;border-bottom:1px solid var(--bd);font-family:var(--mn)">${(t.v_tiktok||0).toLocaleString()}</td><td style="padding:8px 12px;border-bottom:1px solid var(--bd);font-family:var(--mn)">${(t.v_ig||0).toLocaleString()}</td><td style="padding:8px 12px;border-bottom:1px solid var(--bd);font-family:var(--mn)">${(t.v_fb||0).toLocaleString()}</td><td style="padding:8px 12px;border-bottom:1px solid var(--bd);font-family:var(--mn)">${(t.v_yt||0).toLocaleString()}</td><td style="padding:8px 12px;border-bottom:1px solid var(--bd);font-family:var(--mn);font-weight:600">${tot.toLocaleString()}</td><td style="padding:8px 12px;border-bottom:1px solid var(--bd);font-size:12px;color:var(--tx2)">${esc(t.perf_note||'—')}</td></tr>`}).join('')||'<tr><td colspan="8" style="padding:20px;text-align:center;color:var(--tx3)">本期尚無影片資料</td></tr>'}
+      <h3>每檔短影音各平台詳細數據與企劃成效明細</h3>
+      <div style="overflow-x:auto"><table class="tt"><thead><tr><th>發文主題</th><th style="width:80px">發布日期</th><th style="width:80px">TikTok</th><th style="width:90px">Instagram</th><th style="width:80px">Facebook</th><th style="width:80px">YouTube</th><th style="width:90px">單支總計</th><th style="min-width:260px">團隊企劃核心成效分析與方向</th></tr></thead><tbody>
+      ${vids.map(t=>{const tot=(t.v_tiktok||0)+(t.v_ig||0)+(t.v_fb||0)+(t.v_yt||0);return `<tr><td style="padding:6px 10px;font-weight:500">${esc(t.name)}</td><td style="padding:6px 10px;font-family:var(--mn);font-size:11px">${t.due_date?fd(t.due_date):'—'}</td><td style="padding:6px 10px;font-family:var(--mn)">${(t.v_tiktok||0).toLocaleString()}</td><td style="padding:6px 10px;font-family:var(--mn)">${(t.v_ig||0).toLocaleString()}</td><td style="padding:6px 10px;font-family:var(--mn)">${(t.v_fb||0).toLocaleString()}</td><td style="padding:6px 10px;font-family:var(--mn)">${(t.v_yt||0).toLocaleString()}</td><td style="padding:6px 10px;font-family:var(--mn);font-weight:700;color:var(--ac)">${tot.toLocaleString()}</td><td style="padding:6px 10px;font-size:11.5px;color:var(--tx2)">${esc(t.perf_note||'—')}</td></tr>`}).join('')||'<tr><td colspan="8" style="padding:20px;text-align:center;color:var(--tx3)">本期尚無影片資料</td></tr>'}
       </tbody></table></div>
     </div>
     <div class="rpt-sec">
-      <h3>4. 下期短影音企劃策略與加碼方向</h3>
-      ${strategies.length?strategies.map((s,i)=>`<div style="display:flex;gap:8px;margin-bottom:8px;font-size:13px"><span>📌</span><div><b>策略方向${i+1}：</b>${esc(s)}</div></div>`).join(''):'<div style="color:var(--tx3);font-size:13px">（尚未填寫，請至專案編輯補上「下期企劃策略方向」）</div>'}
+      <h3>下期短影音企劃策略與加碼方向</h3>
+      ${strategies.length?`<div style="display:grid;grid-template-columns:repeat(${Math.min(strategies.length,3)},1fr);gap:10px">${strategies.map((s,i)=>`<div class="rpt-strat"><b>策略方向${i+1}</b><div style="margin-top:4px">${esc(s)}</div></div>`).join('')}</div>`:'<div style="color:var(--tx3);font-size:13px">（尚未填寫，請至專案編輯補上「下期企劃策略方向」）</div>'}
     </div>
   `;
 }
@@ -444,7 +461,7 @@ function vc0(c){return `<div class="vc">${c}</div>`}
 
 // ── Google 日曆同步（點按鈕才同步，不是自動即時同步）──
 // 設定方式請見對話中附的「Google 日曆同步設定說明」
-const GCAL_CLIENT_ID = ''; // 請填入你在 Google Cloud Console 建立的 OAuth Client ID
+const GCAL_CLIENT_ID = '50101507408-nselqfjf46g2thm1adfi80dueo34q2q7.apps.googleusercontent.com';
 const GCAL_CALENDAR_ID = 'primary'; // 預設用你的主要日曆；如果要用專用日曆，改成該日曆的 Calendar ID
 let gcalToken=null, gcalTokenClient=null;
 function initGCalClient(){if(!window.google||!google.accounts||!GCAL_CLIENT_ID)return;gcalTokenClient=google.accounts.oauth2.initTokenClient({client_id:GCAL_CLIENT_ID,scope:'https://www.googleapis.com/auth/calendar.events',callback:(resp)=>{if(resp&&resp.access_token){gcalToken=resp.access_token;syncGCalNow()}}})}
