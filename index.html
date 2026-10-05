@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
 <title>指名度行銷 ProjectOS v4</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
@@ -215,6 +216,36 @@ input:checked+.tsl{background:var(--gn)}input:checked+.tsl::before{transform:tra
 .rpt-strat{background:var(--sf2);border-left:3px solid var(--ac);border-radius:6px;padding:10px 14px;font-size:13.5px;line-height:1.5}
 #report-content textarea{width:100%;font-family:var(--sn)}
 .rpt-sec table.tt tbody tr:nth-child(even) td{background:var(--sf2)}
+#share-view{display:none;position:fixed;inset:0;overflow-y:auto;background:var(--bg);color:var(--tx);padding:18px 14px 48px;z-index:500}
+#share-view.on{display:block}
+.sv-wrap{max-width:860px;margin:0 auto}
+.sv-hdr{background:linear-gradient(135deg,var(--ac),#2D3FE0);border-radius:14px;padding:22px 24px;color:#fff;margin-bottom:14px}
+.sv-eyebrow{font-size:11px;letter-spacing:.08em;opacity:.85;font-weight:600}
+.sv-name{font-size:28px;font-weight:700;margin-top:4px;word-break:break-word;line-height:1.25}
+.sv-sub{font-size:13px;opacity:.88;margin-top:5px}
+.sv-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.sv-bar select{width:auto;min-width:150px}
+.sv-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:14px}
+.sv-kpi{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:14px 16px}
+.sv-kpi .l{font-size:12.5px;color:var(--tx3)}
+.sv-kpi .v{font-size:28px;font-weight:700;margin-top:2px}
+.sv-kpi .s{font-size:12px;color:var(--tx3);margin-top:4px;line-height:1.5}
+.sv-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.sv-card h3{font-family:var(--ui);font-size:14px;font-weight:700;margin-bottom:6px}
+.sv-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.sv-chips .bdg{font-size:12.5px;padding:4px 11px}
+.sv-row{display:flex;gap:14px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--bd)}
+.sv-row:last-child{border-bottom:none}
+.sv-date{width:50px;flex-shrink:0;text-align:center}
+.sv-date .d{font-size:20px;font-weight:700;line-height:1.1}
+.sv-date .m{font-size:11.5px;color:var(--tx3);margin-top:2px}
+.sv-main{flex:1;min-width:0}
+.sv-title{font-size:15px;font-weight:500;line-height:1.45;word-break:break-word}
+.sv-meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-top:7px;font-size:12.5px;color:var(--tx3)}
+.sv-views{text-align:right;flex-shrink:0}
+.sv-views .n{font-size:19px;font-weight:700;color:var(--ac)}
+.sv-views .u{font-size:11px;color:var(--tx3)}
+.sv-foot{text-align:center;font-size:12px;color:var(--tx3);margin-top:22px;line-height:1.7}
 @page{size:A4 landscape;margin:12mm}
 @media print{
   #sb,#sb-toggle,#tb,#sb-backdrop{display:none !important}
@@ -278,6 +309,7 @@ input:checked+.tsl{background:var(--gn)}input:checked+.tsl::before{transform:tra
   <div class="le" id="le">帳號或密碼錯誤</div>
   <div style="margin-top:16px;font-size:12px;color:var(--tx3)">首次登入請聯繫 Jackson 確認帳號已建立</div>
 </div></div>
+<div id="share-view"></div>
 <div id="app">
 <nav id="sb">
   <div class="sbl"><div class="sbm">指</div><div style="font-family:var(--ui);font-weight:600;font-size:13px;line-height:1.2">指名度行銷<span style="display:block;font-weight:400;font-size:10px;color:var(--tx3)">ProjectOS v4 · 線上版</span></div></div>
@@ -357,6 +389,7 @@ const SUPABASE_URL = 'https://kdkbgjjgriaiiepzbulq.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtka2JnampncmlhaWllcHpidWxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0OTg3ODksImV4cCI6MjEwMzA3NDc4OX0.6QHANWHDdhMyU7mEJHt0TDe8vbp1O1wYUTOTE8pVz_k';
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+const SHARE_TOKEN = new URLSearchParams(location.search).get('share');
 let CU=null,STATE={projects:[],videos:[],tasks:[],shoots:[],profiles:[],notifications:[],announcements:[],clientLogs:[],leads:[],talkRecords:[],quotes:[],contractClients:[],salesGoals:[],auditLogs:[]};
 const TD=new Date();
 function loadTF(){try{const saved=JSON.parse(localStorage.getItem('TF')||'null');if(saved&&typeof saved==='object')return{q:saved.q||'',as:saved.as||[],st:saved.st||[],pj:saved.pj||[],ur:saved.ur||[]}}catch(e){}return{q:'',as:[],st:[],pj:[],ur:[]}}
@@ -663,8 +696,97 @@ async function handleSignIn(session) {
     console.error('登入發生錯誤：',err.message);
   }
 }
+// ── 客戶預覽頁（公開唯讀；只透過 get_project_share 取得白名單資料，不直接碰任何資料表）──
+let SHARE_DATA=null,SHARE_PERIOD=null;
+const SV_STATUS_ORDER=['已發布','已排程','排程中','送審中','可送審','待審核','剪輯中','待剪輯','待拍攝','企劃中','待定'];
+function svMD(d){if(!d)return{m:'',d:'—'};const p=String(d).split('-');return{m:(+p[1])+'月',d:String(+p[2])}}
+function svPeriods(){const d=SHARE_DATA;return [...new Set([d.current_period,...(d.videos||[]).map(v=>v.period)])].sort((a,b)=>b-a)}
+function svSetPeriod(v){SHARE_PERIOD=parseInt(v);renderShare()}
+async function initShareView(){
+  document.getElementById('loading').style.display='none';
+  document.getElementById('ls').classList.remove('on');
+  document.getElementById('app').classList.remove('on');
+  const sv=document.getElementById('share-view');
+  sv.classList.add('on');
+  sv.innerHTML='<div style="padding:80px 0;text-align:center;color:var(--tx3)">載入中...</div>';
+  await loadShare();
+}
+async function loadShare(){
+  const sv=document.getElementById('share-view');
+  let res;
+  try{res=await sb.rpc('get_project_share',{p_token:SHARE_TOKEN})}catch(e){res={error:e}}
+  const {data,error}=res;
+  if(error||!data){
+    sv.innerHTML=`<div class="sv-wrap"><div class="sv-card" style="text-align:center;padding:48px 20px"><div style="font-size:34px;margin-bottom:10px">🔒</div><div style="font-size:16px;font-weight:600;margin-bottom:6px">${error?'目前無法載入':'此連結無效或已停用'}</div><div style="font-size:13px;color:var(--tx3)">${error?'請稍後再試，或聯繫指名度行銷窗口。':'請向指名度行銷窗口索取最新連結。'}</div></div></div>`;
+    return;
+  }
+  SHARE_DATA=data;
+  document.title=`${data.client_name} 影片進度`;
+  if(SHARE_PERIOD==null||!svPeriods().includes(SHARE_PERIOD))SHARE_PERIOD=data.current_period;
+  renderShare();
+}
+function renderShare(){
+  const d=SHARE_DATA,sv=document.getElementById('share-view');
+  const periods=svPeriods(),per=SHARE_PERIOD;
+  const vids=(d.videos||[]).filter(v=>v.period===per).sort((a,b)=>(b.due_date||'').localeCompare(a.due_date||''));
+  const sum=v=>(v.v_tiktok||0)+(v.v_ig||0)+(v.v_fb||0)+(v.v_yt||0);
+  const done=vids.filter(v=>v.status==='已發布').length;
+  const total=per===d.current_period?Math.max(d.total_videos||0,vids.length):vids.length;
+  const pct=total?Math.round(done/total*100):0;
+  const upcoming=vids.filter(v=>['排程中','已排程'].includes(v.status)).length;
+  const totViews=vids.reduce((s,v)=>s+sum(v),0);
+  const pt=k=>vids.reduce((s,v)=>s+(v[k]||0),0);
+  const platLine=[['TikTok',pt('v_tiktok')],['Instagram',pt('v_ig')],['Facebook',pt('v_fb')],['YouTube',pt('v_yt')]].filter(x=>x[1]>0).map(x=>`${x[0]} ${x[1].toLocaleString()}`).join(' · ');
+  const counts={};vids.forEach(v=>{counts[v.status]=(counts[v.status]||0)+1});
+  const chips=SV_STATUS_ORDER.concat(Object.keys(counts).filter(s=>!SV_STATUS_ORDER.includes(s))).filter(s=>counts[s]).map(s=>`<span class="bdg ${TASK_STCLS[s]||'bdn'}">${esc(s)} ${counts[s]}</span>`).join('');
+  const rows=vids.map(v=>{
+    const dt=svMD(v.due_date),tot=sum(v);
+    const plat=[['TikTok',v.v_tiktok],['IG',v.v_ig],['FB',v.v_fb],['YT',v.v_yt]].filter(x=>x[1]>0).map(x=>`${x[0]} ${x[1].toLocaleString()}`).join(' · ');
+    return `<div class="sv-row"><div class="sv-date"><div class="d">${esc(dt.d)}</div><div class="m">${esc(dt.m)}</div></div><div class="sv-main"><div class="sv-title">${esc(v.name)}</div><div class="sv-meta"><span class="bdg ${TASK_STCLS[v.status]||'bdn'}">${esc(v.status)}</span>${plat?`<span>${esc(plat)}</span>`:''}</div></div>${tot>0?`<div class="sv-views"><div class="n">${tot.toLocaleString()}</div><div class="u">觀看</div></div>`:''}</div>`}).join('')||'<div style="padding:28px 0;text-align:center;color:var(--tx3)">這一期尚無影片資料</div>';
+  const upd=new Date(d.updated_at);
+  sv.innerHTML=`<div class="sv-wrap">
+    <div class="sv-hdr"><div class="sv-eyebrow">SHORT-FORM VIDEO PROGRESS</div><div class="sv-name">${esc(d.client_name)}</div><div class="sv-sub">第${per}期 影片發布與成效進度</div></div>
+    <div class="sv-bar"><select class="sb2" onchange="svSetPeriod(this.value)">${periods.map(p=>`<option value="${p}" ${p===per?'selected':''}>第${p}期${p===d.current_period?'（當期）':''}</option>`).join('')}</select><div style="flex:1"></div><button class="btn bg sm" onclick="loadShare()">↻ 更新資料</button></div>
+    <div class="sv-kpis">
+      <div class="sv-kpi"><div class="l">本期發布進度</div><div class="v">${done}<span style="font-size:16px;color:var(--tx3);font-weight:500"> / ${total} 支</span></div><div class="pw" style="margin-top:8px;height:7px"><div class="pb ${bc(pct)}" style="width:${pct}%;height:7px"></div></div></div>
+      <div class="sv-kpi"><div class="l">本期全網觀看數</div><div class="v" style="color:var(--ac)">${totViews.toLocaleString()}</div><div class="s">${esc(platLine||'尚無觀看數據')}</div></div>
+      <div class="sv-kpi"><div class="l">即將發布</div><div class="v" style="color:var(--sk)">${upcoming}<span style="font-size:16px;color:var(--tx3);font-weight:500"> 支</span></div><div class="s">已排程 / 排程中</div></div>
+    </div>
+    ${chips?`<div class="sv-chips">${chips}</div>`:''}
+    <div class="sv-card"><h3>影片進度（依發布日由新到舊）</h3>${rows}</div>
+    <div class="sv-foot">資料更新時間：${esc(isNaN(upd)?'—':upd.toLocaleString('zh-TW',{hour12:false}))}<br>指名度行銷 · ProjectOS</div>
+  </div>`;
+}
+// ── 內部：產生／管理客戶預覽連結 ──
+function shareUrl(tok){return location.origin+location.pathname+'?share='+tok}
+function genShareToken(){const a=new Uint8Array(32);crypto.getRandomValues(a);return Array.from(a,b=>b.toString(16).padStart(2,'0')).join('')}
+function oShareLink(pid){
+  const p=STATE.projects.find(x=>x.id===pid);if(!p)return;
+  document.getElementById('mt').textContent='客戶預覽連結：'+p.client_name;
+  const on=!!(p.share_enabled&&p.share_token),url=on?shareUrl(p.share_token):'';
+  document.getElementById('mb').innerHTML=on?
+    `<div class="al ain" style="margin-bottom:14px"><span>ℹ️</span><div>任何拿到這條連結的人都能直接開啟，不需要登入。<br>客戶<b>看得到</b>：影片名稱、狀態、發布日、各平台觀看數、各期紀錄。<br>客戶<b>看不到</b>：負責人、工作內容、內部備註、其他客戶的專案。</div></div><div class="fr"><label class="fl">客戶預覽連結（請當作密碼保管，不要公開張貼）</label><div style="display:flex;gap:8px"><input id="sh-url" readonly value="${esc(url)}" onclick="this.select()"><button class="btn bp sm" onclick="copyShareUrl(this)">複製</button></div></div><div style="margin-top:10px"><a href="${esc(url)}" target="_blank" rel="noopener" class="btn bg sm">👁 開新分頁預覽</a></div>`:
+    `<div class="al ain"><span>ℹ️</span><div>目前尚未啟用客戶預覽。啟用後會產生一條專屬連結，客戶不用登入就能查看這個專案的影片發布進度、排程狀態與各平台流量成效（唯讀）。隨時可以停用或重新產生連結，舊連結會立刻失效。</div></div>`;
+  document.getElementById('mf').innerHTML=on?
+    `<button class="btn brd xs" style="margin-right:auto" onclick="sbShareSet('${pid}',false)">停用連結</button><button class="btn bg" onclick="sbShareSet('${pid}',true,true)">重新產生（舊連結失效）</button><button class="btn bp" onclick="closeM()">完成</button>`:
+    `<button class="btn bg" onclick="closeM()">取消</button><button class="btn bp" onclick="sbShareSet('${pid}',true)">啟用並產生連結</button>`;
+  openM();
+}
+async function copyShareUrl(btn){const i=document.getElementById('sh-url');try{await navigator.clipboard.writeText(i.value)}catch(e){i.select();document.execCommand('copy')}const o=btn.textContent;btn.textContent='✓ 已複製';setTimeout(()=>{btn.textContent=o},1500)}
+async function sbShareSet(pid,enable,regen){
+  const p=STATE.projects.find(x=>x.id===pid);if(!p)return;
+  if(!enable&&!confirm('停用後，客戶手上的連結會立刻失效，確定嗎？'))return;
+  if(enable&&regen&&!confirm('重新產生後，舊連結會立刻失效（客戶需要改用新連結），確定嗎？'))return;
+  const upd=enable?{share_enabled:true,share_token:(regen||!p.share_token)?genShareToken():p.share_token}:{share_enabled:false,share_token:null};
+  const {error}=await sb.from('projects').update(upd).eq('id',pid);
+  if(error){alert('操作失敗：'+error.message);return}
+  Object.assign(p,upd);
+  await aLog(enable?(regen?'重新產生客戶預覽連結':'啟用客戶預覽連結'):'停用客戶預覽連結',`<${esc(p.client_name)}>`);
+  oShareLink(pid);
+}
 // 主動 check session (處理頁面重載時 onAuthStateChange 不觸發的情況)
 async function initApp() {
+  if(SHARE_TOKEN){await initShareView();return}
   const { data: { session } } = await sb.auth.getSession();
   if (session) {
     await handleSignIn(session);
@@ -674,6 +796,7 @@ async function initApp() {
   }
 }
 sb.auth.onAuthStateChange(async(event,session)=>{
+  if(SHARE_TOKEN)return;
   if((event==='SIGNED_IN'||event==='INITIAL_SESSION')&&session){
     await handleSignIn(session);
   }else if(event==='SIGNED_OUT'){CU=null;document.getElementById('app').classList.remove('on');document.getElementById('ls').classList.add('on');document.getElementById('loading').style.display='none';}
@@ -682,7 +805,7 @@ sb.auth.onAuthStateChange(async(event,session)=>{
 initApp();
 // 安全網：8秒後若還在 loading，強制顯示登入頁
 setTimeout(()=>{
-  if(document.getElementById('loading').style.display!=='none'){
+  if(!SHARE_TOKEN&&document.getElementById('loading').style.display!=='none'){
     document.getElementById('loading').style.display='none';
     document.getElementById('ls').classList.add('on');
   }
@@ -934,7 +1057,7 @@ function rAN(){document.getElementById('ana').innerHTML=hasPerm('announcements_m
 async function delAn(id){await sb.from('announcements').delete().eq('id',id);STATE.announcements=STATE.announcements.filter(a=>a.id!==id);rAN()}
 
 function oPD(pid){nav('pd',null);try{localStorage.setItem('lastPD',pid)}catch(e){}renderPD(pid)}
-function renderPD(pid){const p=STATE.projects.find(x=>x.id===pid);if(!p)return;if(PD_STATE.pid!==pid){PD_STATE={pid,period:p.period,editMode:false}}const u=gU(p.planner_id),ed=gU(p.editor_id),v=pc(p);const vidTasks=STATE.tasks.filter(t=>t.project_id===pid&&t.content_type==='短影音');const periods=[...new Set([p.period,...vidTasks.map(t=>t.period).filter(x=>x!=null)])].sort((a,b)=>b-a);const viewPeriod=PD_STATE.period;const pvids=vidTasks.filter(t=>(t.period!=null?t.period:p.period)===viewPeriod).sort((a,b)=>(a.due_date||'9999-99-99').localeCompare(b.due_date||'9999-99-99'));const relatedTasks=STATE.tasks.filter(t=>t.project_id===pid&&t.content_type!=='短影音');const sc={企劃中:0,待拍攝:0,待剪輯:0,剪輯中:0,待審核:0,可送審:0,送審中:0,排程中:0,已排程:0};pvids.forEach(v2=>{if(sc[v2.status]!==undefined)sc[v2.status]++});const pts=p.platforms||[];const logs=STATE.clientLogs?.filter(l=>l.project_id===pid).sort((a,b)=>b.log_date.localeCompare(a.log_date))||[];const allPer=STATE.projects.filter(x=>x.client_name===p.client_name).sort((a,b)=>a.period-b.period);const ip=p.ip_settings||{};const ce=hasPerm('tasks_edit');document.getElementById('pdc').innerHTML=`<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button class="btn bg sm" onclick="nav('pj',null);rPJ()">← 返回</button><div><div style="font-size:20px;font-weight:700">${esc(p.client_name)}</div><div style="font-size:12px;color:var(--tx3)">${pPS(p)} · ${p.id}</div></div>${hasPerm('projects_edit')?`<div style="margin-left:auto;display:flex;gap:8px"><button class="btn bg sm" onclick="oEPJ('${p.id}')">✏️ 編輯</button><button class="btn bg sm" onclick="oEditIP('${p.id}')">🏷 IP設定</button></div>`:''}<button class="btn bp sm" ${!hasPerm('projects_edit')?'style="margin-left:auto"':''} onclick="rPF('${pid}');nav('pf',null)">📊 成效</button><button class="btn bg sm" onclick="rReport('${pid}');nav('report',null)">📄 結案報告</button></div><div class="period-sel"><span style="font-size:12px;color:var(--tx3);font-family:var(--ui)">期數：</span>${allPer.map(pp=>`<button class="per-btn ${pp.id===pid?'on':''}" onclick="oPD('${pp.id}')" title="${pPS(pp)}">第${pp.period}期</button>`).join('')}</div><div class="gpdkpi" style="display:grid;grid-template-columns:2fr repeat(9,1fr);gap:12px;margin-bottom:16px"><div class="kc"><div class="kl">本期達成率</div><div style="font-size:24px;font-weight:700;color:${v>=80?'var(--gn)':v>=50?'var(--am)':'var(--rd)'}">${v}%</div><div style="margin-top:8px"><div class="pw" style="height:8px"><div class="pb ${v>=80?'pbg':v>=50?'pba':'pbr'}" style="width:${v}%;height:8px;border-radius:100px"></div></div><div style="font-size:11px;color:var(--tx3);margin-top:4px">${p.done_videos}/${p.total_videos}片·${dl(pDL(p))}截止</div></div></div>${Object.entries(sc).map(([s,c])=>`<div class="kc" style="padding:12px"><div class="kl" style="font-size:10px">${s}</div><div style="font-size:22px;font-weight:700;color:${{企劃中:'var(--tl,#2DD4BF)',待拍攝:'var(--or)',待剪輯:'var(--am)',剪輯中:'var(--rd)',待審核:'var(--pu)',可送審:'var(--pk,#EC4899)',送審中:'var(--or)',已排程:'var(--sk,#0EA5E9)'}[s]||'var(--tx2)'}">${c}</div></div>`).join('')}</div><div class="gpdinfo" style="display:grid;grid-template-columns:1fr 300px;gap:16px;margin-bottom:20px"><div class="pnl" style="padding:16px"><div style="font-family:var(--ui);font-size:12px;font-weight:600;color:var(--tx3);margin-bottom:10px;text-transform:uppercase">專案資訊</div><div class="g2" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px"><div><span style="font-size:11px;color:var(--tx3);display:block;margin-bottom:2px">企劃/拍攝</span><span class="tg" style="color:${u.color}">${esc(u.name)}</span></div><div><span style="font-size:11px;color:var(--tx3);display:block;margin-bottom:2px">剪輯師</span><span class="tg" style="color:${ed.color}">${esc(ed.name)}</span></div><div><span style="font-size:11px;color:var(--tx3);display:block;margin-bottom:2px">本期片數</span>${p.done_videos}/${p.total_videos}片</div><div><span style="font-size:11px;color:var(--tx3);display:block;margin-bottom:2px">請款截止</span>${esc(p.billing_day)}</div><div><span style="font-size:11px;color:var(--tx3);display:block;margin-bottom:2px">期間</span><span style="font-family:var(--mn);font-size:11px;color:var(--tx3)">${pPS(p)}</span></div></div>${p.plan_link?`<div style="margin-top:12px"><a href="${safeUrl(p.plan_link)}" target="_blank" class="btn bg sm" style="width:100%;justify-content:center">📄 開啟企劃表</a></div>`:''}</div><div><div class="pnl" style="padding:14px;margin-bottom:10px"><div style="font-family:var(--ui);font-size:11px;font-weight:600;color:var(--tx3);margin-bottom:8px;text-transform:uppercase">發布平台</div>${pts.map(pt=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="ptg ${ptg(pt.n)}">${pt.n}</span>${pt.u?`<a href="${safeUrl(pt.u)}" target="_blank" style="font-size:12px;color:var(--ac);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px">${pt.u}</a>`:'<span style="font-size:12px;color:var(--tx3)">未設定</span>'}</div>`).join('')}</div><div class="pnl" style="padding:14px"><div style="font-family:var(--ui);font-size:11px;font-weight:600;color:var(--tx3);margin-bottom:8px;text-transform:uppercase">IP 設定</div><div style="font-size:12px;display:grid;gap:5px"><div><span style="color:var(--tx3)">人設：</span>${ip.ps||'—'}</div><div><span style="color:var(--tx3)">受眾：</span>${ip.au||'—'}</div><div><span style="color:var(--tx3)">風格：</span>${ip.sy||'—'}</div><div><span style="color:var(--tx3)">對標：</span>${(ip.co||[]).join('、')||'—'}</div></div></div></div></div><div class="pnl"><div class="ph"><div style="display:flex;align-items:center;gap:10px"><div style="font-family:var(--ui);font-size:13px;font-weight:600">影片明細 (${pvids.length}/${p.total_videos}片)</div><select class="sb2" style="font-size:12px;max-width:110px" onchange="pdSetPeriod('${pid}',this.value)">${periods.map(pp=>`<option value="${pp}" ${pp===viewPeriod?'selected':''}>第${pp}期${pp===p.period?'（當期）':''}</option>`).join('')}</select></div><div style="display:flex;gap:8px">${ce?`<button class="btn bg xs" onclick="oPDAddVidTask('${pid}')">＋ 新增影片任務</button>`:''}${hasPerm('projects_edit')&&viewPeriod===p.period?`<button class="btn bs xs" onclick="oCloseoutPeriod('${pid}')">📗 本月結案</button>`:''}</div></div><div class="vtbl-wrap"><table class="vtbl"><thead><tr><th style="width:50px">期數</th><th style="width:36px">項次</th><th style="width:180px">影片名稱</th><th style="width:120px">狀態</th><th style="width:100px">發布日</th><th style="width:85px">負責人</th><th style="width:220px">工作內容</th><th style="width:70px">成效</th><th style="width:55px"></th>${ce?'<th style="width:36px"></th>':''}</tr></thead><tbody>${pvids.map((t,i)=>pdVidRow(t,pid,i+1,ce)).join('')||`<tr><td colspan="10" style="padding:24px;text-align:center;color:var(--tx3)">這一期還沒有影片任務${ce?'，點上方「＋ 新增影片任務」開始新增':''}</td></tr>`}</tbody></table></div></div><div class="pnl" style="margin-top:16px"><div class="ph"><div style="font-family:var(--ui);font-size:13px;font-weight:600">📋 相關任務明細 (${relatedTasks.length})</div></div><div style="padding:0 16px 12px">${relatedTasks.length?`<table class="vtbl"><thead><tr><th style="width:70px">類型</th><th>任務名稱</th><th style="width:120px">狀態</th><th style="width:85px">負責人</th><th style="width:100px">截止日</th><th style="width:55px"></th></tr></thead><tbody>${relatedTasks.map(t=>{const u2=gU(t.assignee_id);return `<tr><td>${vc0(`<span class="tg" style="font-size:10px">${t.content_type||'其他'}</span>`)}</td><td>${vc0(`<span style="font-size:13px">${esc(t.name)}</span>`)}</td><td>${vc0(`<span class="bdg ${TASK_STCLS[t.status]||'bdn'}">${t.status}</span>`)}</td><td>${vc0(`<span class="tg" style="font-size:11px;color:${u2.color}">${esc(u2.name)}</span>`)}</td><td>${vc0(`<span style="font-size:12px">${fd(t.due_date)}</span>`)}</td><td>${vc0(`<button class="btn bg xs" onclick="oTP('${t.id}')">詳情</button>`)}</td></tr>`}).join('')}</tbody></table>`:'<div style="padding:20px;text-align:center;color:var(--tx3)">尚無其他相關任務</div>'}</div></div><div class="pnl" style="margin-top:16px"><div class="ph"><div style="font-family:var(--ui);font-size:13px;font-weight:600">📝 客戶日誌</div><button class="btn bp xs" onclick="oAddLog('${pid}')">＋ 新增</button></div><div style="padding:0 16px">${logs.length?logs.map(l=>`<div class="cl-row"><div class="cl-date">${l.log_date}</div><div style="flex:1"><div style="font-size:13px;font-weight:500">${esc(l.title)}</div><div style="font-size:13px;color:var(--tx2);margin-top:4px">${esc(l.body)}</div>${l.follow_up?`<div class="cl-follow">⚡ 跟進：${esc(l.follow_up)}</div>`:''}<div style="font-size:11px;color:var(--tx3);margin-top:4px">by ${esc(gU(l.author_id).name)}</div></div></div>`).join(''):'<div style="padding:20px;text-align:center;color:var(--tx3)">尚無溝通記錄</div>'}</div></div>`}
+function renderPD(pid){const p=STATE.projects.find(x=>x.id===pid);if(!p)return;if(PD_STATE.pid!==pid){PD_STATE={pid,period:p.period,editMode:false}}const u=gU(p.planner_id),ed=gU(p.editor_id),v=pc(p);const vidTasks=STATE.tasks.filter(t=>t.project_id===pid&&t.content_type==='短影音');const periods=[...new Set([p.period,...vidTasks.map(t=>t.period).filter(x=>x!=null)])].sort((a,b)=>b-a);const viewPeriod=PD_STATE.period;const pvids=vidTasks.filter(t=>(t.period!=null?t.period:p.period)===viewPeriod).sort((a,b)=>(a.due_date||'9999-99-99').localeCompare(b.due_date||'9999-99-99'));const relatedTasks=STATE.tasks.filter(t=>t.project_id===pid&&t.content_type!=='短影音');const sc={企劃中:0,待拍攝:0,待剪輯:0,剪輯中:0,待審核:0,可送審:0,送審中:0,排程中:0,已排程:0};pvids.forEach(v2=>{if(sc[v2.status]!==undefined)sc[v2.status]++});const pts=p.platforms||[];const logs=STATE.clientLogs?.filter(l=>l.project_id===pid).sort((a,b)=>b.log_date.localeCompare(a.log_date))||[];const allPer=STATE.projects.filter(x=>x.client_name===p.client_name).sort((a,b)=>a.period-b.period);const ip=p.ip_settings||{};const ce=hasPerm('tasks_edit');document.getElementById('pdc').innerHTML=`<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap"><button class="btn bg sm" onclick="nav('pj',null);rPJ()">← 返回</button><div><div style="font-size:20px;font-weight:700">${esc(p.client_name)}</div><div style="font-size:12px;color:var(--tx3)">${pPS(p)} · ${p.id}</div></div>${hasPerm('projects_edit')?`<div style="margin-left:auto;display:flex;gap:8px"><button class="btn bg sm" onclick="oEPJ('${p.id}')">✏️ 編輯</button><button class="btn bg sm" onclick="oEditIP('${p.id}')">🏷 IP設定</button></div>`:''}<button class="btn bp sm" ${!hasPerm('projects_edit')?'style="margin-left:auto"':''} onclick="rPF('${pid}');nav('pf',null)">📊 成效</button><button class="btn bg sm" onclick="rReport('${pid}');nav('report',null)">📄 結案報告</button>${hasPerm('projects_edit')?`<button class="btn bg sm" onclick="oShareLink('${pid}')">🔗 客戶預覽</button>`:''}</div><div class="period-sel"><span style="font-size:12px;color:var(--tx3);font-family:var(--ui)">期數：</span>${allPer.map(pp=>`<button class="per-btn ${pp.id===pid?'on':''}" onclick="oPD('${pp.id}')" title="${pPS(pp)}">第${pp.period}期</button>`).join('')}</div><div class="gpdkpi" style="display:grid;grid-template-columns:2fr repeat(9,1fr);gap:12px;margin-bottom:16px"><div class="kc"><div class="kl">本期達成率</div><div style="font-size:24px;font-weight:700;color:${v>=80?'var(--gn)':v>=50?'var(--am)':'var(--rd)'}">${v}%</div><div style="margin-top:8px"><div class="pw" style="height:8px"><div class="pb ${v>=80?'pbg':v>=50?'pba':'pbr'}" style="width:${v}%;height:8px;border-radius:100px"></div></div><div style="font-size:11px;color:var(--tx3);margin-top:4px">${p.done_videos}/${p.total_videos}片·${dl(pDL(p))}截止</div></div></div>${Object.entries(sc).map(([s,c])=>`<div class="kc" style="padding:12px"><div class="kl" style="font-size:10px">${s}</div><div style="font-size:22px;font-weight:700;color:${{企劃中:'var(--tl,#2DD4BF)',待拍攝:'var(--or)',待剪輯:'var(--am)',剪輯中:'var(--rd)',待審核:'var(--pu)',可送審:'var(--pk,#EC4899)',送審中:'var(--or)',已排程:'var(--sk,#0EA5E9)'}[s]||'var(--tx2)'}">${c}</div></div>`).join('')}</div><div class="gpdinfo" style="display:grid;grid-template-columns:1fr 300px;gap:16px;margin-bottom:20px"><div class="pnl" style="padding:16px"><div style="font-family:var(--ui);font-size:12px;font-weight:600;color:var(--tx3);margin-bottom:10px;text-transform:uppercase">專案資訊</div><div class="g2" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px"><div><span style="font-size:11px;color:var(--tx3);display:block;margin-bottom:2px">企劃/拍攝</span><span class="tg" style="color:${u.color}">${esc(u.name)}</span></div><div><span style="font-size:11px;color:var(--tx3);display:block;margin-bottom:2px">剪輯師</span><span class="tg" style="color:${ed.color}">${esc(ed.name)}</span></div><div><span style="font-size:11px;color:var(--tx3);display:block;margin-bottom:2px">本期片數</span>${p.done_videos}/${p.total_videos}片</div><div><span style="font-size:11px;color:var(--tx3);display:block;margin-bottom:2px">請款截止</span>${esc(p.billing_day)}</div><div><span style="font-size:11px;color:var(--tx3);display:block;margin-bottom:2px">期間</span><span style="font-family:var(--mn);font-size:11px;color:var(--tx3)">${pPS(p)}</span></div></div>${p.plan_link?`<div style="margin-top:12px"><a href="${safeUrl(p.plan_link)}" target="_blank" class="btn bg sm" style="width:100%;justify-content:center">📄 開啟企劃表</a></div>`:''}</div><div><div class="pnl" style="padding:14px;margin-bottom:10px"><div style="font-family:var(--ui);font-size:11px;font-weight:600;color:var(--tx3);margin-bottom:8px;text-transform:uppercase">發布平台</div>${pts.map(pt=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="ptg ${ptg(pt.n)}">${pt.n}</span>${pt.u?`<a href="${safeUrl(pt.u)}" target="_blank" style="font-size:12px;color:var(--ac);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px">${pt.u}</a>`:'<span style="font-size:12px;color:var(--tx3)">未設定</span>'}</div>`).join('')}</div><div class="pnl" style="padding:14px"><div style="font-family:var(--ui);font-size:11px;font-weight:600;color:var(--tx3);margin-bottom:8px;text-transform:uppercase">IP 設定</div><div style="font-size:12px;display:grid;gap:5px"><div><span style="color:var(--tx3)">人設：</span>${ip.ps||'—'}</div><div><span style="color:var(--tx3)">受眾：</span>${ip.au||'—'}</div><div><span style="color:var(--tx3)">風格：</span>${ip.sy||'—'}</div><div><span style="color:var(--tx3)">對標：</span>${(ip.co||[]).join('、')||'—'}</div></div></div></div></div><div class="pnl"><div class="ph"><div style="display:flex;align-items:center;gap:10px"><div style="font-family:var(--ui);font-size:13px;font-weight:600">影片明細 (${pvids.length}/${p.total_videos}片)</div><select class="sb2" style="font-size:12px;max-width:110px" onchange="pdSetPeriod('${pid}',this.value)">${periods.map(pp=>`<option value="${pp}" ${pp===viewPeriod?'selected':''}>第${pp}期${pp===p.period?'（當期）':''}</option>`).join('')}</select></div><div style="display:flex;gap:8px">${ce?`<button class="btn bg xs" onclick="oPDAddVidTask('${pid}')">＋ 新增影片任務</button>`:''}${hasPerm('projects_edit')&&viewPeriod===p.period?`<button class="btn bs xs" onclick="oCloseoutPeriod('${pid}')">📗 本月結案</button>`:''}</div></div><div class="vtbl-wrap"><table class="vtbl"><thead><tr><th style="width:50px">期數</th><th style="width:36px">項次</th><th style="width:180px">影片名稱</th><th style="width:120px">狀態</th><th style="width:100px">發布日</th><th style="width:85px">負責人</th><th style="width:220px">工作內容</th><th style="width:70px">成效</th><th style="width:55px"></th>${ce?'<th style="width:36px"></th>':''}</tr></thead><tbody>${pvids.map((t,i)=>pdVidRow(t,pid,i+1,ce)).join('')||`<tr><td colspan="10" style="padding:24px;text-align:center;color:var(--tx3)">這一期還沒有影片任務${ce?'，點上方「＋ 新增影片任務」開始新增':''}</td></tr>`}</tbody></table></div></div><div class="pnl" style="margin-top:16px"><div class="ph"><div style="font-family:var(--ui);font-size:13px;font-weight:600">📋 相關任務明細 (${relatedTasks.length})</div></div><div style="padding:0 16px 12px">${relatedTasks.length?`<table class="vtbl"><thead><tr><th style="width:70px">類型</th><th>任務名稱</th><th style="width:120px">狀態</th><th style="width:85px">負責人</th><th style="width:100px">截止日</th><th style="width:55px"></th></tr></thead><tbody>${relatedTasks.map(t=>{const u2=gU(t.assignee_id);return `<tr><td>${vc0(`<span class="tg" style="font-size:10px">${t.content_type||'其他'}</span>`)}</td><td>${vc0(`<span style="font-size:13px">${esc(t.name)}</span>`)}</td><td>${vc0(`<span class="bdg ${TASK_STCLS[t.status]||'bdn'}">${t.status}</span>`)}</td><td>${vc0(`<span class="tg" style="font-size:11px;color:${u2.color}">${esc(u2.name)}</span>`)}</td><td>${vc0(`<span style="font-size:12px">${fd(t.due_date)}</span>`)}</td><td>${vc0(`<button class="btn bg xs" onclick="oTP('${t.id}')">詳情</button>`)}</td></tr>`}).join('')}</tbody></table>`:'<div style="padding:20px;text-align:center;color:var(--tx3)">尚無其他相關任務</div>'}</div></div><div class="pnl" style="margin-top:16px"><div class="ph"><div style="font-family:var(--ui);font-size:13px;font-weight:600">📝 客戶日誌</div><button class="btn bp xs" onclick="oAddLog('${pid}')">＋ 新增</button></div><div style="padding:0 16px">${logs.length?logs.map(l=>`<div class="cl-row"><div class="cl-date">${l.log_date}</div><div style="flex:1"><div style="font-size:13px;font-weight:500">${esc(l.title)}</div><div style="font-size:13px;color:var(--tx2);margin-top:4px">${esc(l.body)}</div>${l.follow_up?`<div class="cl-follow">⚡ 跟進：${esc(l.follow_up)}</div>`:''}<div style="font-size:11px;color:var(--tx3);margin-top:4px">by ${esc(gU(l.author_id).name)}</div></div></div>`).join(''):'<div style="padding:20px;text-align:center;color:var(--tx3)">尚無溝通記錄</div>'}</div></div>`}
 function vRow(v2,pid){const er=v2.views>0?((v2.likes+v2.comments+v2.shares)/v2.views*100).toFixed(1):0;const ce=hasPerm('videos_edit');const ALL_V=['企劃中','待拍攝','待剪輯','待審核','排程中','已發布'];function vc(c){return `<div class="vc">${c}</div>`}function vi(f,val,type='text'){if(!ce)return `<div class="vc"><span style="font-size:12px;color:var(--tx2)">${val||'—'}</span></div>`;if(type==='sel-stat')return `<div class="vc"><select class="vcs" onchange="uV('${v2.id}','${f}',this.value,'${pid}')">${ALL_V.map(s=>`<option ${s===val?'selected':''}>${s}</option>`).join('')}</select></div>`;if(type==='sel-ed')return `<div class="vc"><select class="vcs" onchange="uV('${v2.id}','${f}',this.value,'${pid}')">${STATE.profiles.filter(a=>a.dept==='剪輯師').map(a=>`<option value="${a.id}" ${a.id===val?'selected':''}>${esc(a.name)}</option>`).join('')}</select></div>`;if(type==='date')return `<div class="vc"><input type="date" class="vci" style="font-size:11px;font-family:var(--mn)" value="${val||''}" onblur="uV('${v2.id}','${f}',this.value,'${pid}')"></div>`;if(type==='ta')return `<div class="vc"><textarea class="vci" rows="2" onblur="uV('${v2.id}','${f}',this.value,'${pid}')">${val||''}</textarea></div>`;return `<div class="vc"><input class="vci" value="${(val||'').replace(/"/g,'&quot;')}" onblur="uV('${v2.id}','${f}',this.value,'${pid}')"></div>`}return `<tr id="vr-${v2.id}"><td>${vc(`<span style="font-size:11px;color:var(--tx3)">${v2.idx||'—'}</span>`)}</td><td>${vi('name',v2.name)}</td><td><div class="vc"><span class="ptg ${ptg(v2.platform)}">${v2.platform}</span></div></td><td>${vi('status',v2.status,'sel-stat')}</td><td>${vi('publish_date',v2.publish_date,'date')}</td><td>${vi('shoot_date',v2.shoot_date,'date')}</td><td>${vi('location',v2.location)}</td><td>${vi('angle',v2.angle)}</td><td>${vi('goal',v2.goal,'ta')}</td><td>${vi('key_point',v2.key_point,'ta')}</td><td>${vi('script',v2.script,'ta')}</td><td><div class="vc">${ce?`<input class="vci" value="${esc(v2.reference_link||'')}" onblur="uV('${v2.id}','reference_link',this.value,'${pid}')" style="font-size:11px">`:'—'}</div></td><td>${vi('editor_id',v2.editor_id,'sel-ed')}</td><td>${vc(`<span style="font-size:12px;font-family:var(--mn)">${v2.views?v2.views.toLocaleString():'—'}</span>`)}</td><td>${vc(`<span style="font-size:12px;font-family:var(--mn)">${v2.likes||'—'}</span>`)}</td><td>${vc(`<span style="font-size:12px;font-family:var(--mn)">${v2.comments||'—'}</span>`)}</td><td>${vc(`<span style="font-size:12px;font-family:var(--mn)">${v2.shares||'—'}</span>`)}</td><td>${vc(`<span style="font-size:12px;font-family:var(--mn);color:${er>=5?'#3DD68C':er>=2?'#F5A524':'var(--tx3)'}">${v2.views?er+'%':'—'}</span>`)}</td><td>${vc(ce?`<button class="btn bg xs" onclick="delV('${v2.id}','${pid}')">🗑</button>`:'')}</td></tr>`}
 async function uV(id,field,val,pid){const v=STATE.videos.find(x=>x.id===id);if(!v)return;await sb.from('videos').update({[field]:val,updated_at:new Date().toISOString()}).eq('id',id);v[field]=val;if(field==='status'){const p=STATE.projects.find(x=>x.id===v.project_id);if(p){p.done_videos=STATE.videos.filter(vv=>vv.project_id===p.id&&vv.status==='已發布').length;await sb.from('projects').update({done_videos:p.done_videos,updated_at:new Date().toISOString()}).eq('id',p.id);if(p.done_videos>=p.total_videos&&!p.needs_approval){p.needs_approval=true;await sb.from('projects').update({needs_approval:true}).eq('id',p.id);await aNot('project',`${esc(p.client_name)} 達到審批門檻`,`第${p.period}期 ${p.done_videos}片已發布`,['jackson'])}}}const row=document.getElementById('vr-'+id);if(row)row.outerHTML=vRow(v,pid)}
 async function delV(id,pid){if(!confirm('確定刪除？'))return;await sb.from('videos').delete().eq('id',id);STATE.videos=STATE.videos.filter(x=>x.id!==id);const p=STATE.projects.find(x=>x.id===pid);if(p){p.done_videos=STATE.videos.filter(vv=>vv.project_id===pid&&vv.status==='已發布').length;await sb.from('projects').update({done_videos:p.done_videos}).eq('id',pid)}renderPD(pid)}
