@@ -1664,7 +1664,7 @@ function rBDB(){
   const mG=g.find(x=>x.period_type==='monthly'),qG=g.find(x=>x.period_type==='quarterly'),aG=g.find(x=>x.period_type==='annual');
   const mrr=totalMRR();
   const talking=STATE.leads.filter(l=>TALK_STAGES.includes(l.stage)).length,contracted=STATE.leads.filter(l=>l.stage==='contract').length;
-  function gpct(g2){return g2?Math.min(100,Math.round(g2.current_amount/g2.target_amount*100)):0}
+  function gpct(g2){return g2&&g2.target_amount>0?Math.min(100,Math.round(g2.current_amount/g2.target_amount*100)):0}
   const mP=gpct(mG),qP=gpct(qG),aP=gpct(aG);
   function goalRow(x){if(!x.g)return '';return '<div class="goal-bar"><div class="goal-label"><span>'+x.lb+' '+x.g.period_label+'</span><div><span style="font-weight:700">'+fmt$$(x.g.current_amount)+'</span><span style="color:var(--tx3)"> / '+fmt$$(x.g.target_amount)+'</span><span style="margin-left:8px;font-family:var(--mn);font-size:12px;font-weight:600;color:'+(x.p>=100?'#52C98F':x.p>=70?'#E3AE48':'#F07878')+'">'+x.p+'%</span></div></div><div class="pw"><div class="pb '+(x.p>=100?'pbg':x.p>=70?'pba':'pbr')+'" style="width:'+x.p+'%"></div></div></div>'}
   function funnelRow(s,lb,ct,cl){return '<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:13px"><span>'+lb+'</span><span style="font-weight:700;color:'+cl+'">'+ct+'</span></div><div class="pw" style="height:8px"><div class="pb" style="width:'+Math.min(100,ct/Math.max(1,STATE.leads.length)*100)+'%;background:'+cl+';height:8px;border-radius:100px"></div></div></div>'}
@@ -1678,7 +1678,7 @@ function rBDB(){
     '</div>'+
     '<div class="g2" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">'+
     '<div class="pnl" style="padding:20px"><div style="font-family:var(--ui);font-size:13px;font-weight:600;margin-bottom:16px">🏆 業績目標</div>'+
-    [{g:mG,lb:'月目標',p:mP},{g:qG,lb:'季目標',p:qP},{g:aG,lb:'年目標',p:aP}].map(goalRow).join('')+
+    ([{g:mG,lb:'月目標',p:mP},{g:qG,lb:'季目標',p:qP},{g:aG,lb:'年目標',p:aP}].map(goalRow).join('')||('<div style="color:var(--tx3);font-size:13px;line-height:1.7">尚未設定業績目標'+(hasPerm('sales_manage')?'<br><button class="btn bor2 sm" style="margin-top:10px" onclick="oEditGoals()">設定目標</button>':'')+'</div>'))+
     '</div>'+
     '<div class="pnl" style="padding:16px"><div style="font-family:var(--ui);font-size:13px;font-weight:600;margin-bottom:14px">📊 業績漏斗</div>'+
     funnelRow('lead','潛在名單',STATE.leads.filter(l=>l.stage==='lead').length,'#9099A9')+
@@ -1790,7 +1790,7 @@ function rContracts(){
     (list.length?`<div class="pnl" style="overflow-x:auto"><table class="tt cmp"><thead><tr>${ths}</tr></thead><tbody>${rows}</tbody></table></div>`:`<div class="pnl" style="padding:36px 16px;text-align:center;color:var(--tx3);line-height:1.8">目前沒有正式合作的客戶<br>到「潛在客戶名單」把洽談狀態改成「正式合作」，客戶明細就會自動轉到這裡</div>`)+legacyHtml;
 }
 
-function rGoals(){const g=STATE.salesGoals;function goalCard(title,g2,color){if(!g2)return '';const pct=Math.min(100,Math.round(g2.current_amount/g2.target_amount*100));return `<div class="pnl" style="padding:20px"><div style="font-family:var(--ui);font-size:14px;font-weight:600;margin-bottom:16px">${title}</div><div style="font-size:32px;font-weight:700;color:${color};margin-bottom:4px">${fmt$$(g2.current_amount)}</div><div style="font-size:13px;color:var(--tx3);margin-bottom:12px">目標：${fmt$$(g2.target_amount)}</div><div class="pw" style="height:10px;border-radius:100px"><div class="pb" style="width:${pct}%;background:${color};height:10px;border-radius:100px"></div></div><div style="display:flex;justify-content:space-between;margin-top:6px;font-size:12px;color:var(--tx3)"><span>達成率 ${pct}%</span><span>還差 ${fmt$$(g2.target_amount-g2.current_amount)}</span></div></div>`}document.getElementById('goals-c').innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px"><div style="font-family:var(--ui);font-size:14px;font-weight:600">業績目標管理</div>${hasPerm('sales_manage')?`<button class="btn bor2 sm" onclick="oEditGoals()">編輯目標</button>`:''}</div><div class="dg3" style="margin-bottom:20px">${goalCard('月度業績 '+(g.find(x=>x.period_type==='monthly')?.period_label||''),g.find(x=>x.period_type==='monthly'),'#E3AE48')}${goalCard('季度業績 '+(g.find(x=>x.period_type==='quarterly')?.period_label||''),g.find(x=>x.period_type==='quarterly'),'#6E96F7')}${goalCard('年度業績 '+(g.find(x=>x.period_type==='annual')?.period_label||''),g.find(x=>x.period_type==='annual'),'#52C98F')}</div>`}
+function rGoals(){const g=STATE.salesGoals;function goalCard(title,g2,color){if(!g2)return '';const pct=g2.target_amount>0?Math.min(100,Math.round(g2.current_amount/g2.target_amount*100)):0;return `<div class="pnl" style="padding:20px"><div style="font-family:var(--ui);font-size:14px;font-weight:600;margin-bottom:16px">${title}</div><div style="font-size:32px;font-weight:700;color:${color};margin-bottom:4px">${fmt$$(g2.current_amount)}</div><div style="font-size:13px;color:var(--tx3);margin-bottom:12px">目標：${fmt$$(g2.target_amount)}</div><div class="pw" style="height:10px;border-radius:100px"><div class="pb" style="width:${pct}%;background:${color};height:10px;border-radius:100px"></div></div><div style="display:flex;justify-content:space-between;margin-top:6px;font-size:12px;color:var(--tx3)"><span>達成率 ${pct}%</span><span>還差 ${fmt$$(Math.max(0,g2.target_amount-g2.current_amount))}</span></div></div>`}document.getElementById('goals-c').innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px"><div style="font-family:var(--ui);font-size:14px;font-weight:600">業績目標管理</div>${hasPerm('sales_manage')?`<button class="btn bor2 sm" onclick="oEditGoals()">編輯目標</button>`:''}</div>${g.some(x=>['monthly','quarterly','annual'].includes(x.period_type))?'':`<div class="pnl" style="padding:28px;text-align:center;color:var(--tx3);font-size:13px;line-height:1.8;margin-bottom:20px">尚未設定業績目標${hasPerm('sales_manage')?'<br><button class="btn bor2 sm" style="margin-top:12px" onclick="oEditGoals()">設定目標</button>':''}</div>`}<div class="dg3" style="margin-bottom:20px">${goalCard('月度業績 '+(g.find(x=>x.period_type==='monthly')?.period_label||''),g.find(x=>x.period_type==='monthly'),'#E3AE48')}${goalCard('季度業績 '+(g.find(x=>x.period_type==='quarterly')?.period_label||''),g.find(x=>x.period_type==='quarterly'),'#6E96F7')}${goalCard('年度業績 '+(g.find(x=>x.period_type==='annual')?.period_label||''),g.find(x=>x.period_type==='annual'),'#52C98F')}</div>`}
 
 function toggleNP(){const el=document.getElementById('np');el.classList.toggle('on');if(el.classList.contains('on'))rNL()}
 function rNL(){const my=STATE.notifications.filter(n=>n.target_ids?.includes('all')||n.target_ids?.includes(CU.id));document.getElementById('nl').innerHTML=my.length?my.map(n=>{const isR=n.read_by?.includes(CU.id);return `<div class="ni ${isR?'':'ur'}" onclick="mR('${n.id}')"><div style="display:flex;gap:8px"><div style="width:7px;height:7px;border-radius:50%;margin-top:4px;flex-shrink:0;${isR?'background:transparent':'background:var(--ac)'}"></div><div><div style="font-size:12px;font-weight:500">${esc(n.title)}</div><div style="font-size:11px;color:var(--tx3)">${esc(n.body)}</div><div style="font-size:10px;color:var(--tx3);margin-top:2px">${n.created_at?.slice(0,16)}</div></div></div></div>`}).join(''):'<div style="padding:20px;text-align:center;color:var(--tx3);font-size:12px">無通知</div>'}
@@ -4218,6 +4218,48 @@ async function calSaveId(){
 (function(){const _o=calOpen;calOpen=function(key){_o(key);const e=CAL.ev[key];if(e&&e.src==='g'&&calCanEdit()&&!calIsImp(e.ref)){const sh=$n('nxsp');if(sh)sh.insertAdjacentHTML('beforeend',`<div class="nx-btn p" onclick="calPendSheetOne('${esc(e.ref.id)}')">轉為拍攝任務</div>`)}}})();
 function calPendSheetOne(id){const g=CAL.g.items[id];if(!g)return;const pj=STATE.projects.filter(p=>pjRunning(p)),m=calMatchProject(g);NX_SHEET={type:'calpend'};
   nxSheet(`<div style="font-size:18px;font-weight:500">轉為拍攝任務</div><div><div style="font-size:14.5px;font-weight:500">${esc(g.title)}</div><div class="nx-cl">${esc(fd(g.date))}${g.time?' '+esc(g.time):''}</div></div><div><div class="nx-lb">歸屬專案</div><select id="cp-${esc(g.id)}" class="nx-in" style="min-height:42px"><option value="">未歸專案</option>${pj.map(p=>`<option value="${p.id}" ${m&&m.id===p.id?'selected':''}>${esc(p.client_name)}</option>`).join('')}</select></div><div class="nx-cl">會建立一筆「待拍攝」影片任務，日期沿用活動日期；Google 上的活動標題不會被改動。</div><div class="nx-btn p" style="min-height:46px" onclick="calConv('${esc(g.id)}')">轉為任務</div>`)}
+
+
+// ════════════════ 業務部：預設進入總覽儀表板；業績目標編輯修正 ════════════════
+deptOf('biz').home=()=>isMob()?'perf':'bdb';
+function setDept(d){
+  if(!deptAvail(d))d=curDept();
+  const pg=(document.querySelector('.pg.on')||{id:''}).id.slice(3),dd=deptOf(d),onToday=pg==='today'||pg==='db',home=dd.home?dd.home():null;
+  NX_DEPT=d;try{localStorage.setItem('NX_DEPT',d)}catch(e){}
+  if(isMob()&&pg==='more'){nxApplyDept();rMore();return}
+  // 有「預設首頁」的部門（業務部＝總覽儀表板）：切過去就直接顯示；手機在「今日」頁切換則維持篩選今日
+  if(home&&(!isMob()||!onToday)){NX_TALL=false;try{localStorage.setItem('NX_TALL','0')}catch(e){}nxApplyDept();nav(home,null);return}
+  if(onToday){NX_TALL=false;try{localStorage.setItem('NX_TALL','0')}catch(e){}nxApplyDept();rDB();return}
+  nxApplyDept();
+  const t=dd.tabs.find(x=>!x[4]||x[4].some(k=>hasPerm(k)))||dd.tabs[0];nav(t[0],null);   // 其他部門：進入第一個「有權限」的分頁
+}
+// ── 業績目標：找不到就新增；期間標籤跟著當期；月／季／年都填 0 ＝ 清除該目標 ──
+function nxPeriodLabels(){const d=new Date(),y=d.getFullYear(),m=d.getMonth()+1;return {monthly:`${y}-${pad2(m)}`,quarterly:`${y}-Q${Math.ceil(m/3)}`,annual:String(y)}}
+function oEditGoals(){
+  const g=STATE.salesGoals,L=nxPeriodLabels(),f=t=>g.find(x=>x.period_type===t);
+  const row=(lb,id1,v1,id2,v2)=>`<div class="fg"><div class="fr"><label class="fl">${lb}目標（NT$）</label><input id="${id1}" type="number" min="0" value="${v1||0}"></div><div class="fr"><label class="fl">目前${lb}業績</label><input id="${id2}" type="number" min="0" value="${v2||0}"></div></div>`;
+  document.getElementById('mt').textContent='編輯業績目標';
+  document.getElementById('mb').innerHTML=row('月（'+L.monthly+'）','gmt',(f('monthly')||{}).target_amount,'gmc',(f('monthly')||{}).current_amount)+row('季（'+L.quarterly+'）','gqt',(f('quarterly')||{}).target_amount,'gqc',(f('quarterly')||{}).current_amount)+row('年（'+L.annual+'）','gat',(f('annual')||{}).target_amount,'gac',(f('annual')||{}).current_amount)+`<div style="font-size:12px;color:var(--tx3);line-height:1.7">儲存時期間會更新為當期。目標與目前業績都填 0，會清除該項目標。</div>`;
+  document.getElementById('mf').innerHTML=`<button class="btn bg" onclick="closeM()">取消</button><button class="btn bor2" onclick="sbGoals()">儲存</button>`;openM();
+}
+async function sbGoals(){
+  const g=STATE.salesGoals,L=nxPeriodLabels(),now=new Date().toISOString();let err=null;
+  async function one(type,tid,cid){
+    const tgt=Math.max(0,parseInt(document.getElementById(tid).value)||0),cur=Math.max(0,parseInt(document.getElementById(cid).value)||0),rec=g.find(x=>x.period_type===type);
+    if(rec){
+      if(tgt===0&&cur===0){const r=await sb.from('sales_goals').delete().eq('id',rec.id);if(r.error)return r.error;g.splice(g.indexOf(rec),1);return null}
+      const r=await sb.from('sales_goals').update({target_amount:tgt,current_amount:cur,period_label:L[type],updated_at:now}).eq('id',rec.id);if(r.error)return r.error;
+      rec.target_amount=tgt;rec.current_amount=cur;rec.period_label=L[type];return null;
+    }
+    if(tgt>0||cur>0){const r=await sb.from('sales_goals').insert({period_type:type,period_label:L[type],target_amount:tgt,current_amount:cur}).select().single();if(r.error)return r.error;if(r.data)g.push(r.data)}
+    return null;
+  }
+  try{err=await one('monthly','gmt','gmc')||await one('quarterly','gqt','gqc')||await one('annual','gat','gac')}catch(e){err={message:'網路異常'}}
+  if(err){alert('儲存失敗：'+err.message);return}
+  try{await aLog('編輯業績目標','更新業績目標設定')}catch(e){}
+  closeM();rGoals();rBDB();if(window.nxRefresh)nxRefresh();
+}
+NX_RENDER.bdb=rBDB;NX_RENDER.goals=rGoals;
 
 </script>
 </body>
