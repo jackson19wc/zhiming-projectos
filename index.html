@@ -601,6 +601,97 @@ textarea.nx-in{resize:vertical;line-height:1.6}
 .nx-fg>.nx-fc:last-child:nth-child(odd){grid-column:1/-1}
 @media (min-width:821px){#pg-tasks,#pg-cust,#pg-perf{display:none!important}}
 @media (max-width:820px){#pg-tasks,#pg-cust,#pg-perf{padding:0 0 calc(96px + env(safe-area-inset-bottom))!important}#nx-dsw{display:none!important}}
+
+/* ═══ 出缺勤 ═══ */
+.nx-clock{background:linear-gradient(160deg,var(--a900),var(--sf) 70%);border-radius:14px;box-shadow:0 0 0 1px var(--a800);padding:10px 12px 10px 14px;display:flex;align-items:center;gap:10px}
+.clk-i{flex:1;min-width:0;cursor:pointer;display:flex;flex-direction:column;gap:3px}
+.clk-t{display:flex;align-items:baseline;gap:8px}.clk-time{font-size:17px;font-weight:500;font-variant-numeric:tabular-nums}.clk-lk{margin-left:auto;white-space:nowrap}
+.clk-s{font-size:13.5px;line-height:1.5}
+.clk-r{display:flex;gap:6px;flex:none}.clk-b{min-height:44px;padding:0 14px;font-size:14px;white-space:nowrap}.clk-m{min-height:44px;padding:0 12px;font-size:13px}
+.nx-dseg{max-width:100%;overflow-x:auto;scrollbar-width:none}.nx-dseg::-webkit-scrollbar{display:none}.nx-dseg .nx-so{white-space:nowrap}
+.nx-arow{display:flex;align-items:center;gap:12px;padding:12px 14px}
+.nx-chk{position:relative;display:flex;align-items:center;cursor:pointer}
+.nx-chk input{position:absolute;opacity:0;width:24px;height:24px;margin:0;cursor:pointer}
+.nx-chk span{width:24px;height:24px;border-radius:7px;box-shadow:inset 0 0 0 1.5px var(--n600);display:flex;align-items:center;justify-content:center;pointer-events:none}
+.nx-chk input:checked+span{background:var(--a700);box-shadow:inset 0 0 0 1.5px var(--nac)}
+.nx-chk input:checked+span::after{content:'';width:6px;height:11px;border:solid var(--a100);border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.nx-agrid{overflow-x:auto;border-radius:8px;background:var(--sf)}
+.nx-agrid table{border-collapse:collapse;font-size:12.5px;min-width:100%}
+.nx-agrid th,.nx-agrid td{padding:6px 5px;text-align:center;min-width:30px;border-bottom:1px solid var(--bd);white-space:nowrap}
+.nx-agrid th{color:var(--n400);font-weight:500;font-size:11.5px;line-height:1.25}.nx-agrid th i{font-style:normal;color:var(--n600)}
+.nx-agrid .s{position:sticky;left:0;background:var(--sf);text-align:left;min-width:64px;padding-left:10px;z-index:2;box-shadow:1px 0 0 var(--bd)}
+.nx-agrid td{cursor:pointer}.nx-agrid td.ok{color:var(--a300)}.nx-agrid td.ab{color:var(--tx);background:var(--a900)}.nx-agrid td.ot{color:var(--a200);background:color-mix(in srgb,var(--a800) 60%,transparent)}
+.nx-agrid td.dv{opacity:.55}
+.nx-agrid .off{background:rgba(255,255,255,.025)}.nx-agrid th.td{color:var(--nac)}
+.nx-wide{max-width:1100px}
+@media (max-width:820px){#pg-att,#pg-attset,#pg-myatt{padding:0 0 calc(96px + env(safe-area-inset-bottom))!important}}
+
+.nx-more{position:absolute;right:10px;top:-9px;background:var(--a700);color:var(--a100);font-size:12px;font-weight:500;line-height:1;padding:5px 9px;border-radius:12px;cursor:pointer;box-shadow:0 0 0 2px var(--bg)}
+
+/* ═══ 手機觸控與輸入優化（僅 ≤820px）═══ */
+@media (max-width:820px){
+ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px!important}  /* 避免 iPhone 點入輸入框時自動放大畫面 */
+ .nx-fc{padding:8px 12px}
+ .nx-fc input,.nx-fc select{min-height:30px;padding:2px 0!important}
+ .nx-chip{min-height:38px;display:inline-flex;align-items:center}
+ .nx-so{min-height:40px}
+ .nx-fb{min-height:38px}
+ .nx-bk{min-height:44px;padding:0 14px 0 0;margin:-10px 0 -10px -2px}
+ .nx-btn.g{min-height:36px;display:inline-flex;align-items:center}
+ .nx-chk,.tog,.nx-more{position:relative}
+ .nx-chk::before,.tog::before,.nx-more::before{content:'';position:absolute;inset:-10px}   /* 視覺大小不變，點擊範圍加大到 44px 以上 */
+ .nx-more{padding:6px 11px}
+ .spx{width:40px;height:40px}
+ .btn.sm{min-height:36px}
+ .nx-sh a:not(.nx-btn){display:inline-block;padding:7px 0}
+}
+
+body.nx-lock #ct{overflow:hidden}
+.nx-sh,.mdl{overscroll-behavior:contain}
+@media (max-width:820px){.btn{min-height:38px}.nx-card a:not(.nx-btn){display:inline-block;padding:8px 0}}
+
+.nx-full{max-width:none}
+@media (min-width:821px){.nx-agrid .st{position:sticky;background:var(--sf);z-index:2;width:46px;min-width:46px;max-width:46px}.nx-agrid .st1{right:92px;box-shadow:-1px 0 0 var(--bd)}.nx-agrid .st2{right:46px}.nx-agrid .st3{right:0}}
+
+#sb:not([data-dept="plan"]) .sbsc,#sb:not([data-dept="plan"]) #spjl{display:none}
+
+/* ═══ 專案行事曆 ═══ */
+.cal{gap:12px}
+.cal-gr{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-height:36px}
+.cal-g{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--n300)}
+.cal-g i{width:8px;height:8px;border-radius:50%;background:var(--n600)}.cal-g.on i{background:#5fbf92}.cal-g.warn i{background:#e0a35a}
+.cal-spin{width:12px!important;height:12px!important;border-radius:50%!important;background:none!important;border:2px solid var(--n600);border-top-color:var(--nac);animation:calspin .8s linear infinite}
+@keyframes calspin{to{transform:rotate(360deg)}}
+.cal-sb{padding:5px 12px!important;min-height:34px;font-size:13px}
+.cal-nav{display:flex;align-items:center;gap:6px}.cal-ttl{flex:1;text-align:center;font-size:16px;font-weight:500}.cal-today{padding:5px 12px!important;min-height:34px}
+.cal-chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;align-items:center}.cal-chips::-webkit-scrollbar{display:none}
+.cal-chips .nx-chip{display:inline-flex;align-items:center;gap:6px}
+.cal-dot{display:inline-block;width:7px;height:7px;border-radius:50%;flex:none}
+.cal-sel{width:auto!important;flex:none;min-height:34px!important;padding:4px 10px!important;border-radius:999px!important;font-size:13px}
+.cal-grid{background:var(--sf);border-radius:12px;overflow:hidden}
+.cal-wk{display:grid;grid-template-columns:repeat(7,1fr);padding:8px 0 4px;font-size:12px;color:var(--n500);text-align:center}
+.cal-body{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--bd)}
+.cal-c{background:var(--sf);padding:6px 4px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;overflow:hidden}
+.cal-c.o{opacity:.4}.cal-c.w .cal-n{color:var(--n400)}
+.cal-n{font-size:14px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%}
+.cal-c.t .cal-n{background:var(--a700);color:var(--a100);font-weight:600}
+.cal-c.s{box-shadow:inset 0 0 0 1.5px var(--nac)}
+.cal-dots{display:flex;gap:3px;height:7px}
+.cal-ag{display:flex;flex-direction:column;gap:8px}
+.cal-a{display:flex;align-items:center;gap:12px;background:var(--sf);border-radius:10px;padding:10px 12px;cursor:pointer}.cal-a.dn,.cal-ch.dn{opacity:.5}
+.cal-bar{width:4px;align-self:stretch;border-radius:2px;background:var(--c);flex:none}
+.cal-at{font-size:14.5px;font-weight:500;line-height:1.35;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.cal-ch{width:100%;font-size:11.5px;line-height:1.3;padding:2px 6px;border-radius:4px;background:color-mix(in srgb,var(--c) 22%,transparent);color:var(--tx);border-left:3px solid var(--c);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
+.cal-more{font-size:11px;color:var(--n400);align-self:flex-start;padding-left:4px}
+@media (min-width:821px){.cal-wrap{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}.cal-c{align-items:stretch;padding:6px}.cal-n{align-self:flex-start}.cal-ag{position:sticky;top:12px}}
+@media (min-width:821px){#sh-m{display:block!important}}
+
+/* ═══ 差旅請款 ═══ */
+.exp-tk{display:flex;gap:3px}.exp-tk i{flex:1;height:4px;border-radius:2px;background:var(--n800)}.exp-tk i.on{background:var(--a700)}.exp-tk i.rj{background:#e0a35a}
+.exp-it{display:flex;flex-direction:column;gap:10px}.exp-r{display:flex;gap:8px;align-items:center}
+.exp-bar{position:sticky;bottom:calc(68px + env(safe-area-inset-bottom));background:var(--sf2);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;box-shadow:0 -8px 20px rgba(0,0,0,.35);z-index:5}
+@media (min-width:821px){.exp-bar{bottom:12px}}
+@media (max-width:820px){#pg-myexp,#pg-expedit,#pg-exp{padding:0 0 calc(96px + env(safe-area-inset-bottom))!important}}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -625,7 +716,7 @@ textarea.nx-in{resize:vertical;line-height:1.6}
     
     <div class="si" onclick="nav('pj',this)"><span>📁</span>專案管理</div>
     <div class="si" onclick="nav('tk',this)"><span>📋</span>任務分配<span class="sbbd" id="tkbd">0</span></div>
-    <div class="si" onclick="nav('sh',this)"><span>🎬</span>拍攝排程</div>
+    <div class="si" onclick="nav('sh',this)"><span>📅</span>專案行事曆</div>
     <div class="si" onclick="nav('wl',this)"><span>👥</span>人員負載</div>
     <div class="si" data-perm="kpi_view" onclick="nav('kp',this)"><span>🎯</span>考核目標</div>
     <div class="si" onclick="nav('mtg',this)"><span>📝</span>會議紀錄</div>
@@ -638,7 +729,7 @@ textarea.nx-in{resize:vertical;line-height:1.6}
     <div class="si" onclick="nav('contracts',this)"><span>📄</span>合作客戶</div>
     <div class="si" onclick="nav('goals',this)"><span>🏆</span>業績目標</div>
     <div class="si" onclick="nav('clog',this)"><span>🗒️</span>客戶互動紀錄</div>
-  </div>
+  </div><div id="dept-adm" style="display:none"><div class="si" id="si-att" onclick="nav('att',this)"><span>🕘</span>出缺勤</div><div class="si" id="si-attset" onclick="nav('attset',this)"><span>⚙️</span>出缺勤設定</div><div class="si" id="si-exp" onclick="nav('exp',this)"><span>🧾</span>請款審核</div></div>
   <div class="sbdv"></div>
   <div class="sbsc">客戶專案 <span id="spjc" style="opacity:.55;font-weight:400"></span></div>
   <div id="spjl" style="max-height:260px;overflow-y:auto"></div>
@@ -672,8 +763,8 @@ textarea.nx-in{resize:vertical;line-height:1.6}
     <div id="mhd"></div><div id="pg-db" class="pg on"><div id="today-c"></div><div id="db-calwrap" style="margin-top:28px;max-width:1240px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div style="font-family:var(--ui);font-size:13px;font-weight:600;color:var(--tx2)">影片發布行事曆</div><div id="cal-nav" style="display:flex;align-items:center;gap:6px"></div></div><div id="db-cal"></div></div></div>
 <div id="pg-pj" class="pg"><div id="pj-m"></div><div class="fb"><input class="sb2" placeholder="🔍 搜尋" oninput="fPJ(this.value)" style="max-width:200px"><button class="fc" data-f="all" onclick="sPJf('all',this)">全部</button><button class="fc" data-f="進行中" onclick="sPJf('進行中',this)">進行中</button><button class="fc" data-f="暫停" onclick="sPJf('暫停',this)">暫停</button><button class="fc" data-f="已結案" onclick="sPJf('已結案',this)">已結案</button><button id="pj-add-btn" class="btn bp sm" style="margin-left:auto" onclick="oAddPJ()">＋ 新增專案</button></div><div id="pj-list-wrap"></div></div>
     <div id="pg-tk" class="pg"><div class="notice-box"><div class="ni-t">📌 注意事項</div><ol><li>事情完成後務必「確實回報」並追蹤進度</li><li>影片需在兩天內送審完畢，請提醒主管</li><li>下班前請注意工作日誌是否填寫</li></ol></div><div id="aprv-banner"></div><div class="fb"><input id="tk-search" class="sb2" placeholder="🔍 搜尋任務" oninput="fTK(this.value)" style="max-width:180px"><span id="tf-as"></span><span id="tf-st"></span><span id="tf-pj"></span><span id="tf-ur"></span><button id="tk-add-btn" class="btn bp sm" style="margin-left:auto" onclick="oAddTask()">＋ 新增任務</button></div><div class="pnl" style="overflow-x:auto"><table class="tt cmp"><thead><tr><th style="width:28px"></th><th style="width:440px">任務名稱</th><th style="width:100px">關聯專案</th><th style="width:85px">負責人</th><th style="width:70px">急迫性</th><th style="width:115px">狀態</th><th style="width:110px">截止日</th><th style="width:55px"></th></tr></thead><tbody id="tkb"></tbody></table></div></div>
-    <div id="pg-sh" class="pg"><div id="sh-m"></div><div class="g3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px" id="shk"></div><div class="fb"><button class="fc" data-f="all" onclick="sSHf('all',this)">全部</button><button class="fc" data-f="企劃中" onclick="sSHf('企劃中',this)">企劃中</button><button class="fc" data-f="待拍攝" onclick="sSHf('待拍攝',this)">待拍攝</button><button class="fc" data-f="未排定" onclick="sSHf('未排定',this)">未排定日期</button><button id="gcal-sync-btn" class="btn bp sm" style="margin-left:auto" onclick="syncGCal()">🔄 同步 Google 日曆</button></div><div class="pnl" style="overflow-x:auto"><table class="tt cmp"><thead><tr id="shth"></tr></thead><tbody id="shb"></tbody></table></div><div id="gcal-embed-wrap" style="margin-top:16px"></div></div>
-    <div id="pg-wl" class="pg"><div id="wl-m"></div><div class="g2" style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><div style="font-family:var(--ui);font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">企劃/拍攝</div><div id="wld"></div></div><div><div style="font-family:var(--ui);font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">剪輯師</div><div id="wle"></div></div></div></div>
+    <div id="pg-sh" class="pg"><div id="sh-m"></div></div>
+<div id="pg-wl" class="pg"><div id="wl-m"></div><div class="g2" style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><div style="font-family:var(--ui);font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">企劃/拍攝</div><div id="wld"></div></div><div><div style="font-family:var(--ui);font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">剪輯師</div><div id="wle"></div></div></div></div>
     <div id="pg-kp" class="pg"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px" id="kpg"></div></div>
     <div id="pg-ac" class="pg"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px"><div style="font-family:var(--ui);font-size:14px;font-weight:600">帳號管理</div><div id="ac-btn"></div></div><div class="pnl" id="acl"></div></div>
     <div id="pg-au" class="pg"><div class="pnl" style="padding:16px"><div style="font-family:var(--ui);font-size:13px;font-weight:600;margin-bottom:14px">操作紀錄</div><div id="aul"></div></div></div>
@@ -688,7 +779,7 @@ textarea.nx-in{resize:vertical;line-height:1.6}
     <div id="pg-goals" class="pg"><div id="goals-c"></div></div>
     <div id="pg-mtg" class="pg"><div id="mtg-c"></div></div>
     <div id="pg-clog" class="pg"><div id="clog-c"></div></div>
-    <div id="pg-cal" class="pg"><div id="cal-c"></div></div><div id="pg-today" class="pg"><div id="today-m"></div></div><div id="pg-inbox" class="pg"><div id="inbox-c"></div></div><div id="pg-more" class="pg"><div id="more-c"></div></div><div id="pg-biz" class="pg"><div id="biz-c"></div></div><div id="pg-wlog" class="pg"><div id="wlog-c"></div></div><div id="pg-me" class="pg"><div id="me-c"></div></div><div id="pg-tasks" class="pg"><div id="tasks-c"></div></div><div id="pg-cust" class="pg"><div id="cust-c"></div></div><div id="pg-perf" class="pg"><div id="perf-c"></div></div>
+    <div id="pg-cal" class="pg"><div id="cal-c"></div></div><div id="pg-today" class="pg"><div id="today-m"></div></div><div id="pg-inbox" class="pg"><div id="inbox-c"></div></div><div id="pg-more" class="pg"><div id="more-c"></div></div><div id="pg-biz" class="pg"><div id="biz-c"></div></div><div id="pg-wlog" class="pg"><div id="wlog-c"></div></div><div id="pg-me" class="pg"><div id="me-c"></div></div><div id="pg-tasks" class="pg"><div id="tasks-c"></div></div><div id="pg-cust" class="pg"><div id="cust-c"></div></div><div id="pg-perf" class="pg"><div id="perf-c"></div></div><div id="pg-att" class="pg"><div id="att-c"></div></div><div id="pg-attset" class="pg"><div id="attset-c"></div></div><div id="pg-myatt" class="pg"><div id="myatt-c"></div></div><div id="pg-myexp" class="pg"><div id="myexp-c"></div></div><div id="pg-expedit" class="pg"><div id="expedit-c"></div></div><div id="pg-exp" class="pg"><div id="exp-c"></div></div>
   </div>
 </div>
 </div>
@@ -1176,7 +1267,7 @@ sb.auth.onAuthStateChange(async(event,session)=>{
   if(SHARE_TOKEN)return;
   if((event==='SIGNED_IN'||event==='INITIAL_SESSION')&&session){
     await handleSignIn(session);
-  }else if(event==='SIGNED_OUT'){CU=null;document.getElementById('app').classList.remove('on');document.getElementById('ls').classList.add('on');document.getElementById('loading').style.display='none';}
+  }else if(event==='SIGNED_OUT'){nxOnLogout();CU=null;document.getElementById('app').classList.remove('on');document.getElementById('ls').classList.add('on');document.getElementById('loading').style.display='none';}
 });
 // 初始化
 initApp();
@@ -1362,7 +1453,7 @@ function rSH(){if(isMob()){rSHm();return}document.querySelectorAll('#pg-sh .fc')
   }
 }
 function rKP(){
-  if(!hasPerm('kpi_view')){document.getElementById('kpg').innerHTML='<div style="color:var(--tx3)">無權限</div>';return}
+  if(!hasPerm('kpi_view')){document.getElementById('kpg').innerHTML='<div style="color:var(--tx3);padding:32px 16px;text-align:center;font-size:13px;line-height:1.7">你沒有查看考核目標的權限<br>如需使用，請聯絡管理員開通</div>';return}
   function kRow(lb,ac,tg,ok){return `<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><span style="font-size:13px;color:var(--tx2)">${lb}</span><div style="display:flex;align-items:center;gap:8px"><span style="font-size:14px;font-weight:700">${ac}</span><span style="font-size:11px;color:var(--tx3)">/ ${tg}</span><span>${ok?'✅':'❌'}</span></div></div><div class="pw"><div class="pb ${ok?'pbg':'pba'}" style="width:${Math.min(100,String(ac).includes('%')?parseFloat(ac):(parseFloat(tg)>0?parseFloat(ac)/parseFloat(tg)*100:0))}%"></div></div></div>`}
   function kStat(lb,val,ok){return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><span style="font-size:13px;color:var(--tx2)">${lb}</span><span style="font-size:14px;font-weight:700">${val}${ok===true?' ✅':ok===false?' ❌':''}</span></div>`}
   document.getElementById('kpg').innerHTML=STATE.profiles.filter(u=>u.active!==false).map(u=>{
@@ -1496,18 +1587,18 @@ function rAC(){
     const rc={admin:'radm',manager:'rmgr',staff:'rstf'};
     const depts=['企劃/拍攝','剪輯師','業務','行政'];
     return '<div class="acr" style="align-items:flex-start;padding:14px 16px">'
-      +'<div class="av" style="background:'+u.color+'33;color:'+u.color+';width:36px;height:36px;flex-shrink:0;margin-top:2px">'+u.name[0]+'</div>'
+      +'<div class="av" style="background:'+safeColor(u.color)+'33;color:'+safeColor(u.color)+';width:36px;height:36px;flex-shrink:0;margin-top:2px">'+esc((u.name||'?')[0])+'</div>'
       +'<div style="flex:1;min-width:0">'
         +'<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px">'
-          +'<div style="font-weight:600;font-size:14px">'+u.name+'</div>'
+          +'<div style="font-weight:600;font-size:14px">'+esc(u.name)+'</div>'
           +'<span class="rb '+rc[u.role]+'">'+rl[u.role]+'</span>'
           +'<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:'+(u.active!==false?'var(--gnd)':'var(--rdd)')+';color:'+(u.active!==false?'var(--gn)':'var(--rd)')+';">'+(u.active!==false?'啟用':'停用')+'</span>'
         +'</div>'
         +'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:4px 16px;font-size:12px;color:var(--tx3)">'
-          +'<div>部門：<span style="color:var(--tx)">'+u.dept+'</span></div>'
+          +'<div>部門：<span style="color:var(--tx)">'+esc(u.dept)+'</span></div>'
           +'<div>企劃量：<span style="color:var(--tx)">'+capPL(u)+'支/月</span></div>'
           +'<div>剪輯量：<span style="color:var(--tx)">'+capED(u)+'部/月</span></div>'
-          +(u.notes?'<div style="grid-column:1/-1">備註：<span style="color:var(--tx2)">'+u.notes+'</span></div>':'')
+          +(u.notes?'<div style="grid-column:1/-1">備註：<span style="color:var(--tx2)">'+esc(u.notes)+'</span></div>':'')
         +'</div>'
         +(u.role!=='admin'?'<div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">'+((u.permissions&&u.permissions.length)?u.permissions.map(pk=>{const pd=PERM_DEFS.find(x=>x.key===pk);return '<span class="tg" style="font-size:10px">'+(pd?pd.label:pk)+'</span>'}).join(''):'<span style="font-size:11px;color:var(--tx3)">尚未指派任何功能權限</span>')+'</div>':'')
       +'</div>'
@@ -1700,7 +1791,7 @@ document.addEventListener('click',e=>{if(!e.target.closest('#np')&&!e.target.clo
 function openP(){document.getElementById('sp').classList.add('on');document.getElementById('ov').classList.add('on')}
 function closeP(){document.getElementById('sp').classList.remove('on');document.getElementById('ov').classList.remove('on')}
 function openM(sz=''){document.getElementById('mo').classList.add('on');const b=document.getElementById('mbox');b.className='mdl';if(sz)b.classList.add(sz)}
-function closeM(){document.getElementById('mo').classList.remove('on');if(window.nxRefresh&&window.CU)setTimeout(nxRefresh,30)}
+function closeM(){document.getElementById('mo').classList.remove('on');if(window.nxRefresh&&CU)setTimeout(nxRefresh,30)}
 function oAddPJ(){const t=tdfToday();document.getElementById('mt').textContent='新增專案';document.getElementById('mb').innerHTML=`<div class="fg"><div class="fr"><label class="fl">專案代碼</label><input id="fc" placeholder="NM2601"></div><div class="fr"><label class="fl">客戶名稱</label><input id="fcl"></div></div><div class="fg"><div class="fr"><label class="fl">企劃/拍攝</label><select id="fpe">${STATE.profiles.filter(a=>a.dept==='企劃/拍攝'||capPL(a)>0).map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('')}</select></div><div class="fr"><label class="fl">剪輯師</label><select id="fed">${STATE.profiles.filter(a=>a.dept==='剪輯師').map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('')}</select></div></div><div class="fg"><div class="fr"><label class="fl">開始日期</label><input id="fsd" type="date" value="${t}"></div><div class="fr"><label class="fl">初始期數</label><input id="fper" type="number" value="1" min="1"></div></div><div class="fg"><div class="fr"><label class="fl">每期片數</label><input id="ftt" type="number" value="10"></div><div class="fr"><label class="fl">請款截止</label><input id="fbl" placeholder="每月25日"></div></div>`;document.getElementById('mf').innerHTML=`<button class="btn bg" onclick="closeM()">取消</button><button class="btn bp" onclick="sbPJ()">建立專案</button>`;openM()}
 async function sbPJ(){const c=document.getElementById('fc').value.trim(),cl=document.getElementById('fcl').value.trim();if(!c||!cl){alert('請填寫代碼與客戶名稱');return}const {data,error}=await sb.from('projects').insert({id:c,client_name:cl,status:'進行中',active:true,planner_id:document.getElementById('fpe').value,period:parseInt(document.getElementById('fper').value)||1,start_date:document.getElementById('fsd').value,total_videos:parseInt(document.getElementById('ftt').value)||10,done_videos:0,editor_id:document.getElementById('fed').value,billing_day:document.getElementById('fbl').value,platforms:[],ip_settings:{ps:'',au:'',sy:'',co:[]}}).select().single();if(!error&&data){STATE.projects.push(data);await aLog('新增專案',`新增 <${c} ${cl}>`);fillTF();rSPJ();}closeM();rPJ()}
 function oAppr(pid){const p=STATE.projects.find(x=>x.id===pid);if(!p)return;document.getElementById('mt').textContent=`審批：${esc(p.client_name)} 第${p.period}期`;document.getElementById('mb').innerHTML=`<div class="al ain" style="margin-bottom:16px"><span>ℹ️</span><div>可調整本期確認數量（含贈送片數），超出移至下期</div></div><div class="fr"><label class="fl">本期確認數量</label><input id="apc" type="number" value="${p.done_videos}"><div style="font-size:11px;color:var(--tx3);margin-top:4px">目前已發布：${p.done_videos}片</div></div><div class="fr"><label class="fl">下一期合約片數</label><input id="apn" type="number" value="${p.total_videos}"></div><div class="fr"><label class="fl">下一期開始日</label><input id="aps" type="date"></div>`;document.getElementById('mf').innerHTML=`<button class="btn bg" onclick="closeM()">取消</button><button class="btn bs" onclick="sbAp('${pid}')">審批通過，建立下一期</button>`;openM()}
@@ -2242,7 +2333,7 @@ function rToday(){
   const nudge=nxHasLog()?'':`<div class="nx-nudge" onclick="NX_WLOG_FROM='today';nav('wlog',null)"><span style="color:var(--a300)">${nxi('notebook','regular',18)}</span><div style="flex:1;display:flex;flex-direction:column;gap:1px"><span>下班前記得填寫工作日誌</span><span style="font-size:12px;color:var(--n500)">今天已推進 ${nxHist().length} 件，會自動帶入</span></div><span style="color:var(--n600)">${nxi('caret-right','regular',14)}</span></div>`;
   const G=[['逾期',t=>{const o=offOf(t);return o!=null&&o<0},'var(--a300)'],['今天',t=>offOf(t)===0,'var(--tx)'],['3 天內',t=>{const o=offOf(t);return o!=null&&o>0&&o<=3},'var(--n300)'],['之後',t=>{const o=offOf(t);return o!=null&&o>3},'var(--n400)'],['未排定',t=>offOf(t)==null,'var(--n500)']];
   const rest=list.slice(1);
-  const groups=G.map(([title,f,fg])=>({title,fg,items:rest.filter(f)})).filter(g=>g.items.length).map(g=>`<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:baseline;gap:8px;font-size:13px;color:${g.fg}"><span style="font-weight:500">${g.title}</span><span style="color:var(--n600)">${g.items.length}</span></div>${g.items.map(t=>nxCard(t)).join('')}</div>`).join('');
+  const groups=G.map(([title,f,fg])=>({title,fg,items:rest.filter(f)})).filter(g=>g.items.length).map(g=>`<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:baseline;gap:8px;font-size:13px;color:${g.fg}"><span style="font-weight:500">${g.title}</span><span style="color:var(--n400)">${g.items.length}</span></div>${g.items.map(t=>nxCard(t)).join('')}</div>`).join('');
   let empty='';
   if(!list.length){
     const sales=CU.dept==='業務';
@@ -2515,7 +2606,7 @@ let NX_DEPT=(()=>{try{return localStorage.getItem('NX_DEPT')}catch(e){return nul
 const canBiz=()=>!!CU&&deptList().some(d=>d.id==='biz');
 const curDept=()=>{const L=deptList();if(!L.length)return 'plan';const s=NX_DEPT&&L.find(d=>d.id===NX_DEPT);if(s)return s.id;const m=L.find(d=>d.myDept.includes(CU.dept));return (m||L[0]).id};
 function nxDeptSeg(){if(!canBiz())return '';const d=curDept();return `<div class="nx-seg nx-dseg"><div class="nx-so${d==='plan'?' on':''}" onclick="setDept('plan')">${nxi('film-slate','regular',14)}企劃部</div><div class="nx-so${d==='biz'?' on':''}" onclick="setDept('biz')">${nxi('briefcase','regular',14)}業務部</div></div>`}
-function nxDeptSwitchDesktop(){const sb=$n('sb');if(!sb)return;let el=$n('nx-dsw');if(!el){const a=sb.querySelector('.sbl');if(!a)return;el=document.createElement('div');el.id='nx-dsw';a.insertAdjacentElement('afterend',el)}el.innerHTML=nxDeptSeg();el.style.display=canBiz()?'block':'none'}
+function nxDeptSwitchDesktop(){const sb=$n('sb');if(!sb)return;let el=$n('nx-dsw');if(!el){const a=sb.querySelector('.sbl');if(!a)return;el=document.createElement('div');el.id='nx-dsw';a.insertAdjacentElement('afterend',el)}el.innerHTML=nxDeptSeg();el.style.display=deptList().length>1?'block':'none'}
 function nxApplyDept(){const sb=$n('sb');if(sb)sb.dataset.dept=curDept();['plan','biz'].forEach(d=>{const c=$n('dept-'+d);if(c&&(!c.dataset.perm||hasPerm(c.dataset.perm)))c.style.display=d===curDept()?'block':'none'});nxDeptSwitchDesktop();nxTabbar()}
 function applyDeptState(){nxApplyDept()}
 function setDept(d){if(d==='biz'&&!canBiz())d='plan';NX_DEPT=d;try{localStorage.setItem('NX_DEPT',d)}catch(e){}nxApplyDept();nav('today',null)}
@@ -2536,7 +2627,7 @@ function nav(p,el){
   nav0(p,el);
   if(!el){const si=document.querySelector(`#sb .si[onclick*="nav('${p}',"]`);if(si){document.querySelectorAll('.si').forEach(i=>i.classList.remove('on'));si.classList.add('on')}}
   nxChrome(p);
-  const R={today:rDB,inbox:rInbox,more:rMore,wlog:rWlog,me:rMe,tasks:rTasksM,cust:rCust,perf:rPerf};
+  const R=Object.assign({today:rDB,inbox:rInbox,more:rMore,wlog:rWlog,me:rMe,tasks:rTasksM,cust:rCust,perf:rPerf},window.NX_RENDER_MAP||{});
   if(R[p])R[p]();
   if(p==='an'){try{localStorage.setItem('anseen:'+CU.id,new Date().toISOString())}catch(e){}}
   const ct=$n('ct');if(ct)ct.scrollTop=0;
@@ -2593,7 +2684,7 @@ function nxLeadCard(l){
 }
 // 滑動（任務與客戶共用）
 function swDown(e,id,kind){if(e.button>0)return;SW={id,kind,x:e.clientX,moved:false,dx:0,el:e.currentTarget};try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){}e.currentTarget.style.transition='none'}
-function swUp(e){if(!SW)return;const s=SW;SW=null;swReset(s);const L=s.kind==='l';if(!s.moved||s.dx<-80)L?openLeadSheet(s.id):openTaskSheet(s.id);else if(s.dx>90)L?advanceLead(s.id):advanceTask(s.id)}
+function swUp(e){if(!SW)return;const s=SW;SW=null;swReset(s);const L=s.kind==='l';if(!s.moved||s.dx<-80)L?openLeadSheet(s.id):openTaskSheet(s.id);else if(s.dx>90){try{localStorage.setItem('TODAY_HINT_SEEN','1')}catch(e){}L?advanceLead(s.id):advanceTask(s.id)}}
 async function advanceLead(id){
   const l=STATE.leads.find(x=>x.id===id);if(!l)return;const i=LSTAGE.indexOf(l.stage);if(i<0||i>=4)return;
   if(!hasPerm('sales_manage')){nToast('沒有業務部編輯權限');return}
@@ -2629,7 +2720,7 @@ function rTodayBiz(){
   const nudge=nxHasLog()?'':`<div class="nx-nudge" onclick="NX_WLOG_FROM='today';nav('wlog',null)"><span style="color:var(--a300)">${nxi('notebook','regular',18)}</span><div style="flex:1;display:flex;flex-direction:column;gap:1px"><span>下班前記得填寫工作日誌</span><span style="font-size:12px;color:var(--n500)">今天已推進 ${nxHist().length} 件，會自動帶入</span></div><span style="color:var(--n600)">${nxi('caret-right','regular',14)}</span></div>`;
   const G=[['逾期',x=>{const o=fOff(x);return o!=null&&o<0},'var(--a300)'],['今天',x=>fOff(x)===0,'var(--tx)'],['3 天內',x=>{const o=fOff(x);return o!=null&&o>0&&o<=3},'var(--n300)'],['之後',x=>{const o=fOff(x);return o!=null&&o>3},'var(--n400)'],['未設定跟進日',x=>fOff(x)==null,'var(--n500)']];
   const rest=list.slice(1),LIM=12;
-  const groups=G.map(([t,f,fg])=>({t,fg,items:rest.filter(f)})).filter(g=>g.items.length).map(g=>`<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:baseline;gap:8px;font-size:13px;color:${g.fg}"><span style="font-weight:500">${g.t}</span><span style="color:var(--n600)">${g.items.length}</span></div>${g.items.slice(0,LIM).map(nxLeadCard).join('')}${g.items.length>LIM?`<div class="nx-btn g" onclick="NX_CUSTF='talk';nav('cust',null)">查看全部 ${g.items.length} 位 →</div>`:''}</div>`).join('');
+  const groups=G.map(([t,f,fg])=>({t,fg,items:rest.filter(f)})).filter(g=>g.items.length).map(g=>`<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:baseline;gap:8px;font-size:13px;color:${g.fg}"><span style="font-weight:500">${g.t}</span><span style="color:var(--n400)">${g.items.length}</span></div>${g.items.slice(0,LIM).map(nxLeadCard).join('')}${g.items.length>LIM?`<div class="nx-btn g" onclick="NX_CUSTF='talk';nav('cust',null)">查看全部 ${g.items.length} 位 →</div>`:''}</div>`).join('');
   const empty=!list.length?`<div class="nx-empty">${nxi('check-circle','regular',28)}<div>${fN?'沒有符合篩選條件的客戶':'目前沒有需要跟進的客戶'}</div><div class="nx-btn p" onclick="nav('cust',null)">前往客戶 →</div></div>`:'';
   const add=hasPerm('sales_manage')?`<div class="nx-ib nx-plus" title="新增客戶" onclick="oAddLead()">${nxi('plus','bold',16)}</div>`:'';
   const head=`<div class="nx-h"><div style="display:flex;flex-direction:column;gap:2px"><div class="nx-date">${dateLabel}</div><div class="nx-gr">${esc(gr)}</div></div><div style="display:flex;gap:8px;align-items:center">${add}${mob?`<div class="nx-ib nx-av" onclick="nav('more',null)">${esc((CU.name||'?').slice(0,1))}</div>`:''}</div></div>`;
@@ -2880,7 +2971,7 @@ function rDB(){if(!CU)return;const biz=curDept()==='biz',w=$n('db-calwrap');if(w
 
 
 // ════════════════ v53：工作區＝「個人」＋「部門」（部門可擴充）════════════════
-const deptList=()=>NX_DEPTS.filter(d=>CU&&(!d.perm||hasPerm(d.perm)));
+const deptList=()=>NX_DEPTS.filter(d=>CU&&deptPermOK(d));
 const deptOf=id=>NX_DEPTS.find(d=>d.id===id);
 const deptAvail=id=>deptList().some(d=>d.id===id);
 let NX_TALL=(()=>{try{const v=localStorage.getItem('NX_TALL');return v==null?null:v==='1'}catch(e){return null}})();
@@ -2903,7 +2994,7 @@ function setDept(d){
 }
 function nxApplyDept(){
   const sb=$n('sb');if(sb)sb.dataset.dept=curDept();
-  NX_DEPTS.forEach(d=>{const c=$n(d.sb);if(c&&(!d.perm||hasPerm(d.perm)))c.style.display=d.id===curDept()?'block':'none'});
+  NX_DEPTS.forEach(d=>{const c=$n(d.sb);if(c&&deptPermOK(d))c.style.display=d.id===curDept()?'block':'none'});
   nxDeptSwitchDesktop();nxTabbar();
 }
 function nav(p,el){
@@ -2920,7 +3011,7 @@ function nav(p,el){
   nav0(p,el);
   if(!el){const si=document.querySelector(`#sb .si[onclick*="nav('${p}',"]`);if(si){document.querySelectorAll('.si').forEach(i=>i.classList.remove('on'));si.classList.add('on')}}
   nxChrome(p);
-  const R={today:rDB,inbox:rInbox,more:rMore,wlog:rWlog,me:rMe,tasks:rTasksM,cust:rCust,perf:rPerf};
+  const R=Object.assign({today:rDB,inbox:rInbox,more:rMore,wlog:rWlog,me:rMe,tasks:rTasksM,cust:rCust,perf:rPerf},window.NX_RENDER_MAP||{});
   if(R[p])R[p]();
   if(p==='an'){try{localStorage.setItem('anseen:'+CU.id,new Date().toISOString())}catch(e){}}
   const ct=$n('ct');if(ct)ct.scrollTop=0;
@@ -2947,7 +3038,7 @@ function rMore(){
   const host=$n('more-c');if(!host)return;
   const d=deptOf(curDept()),roleLb=CU.role==='admin'?'管理員':CU.role==='manager'?'主管':(CU.dept||'成員');
   host.innerHTML=`<div class="nxp"><div style="display:flex;align-items:center;gap:12px"><div class="nx-ib nx-av" style="width:52px;height:52px;font-size:20px">${esc((CU.name||'?').slice(0,1))}</div><div><div style="font-size:18px;font-weight:500">${esc(CU.name)}</div><div class="nx-sub">${esc(roleLb)} · 指名度行銷</div></div></div>`+
-   nxGrp('個人',[nxRow('notebook','工作日誌',"NX_WLOG_FROM='more';nav('wlog',null)"),deptAvail('plan')?nxRow('target','我的產能 / 考核目標',"nav('me',null)"):''])+
+   nxGrp('個人',[nxRow('notebook','工作日誌',"NX_WLOG_FROM='more';nav('wlog',null)"),ATT.ok?nxRow('clock','我的出勤',"nav('myatt',null)"):'',EXP.ok?nxRow('file-text','我的請款',"nav('myexp',null)"):'',deptAvail('plan')?nxRow('target','我的產能 / 考核目標',"nav('me',null)"):''])+
    (nxDeptSeg()?`<div>${nxLbl('工作區（個人＋部門）')}${nxDeptSeg()}</div>`:'')+(d?d.menu():'')+
    nxGrp('其他',[nxRow('megaphone','公告欄',"nav('an',null)"),hasPerm('members_manage')?nxRow('gear-six','帳號管理',"nav('ac',null)"):'',hasPerm('audit_view')?nxRow('list-bullets','操作紀錄',"nav('au',null)"):'',nxRow('sign-out','登出','doLogout(event)')])+`</div>`;
 }
@@ -3010,29 +3101,31 @@ function rToday(){
   const f0=list[0],focusH=f0?(f0.k==='t'?focusTaskHTML(f0.x):focusLeadHTML(f0.x)):'';
   const al=[...(plan?nxAlerts(sc,nxTasks(sc)):[]),...(biz?nxBizAlerts(sc):[])].sort((a,b)=>a.sev-b.sev).slice(0,4);
   const alertArr=al.map(a=>`<div class="nx-al" onclick="${a.go}"><span style="color:var(--a300);margin-top:2px">${nxi(a.icon,'regular',16)}</span><div style="flex:1"><span style="font-weight:500">${esc(a.who)}</span><span style="color:var(--n300)"> — ${esc(a.text)}</span></div><span style="color:var(--n600);margin-top:3px">${nxi('caret-right','regular',14)}</span></div>`),alerts=alertArr.join('');
-  const remArr=nxRemList(plan),rem=remArr.join('');
-  const stackAll=[...remArr,...alertArr],stackShow=NX_REMOPEN?stackAll:stackAll.slice(0,3),stackH=stackShow.join('')+(stackAll.length>3?`<div class="nx-btn g" style="align-self:flex-start" onclick="nxRemToggle()">${NX_REMOPEN?'收合提醒':'還有 '+(stackAll.length-3)+' 則提醒'}</div>`:'');
+  const remArr=nxRemList(plan),anC=nxAnCard(),rem=[...remArr,...(anC?[anC]:[])].join('');
+  const nudge=(nxHasLog()||new Date().getHours()<16)?'':`<div class="nx-nudge" onclick="NX_WLOG_FROM='today';nav('wlog',null)"><span style="color:var(--a300)">${nxi('notebook','regular',18)}</span><div style="flex:1;display:flex;flex-direction:column;gap:1px"><span>下班前記得填寫工作日誌</span><span style="font-size:12px;color:var(--n500)">今天已推進 ${nxHist().length} 件，會自動帶入</span></div><span style="color:var(--n600)">${nxi('caret-right','regular',14)}</span></div>`;
+  const scopeSeg=mgr?`<div class="nx-seg"><div class="nx-so${sc==='mine'?' on':''}" onclick="setScope('mine')">我的</div><div class="nx-so${sc==='all'?' on':''}" onclick="setScope('all')">全組</div></div>`:'';
+  const stackAll=[...remArr,...alertArr,...(anC?[anC]:[]),...(mob&&nudge?[nudge]:[])],stackShow=NX_REMOPEN?stackAll:stackAll.slice(0,1),stackH=NX_REMOPEN?stackAll.join('')+(stackAll.length>1?`<div class="nx-btn g" style="align-self:flex-start;padding:0" onclick="nxRemToggle()">收合提醒 ▴</div>`:''):(stackAll[0]?`<div style="position:relative">${stackAll[0]}${stackAll.length>1?`<span class="nx-more" onclick="nxRemToggle()" title="展開全部提醒">+${stackAll.length-1}</span>`:''}</div>`:'');;
   const ppl=sc==='all'?[...new Set([...TF.as,...NX_BF.as])]:[];
   const chips=[...(plan?[...TF.st.map(s=>[s,`nxRmF('st','${s}')`]),...TF.pj.map(id=>{const p=STATE.projects.find(x=>x.id===id);return [p?p.client_name:'專案',`nxRmF('pj','${id}')`]})]:[]),...(biz?NX_BF.st.map(s=>[LST_LABEL[s],`bizRm('st','${s}')`]):[]),...ppl.map(id=>[gU(id).name,`peopleRm('${id}')`]),...(NX_CNT?[[cnt.find(c=>c[0]===NX_CNT)[1],`nxRmCnt()`]]:[])];
   const fN=chips.length;
-  const filterRow=`<div class="nx-fr"><div class="nx-fb" onclick="openTodayFilter()">${nxi('sliders-horizontal','regular',15)}篩選${fN?`<span style="color:var(--nac)">${fN}</span>`:''}</div>${chips.map(c=>`<div class="nx-ac" onclick="${c[1]}">${esc(c[0])}${nxi('x','regular',11)}</div>`).join('')}<div style="margin-left:auto;display:flex;gap:4px">${plan?`<div class="nx-btn g" onclick="nav('tasks',null)">全部任務 →</div>`:''}${biz?`<div class="nx-btn g" onclick="nav('cust',null)">客戶 →</div>`:''}</div></div>`;
+  const filterRow=`<div class="nx-fr">${mob?scopeSeg:''}<div class="nx-fb" onclick="openTodayFilter()">${nxi('sliders-horizontal','regular',15)}篩選${fN?`<span style="color:var(--nac)">${fN}</span>`:''}</div>${chips.map(c=>`<div class="nx-ac" onclick="${c[1]}">${esc(c[0])}${nxi('x','regular',11)}</div>`).join('')}<div style="margin-left:auto;display:flex;gap:4px">${plan?`<div class="nx-btn g" onclick="nav('tasks',null)">全部任務 →</div>`:''}${biz?`<div class="nx-btn g" onclick="nav('cust',null)">客戶 →</div>`:''}</div></div>`;
   let seen=false;try{seen=localStorage.getItem('TODAY_HINT_SEEN')==='1'}catch(e){}
-  const hint=mob&&!seen&&list.length?`<div class="nx-hint">${nxi('hand-swipe-right','regular',20)}<div style="flex:1">向右滑：推進到下一個${plan&&biz?'狀態／洽談階段':plan?'狀態':'洽談階段'}<br>向左滑或點一下：看詳情</div><span onclick="nxHideHint()" style="cursor:pointer;padding:4px">${nxi('x','regular',14)}</span></div>`:'';
-  const nudge=nxHasLog()?'':`<div class="nx-nudge" onclick="NX_WLOG_FROM='today';nav('wlog',null)"><span style="color:var(--a300)">${nxi('notebook','regular',18)}</span><div style="flex:1;display:flex;flex-direction:column;gap:1px"><span>下班前記得填寫工作日誌</span><span style="font-size:12px;color:var(--n500)">今天已推進 ${nxHist().length} 件，會自動帶入</span></div><span style="color:var(--n600)">${nxi('caret-right','regular',14)}</span></div>`;
+  const hint=mob&&!seen&&list.length?`<div class="nx-hint" style="padding:9px 12px">${nxi('hand-swipe-right','regular',18)}<div style="flex:1;font-size:13px">右滑推進 · 左滑或點一下看詳情</div><span onclick="nxHideHint()" style="cursor:pointer;padding:4px">${nxi('x','regular',14)}</span></div>`:'';
+  
   const G=[['逾期',it=>it.o!=null&&it.o<0,'var(--a300)'],['今天',it=>it.o===0,'var(--tx)'],['3 天內',it=>it.o!=null&&it.o>0&&it.o<=3,'var(--n300)'],['之後',it=>it.o!=null&&it.o>3,'var(--n400)'],['未排定',it=>it.o==null,'var(--n500)']];
   const rest=list.slice(1),LIM=12;
-  const groups=G.map(([t,f,fg])=>({t,fg,items:rest.filter(f)})).filter(g=>g.items.length).map(g=>{let lc=0;const shown=g.items.filter(it=>it.k==='t'||(++lc<=LIM));return `<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:baseline;gap:8px;font-size:13px;color:${g.fg}"><span style="font-weight:500">${g.t}</span><span style="color:var(--n600)">${g.items.length}</span></div>${shown.map(it=>it.k==='t'?nxCard(it.x):nxLeadCard(it.x)).join('')}${shown.length<g.items.length?`<div class="nx-btn g" onclick="nav('cust',null)">還有 ${g.items.length-shown.length} 位客戶 →</div>`:''}</div>`}).join('');
+  const groups=G.map(([t,f,fg])=>({t,fg,items:rest.filter(f)})).filter(g=>g.items.length).map(g=>{let lc=0;const shown=g.items.filter(it=>it.k==='t'||(++lc<=LIM));return `<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:baseline;gap:8px;font-size:13px;color:${g.fg}"><span style="font-weight:500">${g.t}</span><span style="color:var(--n400)">${g.items.length}</span></div>${shown.map(it=>it.k==='t'?nxCard(it.x):nxLeadCard(it.x)).join('')}${shown.length<g.items.length?`<div class="nx-btn g" onclick="nav('cust',null)">還有 ${g.items.length-shown.length} 位客戶 →</div>`:''}</div>`}).join('');
   const sales=CU.dept==='業務';
   const empty=!list.length?`<div class="nx-empty">${nxi('check-circle','regular',28)}<div>${fN?'沒有符合篩選條件的事項':'目前沒有待辦事項，辛苦了'}</div></div>`:'';
   const canT=plan&&hasPerm('tasks_edit'),canL=biz&&hasPerm('sales_manage'),addFn=canT&&canL?'nxAddMenu()':canT?'openNewTask()':canL?'oAddLead()':'';
   const head=`<div class="nx-h"><div style="display:flex;flex-direction:column;gap:2px"><div class="nx-date">${dateLabel}</div><div class="nx-gr">${esc(gr)}</div></div><div style="display:flex;gap:8px;align-items:center">${addFn?`<div class="nx-ib nx-plus" title="新增" onclick="${addFn}">${nxi('plus','bold',16)}</div>`:''}${mob?`<div class="nx-ib nx-av" onclick="nav('more',null)">${esc((CU.name||'?').slice(0,1))}</div>`:''}</div></div>`;
-  const seg=(nxDeptSeg(true)||mgr)?`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${nxDeptSeg(true)}${mgr?`<div class="nx-seg"><div class="nx-so${sc==='mine'?' on':''}" onclick="setScope('mine')">我的</div><div class="nx-so${sc==='all'?' on':''}" onclick="setScope('all')">全組</div></div>`:''}</div>`:'';
-  if(mob)host.innerHTML=`<div class="nxp">${head}${seg}<div class="nx-cnt">${counters}</div>${focusH}${stackH}${filterRow}${hint}${nudge}${empty}${groups}</div>`;
+  const seg=mob?(nxDeptSeg(true)||''):((nxDeptSeg(true)||mgr)?`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${nxDeptSeg(true)}${scopeSeg}</div>`:'');
+  if(mob)host.innerHTML=`<div class="nxp">${head}${seg}${attCardHTML()}<div class="nx-cnt">${counters}</div>${focusH}${stackH}${filterRow}${hint}${empty}${groups}</div>`;
   else{
     const w=workloadOf(CU.id),cap=capOf(CU),pct=cap>0?Math.round(w.open.length/cap*100):0,g=STATE.salesGoals.find(x=>x.period_type==='monthly'),gp=g&&g.target_amount>0?Math.round(g.current_amount/g.target_amount*100):null,cn=s=>STATE.leads.filter(l=>Array.isArray(s)?s.includes(l.stage):l.stage===s).length;
     const me=plan?`<div class="nx-aside-c"><div class="nx-lb">我的產能</div><div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:28px;font-weight:500">${w.open.length}</span><span style="font-size:13px;color:var(--n500)">片待辦${cap>0?` · 佔月產能 ${pct}%`:''}</span></div>${cap>0?`<div class="nx-bar"><div style="width:${Math.min(100,pct)}%"></div></div>`:''}<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${Object.keys(w.byStatus).map(s=>`<span class="nx-tag">${esc(s)}·${w.byStatus[s]}</span>`).join('')}</div><div class="nx-btn g" style="margin-top:6px;justify-content:flex-start" onclick="nav('me',null)">我的產能／考核 →</div></div>`:'';
     const perf=biz?`<div class="nx-aside-c"><div class="nx-lb">本月業績</div>${gp==null?'<div style="font-size:13px;color:var(--n400)">尚未設定月度目標</div>':`<div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:28px;font-weight:500">${gp}%</span><span style="font-size:13px;color:var(--n500)">${fmt$$(g.current_amount)} / ${fmt$$(g.target_amount)}</span></div><div class="nx-bar"><div style="width:${Math.min(100,gp)}%"></div></div>`}<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${[['潛在','lead'],['洽談中',['talk','trial','signing']],['正式合作','contract']].map(([l,s])=>`<span class="nx-tag">${l}·${cn(s)}</span>`).join('')}</div><div class="nx-btn g" style="margin-top:6px;justify-content:flex-start" onclick="nav('perf',null)">業績 →</div></div>`:'';
-    host.innerHTML=`<div class="nx-dw"><div class="nx-dm">${head}${seg}<div class="nx-cnt">${counters}</div>${focusH}${filterRow}${empty}${groups}</div><div class="nx-ds">${rem?`<div class="nx-aside-c"><div class="nx-lb">提醒</div><div style="display:flex;flex-direction:column;gap:8px">${rem}</div></div>`:''}<div class="nx-aside-c"><div class="nx-lb">預警</div>${alerts?`<div style="display:flex;flex-direction:column;gap:8px">${alerts}</div>`:'<div style="font-size:13px;color:var(--n400)">目前沒有緊急事項</div>'}</div>${nudge}${me}${perf}</div></div>`;
+    host.innerHTML=`<div class="nx-dw"><div class="nx-dm">${head}${seg}${attCardHTML()}<div class="nx-cnt">${counters}</div>${focusH}${filterRow}${empty}${groups}</div><div class="nx-ds">${rem?`<div class="nx-aside-c"><div class="nx-lb">提醒</div><div style="display:flex;flex-direction:column;gap:8px">${rem}</div></div>`:''}<div class="nx-aside-c"><div class="nx-lb">預警</div>${alerts?`<div style="display:flex;flex-direction:column;gap:8px">${alerts}</div>`:'<div style="font-size:13px;color:var(--n400)">目前沒有緊急事項</div>'}</div>${nudge}${me}${perf}</div></div>`;
   }
   nxBadges();
 }
@@ -3049,8 +3142,784 @@ function nxRemList(plan){
     const ap=hasPerm('tasks_approve')?nxApproveList().filter(t=>t.status==='待審核'):[];
     if(ap.length)a.push(`<div class="nx-al" onclick="nav('inbox',null)"><span style="color:var(--a300);margin-top:2px">${nxi('check-circle','regular',16)}</span><div style="flex:1"><span style="font-weight:500">${ap.length} 件待審批</span><span style="color:var(--n300)"> — 等你通過或退回</span></div><span style="color:var(--n600);margin-top:3px">${nxi('caret-right','regular',14)}</span></div>`);
   }
-  const an=nxAnCard();if(an)a.push(an);return a;
+  return a;
 }
+
+// ════════════════ 行政部：出缺勤（員工自己打卡；行政可打勾／點選編輯）════════════════
+const ATT_ST=['正常','遲到','早退','遲到早退','缺勤','請假','出差','休假'];
+const ATT_OK=['正常','遲到','早退','遲到早退','出差'];
+const NX_RENDER={};window.NX_RENDER_MAP=NX_RENDER;
+const ATT={ok:null,set:{work_start:'09:00',work_end:'18:00',grace_min:5,workdays:[1,2,3,4,5],allow_manual:true,track_from:''},sites:[],cache:{},ym:nxToday().slice(0,7),day:nxToday(),view:'day',busy:false,pend:null,edit:null};
+PERM_DEFS.push({key:'hr_manage',label:'行政：出缺勤／請款管理',desc:'查看全員出缺勤、打勾或點選編輯出勤紀錄、設定打卡規則與地點（之後含差旅請款審核）'});
+NX_DEPTS.push({id:'adm',name:'行政部',icon:'users-three',perm:'hr_manage',myDept:['行政'],sb:'dept-adm',
+  tabs:[['att','出缺勤','clock',['att','attset']]],pages:['att','attset'],
+  menu:()=>nxGrp('行政部',[nxRow('clock','出缺勤',"nav('att',null)"),nxRow('gear-six','出缺勤設定',"nav('attset',null)")])});
+Object.assign(NX_PDEPT,{att:'adm',attset:'adm'});
+Object.assign(TITLES,{att:'出缺勤',attset:'出缺勤設定',myatt:'我的出勤'});
+['att','attset','myatt'].forEach(k=>NX_OWN.add(k));
+const nxDow=d=>d.getDay()||7;
+const pad2=n=>String(n).padStart(2,'0');
+const attHM=ts=>{if(!ts)return '—';const d=new Date(ts);return pad2(d.getHours())+':'+pad2(d.getMinutes())};
+const attLastDay=ym=>new Date(+ym.slice(0,4),+ym.slice(5,7),0).getDate();
+const attMD=ds=>{const d=new Date(ds+'T00:00:00');return (d.getMonth()+1)+'/'+d.getDate()+' 週'+NX_WK[d.getDay()]};
+const attIsWork=ds=>ATT.set.workdays.includes(nxDow(new Date(ds+'T00:00:00')));
+const attDur=(a,b)=>{const m=Math.round((new Date(b)-new Date(a))/60000);return m<=0?'':`${Math.floor(m/60)}h${pad2(m%60)}m`};
+function attRec(uid,ds){return (ATT.cache[ds.slice(0,7)]||[]).find(r=>r.user_id===uid&&r.work_date===ds)}
+function attPut(row){const ym=row.work_date.slice(0,7),a=ATT.cache[ym]||(ATT.cache[ym]=[]),i=a.findIndex(r=>r.user_id===row.user_id&&r.work_date===row.work_date);if(i>=0)a[i]=row;else a.push(row)}
+async function attLoadMonth(ym){
+  const {data,error}=await sb.from('attendance_records').select('*').gte('work_date',ym+'-01').lte('work_date',ym+'-'+pad2(attLastDay(ym)));
+  if(error)throw error;ATT.cache[ym]=data||[];
+}
+async function attInit(){
+  if(!CU)return;
+  try{
+    const s=await sb.from('attendance_settings').select('*').eq('id',1).maybeSingle();
+    if(s.error){ATT.ok=false;return}
+    if(s.data)Object.assign(ATT.set,{work_start:String(s.data.work_start||'09:00').slice(0,5),work_end:String(s.data.work_end||'18:00').slice(0,5),grace_min:s.data.grace_min!=null?s.data.grace_min:5,workdays:s.data.workdays||[1,2,3,4,5],allow_manual:s.data.allow_manual!==false,track_from:String(s.data.track_from||'').slice(0,10)});
+    const w=await sb.from('work_sites').select('*').eq('active',true);ATT.sites=(w&&w.data)||[];
+    await attLoadMonth(nxToday().slice(0,7));ATT.ok=true;
+  }catch(e){ATT.ok=false}
+  if(window.nxRefresh&&CU)nxRefresh();
+}
+// ── 狀態推導：沒有紀錄的「過去工作日」視為缺勤 ──
+function attDerive(uid,ds){
+  const rec=attRec(uid,ds);if(rec)return {st:rec.status,rec,derived:false};
+  const u=STATE.profiles.find(p=>p.id===uid),since=u&&u.created_at?String(u.created_at).slice(0,10):'',today=nxToday(),wd=attIsWork(ds);
+  if(ATT.set.track_from&&ds<ATT.set.track_from)return {st:'',rec:null,derived:true};
+  if(since&&ds<since)return {st:'',rec:null,derived:true};
+  if(ds<today&&wd)return {st:'缺勤',rec:null,derived:true};
+  if(ds===today&&wd)return {st:'未打卡',rec:null,derived:true};
+  return {st:wd?'':'休息日',rec:null,derived:true};
+}
+const attPresent=st=>ATT_OK.includes(st);
+
+// ═══════════ 個人層：打卡卡片 ═══════════
+function attMine(){return attRec(CU.id,nxToday())}
+function attTag(r){const c=r.status==='正常'?'':' a';return `<span class="nx-tag${c}">${esc(r.status)}</span>`}
+function attMeth(m,ok,dist){return m==='gps'?(ok===false?`定位 · 地點不符${dist?`（${dist}m）`:''}`:'定位'):'手動'}
+function attCardHTML(){
+  if(!ATT.ok)return '';
+  const r=attMine(),now=new Date(),hm=pad2(now.getHours())+':'+pad2(now.getMinutes()),wd=attIsWork(nxToday()),man=ATT.set.allow_manual;
+  const btn=(kind,lb)=>`<div class="nx-btn p clk-b" onclick="attPunch('${kind}')">${nxi('clock','regular',16)} ${lb}</div>${man?`<div class="nx-btn s clk-m" title="無法定位時使用" onclick="attManualSheet('${kind}','')">手動</div>`:''}`;
+  let line='',btns='';
+  if(!r){line=`<span style="color:var(--n300)">今天尚未打卡</span><span class="nx-cl"> · ${wd?'規定 '+ATT.set.work_start+' 上班':'今天是休息日'}</span>`;btns=btn('in','上班打卡')}
+  else if(!r.clock_in){line=`今天：${attTag(r)}${r.note?`<span class="nx-cl"> ${esc(r.note)}</span>`:''}`}
+  else if(!r.clock_out){line=`已上班 <b style="font-weight:600">${attHM(r.clock_in)}</b> ${attTag(r)}<span class="nx-cl"> ${attMeth(r.in_method,r.in_ok,r.in_dist)}</span>`;btns=btn('out','下班打卡')}
+  else{line=`完成 <b style="font-weight:600">${attHM(r.clock_in)}–${attHM(r.clock_out)}</b> ${attDur(r.clock_in,r.clock_out)} ${attTag(r)}`}
+  return `<div class="nx-clock"><div class="clk-i" onclick="nav('myatt',null)"><div class="clk-t"><span class="nx-lb" style="margin:0">打卡</span><span class="clk-time">${hm}</span><span class="nx-cl clk-lk">出勤紀錄 ›</span></div><div class="clk-s">${line}</div></div>${btns?`<div class="clk-r">${btns}</div>`:''}</div>`;
+}
+setInterval(()=>{const e=document.querySelector('.pg.on .clk-time');if(e){const n=new Date();e.textContent=pad2(n.getHours())+':'+pad2(n.getMinutes())}},20000);
+// ── 定位與打卡 ──
+function attGetPos(){return new Promise(res=>{if(!navigator.geolocation)return res(null);navigator.geolocation.getCurrentPosition(p=>res({lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy}),()=>res(null),{enableHighAccuracy:true,timeout:10000,maximumAge:0})})}
+function attDist(a,b,c,d){const R=6371000,t=x=>x*Math.PI/180,dl=t(c-a),dg=t(d-b),h=Math.sin(dl/2)**2+Math.cos(t(a))*Math.cos(t(c))*Math.sin(dg/2)**2;return 2*R*Math.asin(Math.sqrt(h))}
+function attNearest(lat,lng){let best=null;ATT.sites.forEach(s=>{const d=attDist(lat,lng,s.lat,s.lng);if(!best||d<best.dist)best={site:s,dist:Math.round(d)}});return best}
+async function attPunch(kind){
+  if(ATT.busy)return;ATT.busy=true;nToast('取得定位中…');
+  const pos=await attGetPos();ATT.busy=false;
+  if(!pos){attManualSheet(kind,'無法取得定位（請確認已允許定位權限）');return}
+  const near=attNearest(pos.lat,pos.lng);
+  if(near&&near.dist>near.site.radius_m){
+    ATT.pend={kind,method:'gps',pos,near};
+    nxSheet(`<div style="font-size:18px;font-weight:500">不在打卡範圍內</div><div style="font-size:14px;line-height:1.7;color:var(--n300)">距離「${esc(near.site.name)}」約 ${near.dist} 公尺（範圍 ${near.site.radius_m} 公尺）。仍要${kind==='in'?'上班':'下班'}打卡嗎？紀錄會標記「地點不符」。</div><div style="display:flex;gap:8px"><div class="nx-btn s" style="flex:1" onclick="nxSheetClose()">取消</div><div class="nx-btn p" style="flex:1" onclick="nxSheetClose();attCommit(ATT.pend.kind,'gps',ATT.pend.pos,ATT.pend.near)">仍要打卡</div></div>`);return;
+  }
+  attCommit(kind,'gps',pos,near);
+}
+function attManualSheet(kind,reason){
+  const lb=kind==='in'?'上班':'下班';
+  if(!ATT.set.allow_manual){nxSheet(`<div style="font-size:18px;font-weight:500">無法定位</div><div style="font-size:14px;line-height:1.7;color:var(--n300)">${esc(reason)}目前不允許手動打卡，請開啟定位權限後重試。</div><div class="nx-btn s" onclick="nxSheetClose()">知道了</div>`);return}
+  nxSheet(`<div style="font-size:18px;font-weight:500">手動${lb}打卡</div>${reason?`<div style="font-size:13px;color:var(--a300)">${esc(reason)}</div>`:''}<div style="font-size:13px;color:var(--n400);line-height:1.6">手動打卡不記錄位置，時間以系統時間為準，行政人員可以看到打卡方式。</div><div><div class="nx-lb">原因（選填）</div><input id="att-note" class="nx-in" placeholder="例如：外出拜訪客戶、手機沒電"></div><div style="display:flex;gap:8px"><div class="nx-btn s" style="flex:1" onclick="nxSheetClose()">取消</div><div class="nx-btn p" style="flex:1" onclick="attManualGo('${kind}')">確認${lb}打卡</div></div>`);
+}
+function attManualGo(kind){const n=($n('att-note')||{}).value||'';nxSheetClose();attCommit(kind,'manual',null,null,n)}
+async function attCommit(kind,method,pos,near,note){
+  const ok=near?near.dist<=near.site.radius_m:null;
+  const {data,error}=await sb.rpc('attendance_clock',{p_kind:kind,p_method:method,p_lat:pos?pos.lat:null,p_lng:pos?pos.lng:null,p_acc:pos?pos.acc:null,p_site:near?near.site.name:null,p_dist:near?near.dist:null,p_ok:ok,p_note:note||null});
+  if(error){nToast('打卡失敗：'+error.message);return}
+  const row=Array.isArray(data)?data[0]:data;if(row)attPut(row);
+  nToast(`${kind==='in'?'上班':'下班'}打卡成功 ${attHM(kind==='in'?row&&row.clock_in:row&&row.clock_out)}${row&&row.status!=='正常'?`（${row.status}）`:''}`);
+  nxRefresh();
+}
+// ═══════════ 我的出勤 ═══════════
+function attStats(uid,ym){
+  const last=ym===nxToday().slice(0,7)?+nxToday().slice(8):attLastDay(ym);let w={出勤:0,遲到:0,早退:0,缺勤:0,請假:0,出差:0,休假:0};
+  for(let d=1;d<=last;d++){const ds=`${ym}-${pad2(d)}`,x=attDerive(uid,ds);if(!x.st||x.st==='未打卡'||x.st==='休息日')continue;if(attPresent(x.st))w.出勤++;if(x.st.includes('遲到'))w.遲到++;if(x.st.includes('早退'))w.早退++;if(x.st==='缺勤')w.缺勤++;if(x.st==='請假')w.請假++;if(x.st==='出差')w.出差++;if(x.st==='休假')w.休假++}
+  return w;
+}
+const attShift=(ym,n)=>{const d=new Date(+ym.slice(0,4),+ym.slice(5,7)-1+n,1);return d.getFullYear()+'-'+pad2(d.getMonth()+1)};
+async function attGo(ym){ATT.ym=ym;if(!ATT.cache[ym]){try{await attLoadMonth(ym)}catch(e){nToast('讀取失敗：'+e.message)}}nxRefresh()}
+function rMyAtt(){
+  const host=$n('myatt-c');if(!host)return;
+  if(!ATT.ok){host.innerHTML=`<div class="nxp">${nxPH('我的出勤','',['更多',"nav('more',null)"])}<div class="nx-empty"><div>出缺勤功能尚未啟用，請行政人員先在資料庫執行 attendance.sql</div></div></div>`;return}
+  const ym=ATT.ym,st=attStats(CU.id,ym),last=ym===nxToday().slice(0,7)?+nxToday().slice(8):attLastDay(ym);
+  const rows=[];for(let d=last;d>=1;d--){const ds=`${ym}-${pad2(d)}`,x=attDerive(CU.id,ds);if(!x.st||x.st==='休息日'&&!x.rec)continue;rows.push([ds,x])}
+  const cell=(l,n)=>`<div class="nx-c" style="cursor:default"><div class="l">${l}</div><div class="n${l==='缺勤'&&n?' hot':''}">${n}</div></div>`;
+  host.innerHTML=`<div class="nxp">${nxPH('我的出勤',`${esc(CU.name)}`,['更多',"nav('more',null)"])}<div style="display:flex;align-items:center;justify-content:space-between"><div class="nx-ib" onclick="attGo('${attShift(ym,-1)}')">${nxi('caret-left','regular',18)}</div><div style="font-size:16px;font-weight:500">${ym.slice(0,4)} 年 ${+ym.slice(5)} 月</div><div class="nx-ib" onclick="attGo('${attShift(ym,1)}')">${nxi('caret-right','regular',18)}</div></div><div class="nx-cnt" style="grid-template-columns:repeat(4,minmax(0,1fr))">${cell('出勤',st.出勤)}${cell('遲到',st.遲到)}${cell('缺勤',st.缺勤)}${cell('請假',st.請假+st.休假)}</div><div class="nx-list">${rows.map(([ds,x])=>{const r=x.rec;return `<div style="padding:12px 14px;display:flex;align-items:center;gap:12px"><div style="min-width:64px;font-size:13px;color:var(--n400)">${attMD(ds)}</div><div style="flex:1;font-size:14px;font-variant-numeric:tabular-nums">${r&&r.clock_in?`${attHM(r.clock_in)} – ${attHM(r.clock_out)}`:`<span style="color:var(--n500)">${x.st==='未打卡'?'尚未打卡':r&&r.note?esc(r.note):'—'}</span>`}${r&&r.in_ok===false?`<span class="nx-cl"> 地點不符</span>`:''}${r&&r.in_method==='manual'?`<span class="nx-cl"> 手動</span>`:''}</div><span class="nx-tag${x.st==='正常'?'':' a'}" style="${x.derived&&x.st==='缺勤'?'opacity:.7':''}">${esc(x.st)}</span></div>`}).join('')||'<div class="nx-empty"><div>這個月還沒有紀錄</div></div>'}</div></div>`;
+}
+NX_RENDER.myatt=rMyAtt;
+
+// ═══════════ 行政部：全員出缺勤 ═══════════
+function attMembers(){return STATE.profiles.filter(u=>u.active!==false)}
+function attSumLine(ds){
+  const ms=attMembers(),c={應到:0,已到:0,遲到:0,未到:0,假出:0};
+  ms.forEach(u=>{const x=attDerive(u.id,ds);if(x.st===''||x.st==='休息日')return;c.應到++;if(attPresent(x.st))c.已到++;if(x.st.includes('遲到'))c.遲到++;if(x.st==='缺勤'||x.st==='未打卡')c.未到++;if(x.st==='請假'||x.st==='休假')c.假出++});
+  return c;
+}
+async function attSetDay(ds){ATT.day=ds;const ym=ds.slice(0,7);if(!ATT.cache[ym]){try{await attLoadMonth(ym)}catch(e){nToast('讀取失敗：'+e.message)}}nxRefresh()}
+const attShiftDay=(ds,n)=>{const d=new Date(ds+'T00:00:00');d.setDate(d.getDate()+n);return nxISO(d)};
+function rAtt(){
+  const host=$n('att-c');if(!host)return;
+  if(!hasPerm('hr_manage')){host.innerHTML='';nav(isMob()?'today':'db',null);return}
+  if(!ATT.ok){host.innerHTML=`<div class="nxp">${nxPH('出缺勤')}<div class="nx-empty"><div>出缺勤資料表尚未建立<br>請在 Supabase 執行 attendance.sql</div></div></div>`;return}
+  const ym=ATT.view==='month'?ATT.ym:ATT.day.slice(0,7);
+  const head=nxPH('出缺勤','',null,`<div style="display:flex;gap:6px"><div class="nx-ib" style="color:var(--nac)" title="匯出 CSV" onclick="attExport()">${nxi('file-text','regular',20)}</div><div class="nx-ib" style="color:var(--nac)" title="出缺勤設定" onclick="nav('attset',null)">${nxi('gear-six','regular',20)}</div></div>`);
+  const seg=`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${nxDeptSeg()}<div class="nx-seg"><div class="nx-so${ATT.view==='day'?' on':''}" onclick="ATT.view='day';rAtt()">每日</div><div class="nx-so${ATT.view==='month'?' on':''}" onclick="ATT.view='month';ATT.ym=ATT.day.slice(0,7);rAtt()">月表</div></div></div>`;
+  let body='';
+  if(ATT.view==='day'){
+    const ds=ATT.day,c=attSumLine(ds),mem=attMembers();
+    body=`<div style="display:flex;align-items:center;justify-content:space-between"><div class="nx-ib" onclick="attSetDay('${attShiftDay(ds,-1)}')">${nxi('caret-left','regular',18)}</div><div style="text-align:center"><div style="font-size:16px;font-weight:500">${attMD(ds)}${ds===nxToday()?' · 今天':''}</div>${attIsWork(ds)?'':'<div class="nx-cl">休息日</div>'}</div><div class="nx-ib" onclick="attSetDay('${attShiftDay(ds,1)}')">${nxi('caret-right','regular',18)}</div></div>`+
+     `<div class="nx-cnt" style="grid-template-columns:repeat(4,minmax(0,1fr))">${[['應到',c.應到],['已到',c.已到],['遲到',c.遲到],['未到',c.未到]].map(([l,n])=>`<div class="nx-c" style="cursor:default"><div class="l">${l}</div><div class="n${l==='未到'&&n?' hot':''}">${n}</div></div>`).join('')}</div>`+
+     `<div class="nx-list">${mem.map(u=>{const x=attDerive(u.id,ds),r=x.rec,on=attPresent(x.st);return `<div class="nx-arow"><label class="nx-chk" onclick="event.stopPropagation()"><input type="checkbox" ${on?'checked':''} onchange="attTick('${u.id}','${ds}',this.checked)"><span></span></label><div style="flex:1;min-width:0;cursor:pointer" onclick="attOpenEdit('${u.id}','${ds}')"><div style="font-size:15px;font-weight:500">${esc(u.name)}<span class="nx-cl"> ${esc(u.dept||'')}</span></div><div class="nx-cl" style="margin-top:2px;font-variant-numeric:tabular-nums">${r&&r.clock_in?`${attHM(r.clock_in)} – ${attHM(r.clock_out)}　${attMeth(r.in_method,r.in_ok,r.in_dist)}${r.edited_by?'　已編輯':''}`:esc(r&&r.note||(x.st==='缺勤'?'沒有打卡紀錄':x.st==='未打卡'?'尚未打卡':'—'))}</div></div><span class="nx-tag${x.st==='正常'||x.st===''?'':' a'}" style="${x.derived&&x.st==='缺勤'?'opacity:.7':''}">${esc(x.st||'—')}</span></div>`}).join('')}</div>`+
+     `<div class="nx-btn s" onclick="attBulk('${ds}')">全員標記為休假（國定假日）</div><div class="ld-tip">打勾＝標記為出勤；取消打勾＝標記為缺勤。點姓名可修改時間、狀態（遲到／請假／出差…）與備註。</div>`;
+  }else{
+    const last=attLastDay(ym),days=Array.from({length:last},(_,i)=>`${ym}-${pad2(i+1)}`),today=nxToday();
+    const sym={正常:'✓',遲到:'遲',早退:'早',遲到早退:'遲早',缺勤:'缺',請假:'假',出差:'差',休假:'休',未打卡:'·'};
+    body=`<div style="display:flex;align-items:center;justify-content:space-between"><div class="nx-ib" onclick="attGo('${attShift(ym,-1)}')">${nxi('caret-left','regular',18)}</div><div style="font-size:16px;font-weight:500">${ym.slice(0,4)} 年 ${+ym.slice(5)} 月</div><div class="nx-ib" onclick="attGo('${attShift(ym,1)}')">${nxi('caret-right','regular',18)}</div></div>`+
+     `<div class="nx-agrid"><table><thead><tr><th class="s">成員</th>${days.map(ds=>{const w=attIsWork(ds);return `<th class="${w?'':'off'}${ds===today?' td':''}">${+ds.slice(8)}<br><i>${NX_WK[new Date(ds+'T00:00:00').getDay()]}</i></th>`}).join('')}<th class="st st1">出勤</th><th class="st st2">遲到</th><th class="st st3">缺勤</th></tr></thead><tbody>${attMembers().map(u=>{const s=attStats(u.id,ym);return `<tr><td class="s">${esc(u.name)}</td>${days.map(ds=>{const x=attDerive(u.id,ds),cls=x.st==='正常'?'ok':x.st==='缺勤'?'ab':x.st&&x.st!=='休息日'&&x.st!=='未打卡'?'ot':'';return `<td class="${cls}${x.derived&&x.st==='缺勤'?' dv':''}${attIsWork(ds)?'':' off'}" onclick="attOpenEdit('${u.id}','${ds}')">${x.st&&x.st!=='休息日'?(sym[x.st]||''):''}</td>`}).join('')}<td class="st st1"><b>${s.出勤}</b></td><td class="st st2">${s.遲到||''}</td><td class="st st3">${s.缺勤||''}</td></tr>`}).join('')}</tbody></table></div><div class="ld-tip">✓ 正常　遲 遲到　早 早退　缺 缺勤（含沒有打卡的工作日）　假 請假　差 出差　休 休假。點任一格可修改。</div>`;
+  }
+  host.innerHTML=`<div class="nxp ${ATT.view==='month'?'nx-full':'nx-wide'}">${head}${seg}${body}</div>`;
+}
+NX_RENDER.att=rAtt;
+// ── 打勾、編輯、整日休假、匯出 ──
+async function attWrite(row){
+  const {data,error}=await sb.from('attendance_records').upsert(row,{onConflict:'user_id,work_date'}).select().single();
+  if(error){nToast('儲存失敗：'+error.message);return null}
+  if(data)attPut(data);return data;
+}
+async function attTick(uid,ds,on){
+  const x=attDerive(uid,ds);
+  if(x.rec){if(on&&attPresent(x.rec.status)||!on&&x.rec.status==='缺勤')return;await attWrite({user_id:uid,work_date:ds,status:on?'正常':'缺勤',clock_in:x.rec.clock_in,clock_out:x.rec.clock_out,note:x.rec.note||null})}
+  else{if(!on)return;await attWrite({user_id:uid,work_date:ds,status:'正常'})}
+  nxRefresh();
+}
+function attOpenEdit(uid,ds){
+  const x=attDerive(uid,ds),r=x.rec,u=STATE.profiles.find(p=>p.id===uid)||{name:'?'};
+  const hm=ts=>ts?pad2(new Date(ts).getHours())+':'+pad2(new Date(ts).getMinutes()):'';
+  ATT.edit={uid,ds,status:r?r.status:(x.st==='未打卡'?'正常':x.st==='休息日'||!x.st?'正常':x.st)};NX_SHEET={type:'attedit'};
+  nxSheet(`<div><div class="nx-cl">${attMD(ds)}</div><div style="font-size:20px;font-weight:500">${esc(u.name)}</div></div><div>${nxLbl('狀態')}<div id="att-st" style="display:flex;flex-wrap:wrap;gap:6px">${ATT_ST.map(s=>nxChip(s,ATT.edit.status===s,`attPickSt('${s}')`)).join('')}</div></div><div class="nx-fg"><div class="nx-fc"><div class="k">上班時間</div><input id="att-ci" type="time" value="${hm(r&&r.clock_in)}"></div><div class="nx-fc"><div class="k">下班時間</div><input id="att-co" type="time" value="${hm(r&&r.clock_out)}"></div></div>${r&&r.in_method?`<div class="nx-cl" style="line-height:1.7">上班：${attMeth(r.in_method,r.in_ok,r.in_dist)}${r.in_site?'・'+esc(r.in_site):''}${r.in_note?'・'+esc(r.in_note):''}${r.clock_out?`<br>下班：${attMeth(r.out_method,r.out_ok,r.out_dist)}${r.out_note?'・'+esc(r.out_note):''}`:''}</div>`:''}<div><div class="nx-lb">行政備註</div><textarea id="att-nt" class="nx-in" style="min-height:64px" placeholder="例如：特休、補打卡、忘記打卡">${esc(r&&r.note||'')}</textarea></div><div style="display:flex;gap:8px"><div class="nx-btn p" style="flex:1;min-height:46px" onclick="attSaveEdit()">儲存</div>${r?`<div class="nx-btn s" style="color:var(--a300)" onclick="attDelRec('${r.id}')">清除紀錄</div>`:''}</div>`);
+}
+function attPickSt(s){ATT.edit.status=s;const e=$n('att-st');if(e)e.innerHTML=ATT_ST.map(x=>nxChip(x,ATT.edit.status===x,`attPickSt('${x}')`)).join('')}
+async function attSaveEdit(){
+  const e=ATT.edit,ci=$n('att-ci').value,co=$n('att-co').value,nt=$n('att-nt').value.trim();
+  const iso=t=>t?new Date(`${e.ds}T${t}:00`).toISOString():null;
+  const prev=attRec(e.uid,e.ds);
+  const row={user_id:e.uid,work_date:e.ds,status:e.status,clock_in:iso(ci)||(prev&&!ci?null:null),clock_out:iso(co),note:nt||null};
+  if(ci)row.clock_in=iso(ci);else row.clock_in=null;
+  const d=await attWrite(row);if(d){nxSheetClose();nToast('已儲存');nxRefresh()}
+}
+async function attDelRec(id){
+  if(!confirm('清除這筆出勤紀錄？（會回到「未打卡」）'))return;
+  const {error}=await sb.from('attendance_records').delete().eq('id',id);if(error){nToast('刪除失敗：'+error.message);return}
+  Object.keys(ATT.cache).forEach(k=>ATT.cache[k]=ATT.cache[k].filter(r=>r.id!==id));nxSheetClose();nxRefresh();nToast('已清除');
+}
+async function attBulk(ds){
+  if(!confirm(`將 ${attMD(ds)} 全員（尚無紀錄者）標記為「休假」？`))return;
+  const rows=attMembers().filter(u=>!attRec(u.id,ds)).map(u=>({user_id:u.id,work_date:ds,status:'休假',note:'國定假日'}));
+  if(!rows.length){nToast('全員都已有紀錄');return}
+  const {data,error}=await sb.from('attendance_records').upsert(rows,{onConflict:'user_id,work_date'}).select();
+  if(error){nToast('儲存失敗：'+error.message);return}
+  (data||rows).forEach(attPut);nxRefresh();nToast(`已標記 ${rows.length} 人為休假`);
+}
+function attExport(){
+  const ym=ATT.view==='month'?ATT.ym:ATT.day.slice(0,7),last=attLastDay(ym),L=[['日期','姓名','部門','狀態','上班','下班','上班方式','下班方式','上班地點','備註']];
+  attMembers().forEach(u=>{for(let d=1;d<=last;d++){const ds=`${ym}-${pad2(d)}`,x=attDerive(u.id,ds);if(!x.st||x.st==='休息日'&&!x.rec)continue;const r=x.rec||{};L.push([ds,u.name,u.dept||'',x.st,attHM(r.clock_in).replace('—',''),attHM(r.clock_out).replace('—',''),r.in_method==='gps'?'定位':r.in_method==='manual'?'手動':'',r.out_method==='gps'?'定位':r.out_method==='manual'?'手動':'',r.in_site||'',r.note||''])}});
+  const csv='\ufeff'+L.map(r=>r.map(csvQ).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=`出缺勤_${ym}.csv`;document.body.appendChild(a);a.click();a.remove();nToast('已匯出 '+ym+' 出缺勤');
+}
+// ═══════════ 出缺勤設定（規則＋打卡地點）═══════════
+function rAttSet(){
+  const host=$n('attset-c');if(!host)return;
+  if(!hasPerm('hr_manage')){host.innerHTML='';nav(isMob()?'today':'db',null);return}
+  const S=ATT.set,days=[[1,'一'],[2,'二'],[3,'三'],[4,'四'],[5,'五'],[6,'六'],[7,'日']];
+  host.innerHTML=`<div class="nxp nx-wide">${nxPH('出缺勤設定','',['出缺勤',"nav('att',null)"])}${nxDeptSeg()}<div class="nx-card"><div class="nx-lb">上下班規則</div><div class="nx-fg" style="margin-bottom:12px"><div class="nx-fc"><div class="k">上班時間</div><input id="as-ws" type="time" value="${S.work_start}"></div><div class="nx-fc"><div class="k">下班時間</div><input id="as-we" type="time" value="${S.work_end}"></div><div class="nx-fc"><div class="k">遲到寬限（分鐘）</div><input id="as-gr" type="number" min="0" value="${S.grace_min}"></div><div class="nx-fc"><div class="k">開始計算缺勤日</div><input id="as-tf" type="date" value="${S.track_from||''}"></div></div><div class="nx-cl" style="margin:-4px 0 12px;line-height:1.6">這天之前的日子不計入缺勤（避免系統啟用前沒有打卡紀錄被算成缺勤）。</div><div class="nx-lb">工作日</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">${days.map(([n,l])=>nxChip(l,S.workdays.includes(n),`attWd(${n})`)).join('')}</div><label class="nx-row" style="padding:8px 0;min-height:0"><span style="flex:1">允許手動打卡（不記錄位置）</span><label class="tog"><input type="checkbox" id="as-mn" ${S.allow_manual?'checked':''}><span class="tsl"></span></label></label><div class="nx-btn p" style="margin-top:12px;min-height:44px" onclick="attSaveSet()">儲存規則</div></div>`+
+   `<div class="nx-card"><div class="nx-lb">打卡地點（定位打卡會檢查是否在範圍內；未設定任何地點則不檢查）</div>${ATT.sites.map(s=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd)"><div style="flex:1"><div style="font-size:14px">${esc(s.name)}</div><div class="nx-cl">${(+s.lat).toFixed(5)}, ${(+s.lng).toFixed(5)} · 半徑 ${s.radius_m} 公尺</div></div><span class="nx-btn g" style="color:var(--a300)" onclick="attDelSite('${s.id}')">刪除</span></div>`).join('')||'<div class="nx-cl" style="padding:6px 0">尚未設定地點</div>'}<div style="margin-top:12px" class="nx-lb">新增地點</div><input id="si-nm" class="nx-in" placeholder="名稱（例：台北辦公室）" style="margin-bottom:8px"><div class="nx-fg" style="margin-bottom:8px"><div class="nx-fc"><div class="k">緯度</div><input id="si-la" inputmode="decimal" placeholder="25.0330"></div><div class="nx-fc"><div class="k">經度</div><input id="si-lo" inputmode="decimal" placeholder="121.5654"></div><div class="nx-fc"><div class="k">半徑（公尺）</div><input id="si-r" type="number" value="200"></div></div><div style="display:flex;gap:8px"><div class="nx-btn s" style="flex:1" onclick="attHere()">${nxi('clock','regular',15)} 使用目前位置</div><div class="nx-btn p" style="flex:1" onclick="attAddSite()">新增地點</div></div></div></div>`;
+}
+NX_RENDER.attset=rAttSet;
+function attWd(n){const a=ATT.set.workdays,i=a.indexOf(n);if(i>=0)a.splice(i,1);else a.push(n);ATT.set.workdays.sort();rAttSet()}
+async function attSaveSet(){
+  const v={work_start:$n('as-ws').value,work_end:$n('as-we').value,grace_min:parseInt($n('as-gr').value)||0,workdays:ATT.set.workdays,allow_manual:$n('as-mn').checked,track_from:$n('as-tf').value||null,updated_at:new Date().toISOString()};
+  const {error}=await sb.from('attendance_settings').upsert(Object.assign({id:1},v),{onConflict:'id'});
+  if(error){nToast('儲存失敗：'+error.message);return}Object.assign(ATT.set,v,{track_from:v.track_from||''});nToast('已儲存打卡規則');rAttSet();
+}
+async function attHere(){const p=await attGetPos();if(!p){nToast('無法取得定位');return}$n('si-la').value=p.lat.toFixed(6);$n('si-lo').value=p.lng.toFixed(6);nToast('已填入目前位置')}
+async function attAddSite(){
+  const nm=$n('si-nm').value.trim(),la=parseFloat($n('si-la').value),lo=parseFloat($n('si-lo').value),r=parseInt($n('si-r').value)||200;
+  if(!nm||isNaN(la)||isNaN(lo)){nToast('請填寫名稱、緯度、經度');return}
+  const {data,error}=await sb.from('work_sites').insert({name:nm,lat:la,lng:lo,radius_m:r}).select().single();
+  if(error){nToast('新增失敗：'+error.message);return}ATT.sites.push(data);rAttSet();nToast('已新增地點');
+}
+async function attDelSite(id){if(!confirm('刪除這個打卡地點？'))return;const {error}=await sb.from('work_sites').delete().eq('id',id);if(error){nToast('刪除失敗：'+error.message);return}ATT.sites=ATT.sites.filter(s=>s.id!==id);rAttSet()}
+// ── 整合：今日放打卡卡片、更多放「我的出勤」、登入後載入、重新整理對應 ──
+function nxRefresh(){
+  const pg=document.querySelector('.pg.on');if(!pg)return;const id=pg.id.slice(3);
+  const m={today:rDB,db:rDB,inbox:()=>rInbox(),pj:rPJ,sh:rSH,wl:rWL,me:()=>rMe(),tasks:()=>rTasksM(),cust:()=>rCust(),perf:()=>rPerf(),more:()=>rMore(),mtg:rMTG,clog:()=>isMob()?rCLOGm():rCLOG(),leads:rLeads,talks:rTalks,contracts:rContracts,tk:rTK,pd:()=>{if(PD_STATE.pid)renderPD(PD_STATE.pid)}};
+  Object.assign(m,NX_RENDER);if(m[id])m[id]();nxBadges();
+}
+function applyPerms(){STATE.profiles.forEach(p=>{p.color=safeColor(p.color)});applyPerms0();nxApplyDept();attInit();calInit();expInit()}
+
+
+// ════════════════ 安全性與穩定性強化 ════════════════
+// 顯示時才處理：同時相容「寫入時已跳脫」與「寫入時未跳脫」兩種舊紀錄，且不會雙重跳脫
+function escSoft(v){return String(v==null?'':v).replace(/&(?!(?:amp|lt|gt|quot|#39);)/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+const safeColor=c=>/^#[0-9a-f]{6}$/i.test(c||'')?c:'#6E96F7';
+function rAU(){
+  const el=document.getElementById('aul');if(!el)return;
+  const rows=(STATE.auditLogs||[]).map(a=>{const u=gU(a.user_id);return `<div class="arl"><div style="font-family:var(--mn);font-size:11px;color:var(--tx3);min-width:130px;flex-shrink:0">${esc((a.created_at||'').slice(0,16))}</div><div style="font-size:12px;font-weight:600;min-width:50px;color:${safeColor(u.color)}">${esc(u.name)}</div><div style="font-size:12px;flex:1"><strong>${escSoft(a.action)}</strong>：${escSoft(a.detail)}</div></div>`});
+  el.innerHTML=rows.join('')||'<div style="padding:28px 16px;text-align:center;color:var(--tx3);font-size:13px">目前沒有操作紀錄</div>';
+}
+
+
+// ════════════════ 穩定性與操作體驗強化（返回鍵、鍵盤、捲動鎖定、錯誤提示、登出清除）════════════════
+// ── 疊層：底部抽屜／舊版彈窗／舊版側面板／手機側邊欄 ──
+function nxOverlay(){
+  const s=$n('nxs');if(s&&s.classList.contains('on'))return 's';
+  const m=$n('mo');if(m&&m.classList.contains('on'))return 'm';
+  const sp=$n('sp');if(sp&&sp.classList.contains('on'))return 'p';
+  const sb=$n('sb');if(sb&&sb.classList.contains('open')&&innerWidth<=820)return 'd';
+  return null;
+}
+function nxCloseOverlay(k){if(k==='s')nxSheetClose();else if(k==='m')closeM();else if(k==='p')closeP();else if(k==='d')toggleSidebar(false)}
+function nxLock(){document.body.classList.toggle('nx-lock',!!nxOverlay())}
+function nxSheet(html){let o=$n('nxs');if(!o){o=document.createElement('div');o.id='nxs';document.body.appendChild(o)}o.innerHTML=`<div class="nx-bd" onclick="nxSheetClose()"></div><div class="nx-sh" id="nxsp" role="dialog" aria-modal="true"><div class="nx-grab"></div>${html}</div>`;o.classList.add('on');nxLock()}
+function nxSheetClose(){const o=$n('nxs');if(o){o.classList.remove('on');o.innerHTML=''}NX_SHEET=null;nxLock()}
+function openM(sz=''){document.getElementById('mo').classList.add('on');const b=document.getElementById('mbox');b.className='mdl';if(sz)b.classList.add(sz);nxLock()}
+function closeM(){document.getElementById('mo').classList.remove('on');nxLock();if(window.nxRefresh&&CU)setTimeout(nxRefresh,30)}
+function openP(){document.getElementById('sp').classList.add('on');document.getElementById('ov').classList.add('on');nxLock()}
+function closeP(){document.getElementById('sp').classList.remove('on');document.getElementById('ov').classList.remove('on');nxLock()}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const k=nxOverlay();if(k)nxCloseOverlay(k)}});
+// ── 返回鍵／iPhone 左滑返回：先關閉疊層，其次回到上一個頁面，最上層連按兩次才離開 ──
+const NX_NAVH=[];let NX_SENT=false,NX_BACKTS=0;
+function nxSentinel(){try{history.pushState({nx:'s'},'')}catch(e){}}
+(function(){
+  const _nav=nav;
+  nav=function(p,el){
+    _nav(p,el);
+    try{
+      if(!CU)return;const id=(document.querySelector('.pg.on')||{}).id;if(!id)return;const pg=id.slice(3);
+      if(!nav._pop&&NX_NAVH[NX_NAVH.length-1]!==pg){NX_NAVH.push(pg);if(NX_NAVH.length>30)NX_NAVH.shift()}
+      if(!NX_SENT){nxSentinel();NX_SENT=true}
+    }catch(e){}
+  };
+})();
+window.addEventListener('popstate',()=>{
+  if(!CU||!NX_SENT)return;
+  const ov=nxOverlay();
+  if(ov){nxCloseOverlay(ov);nxSentinel();return}
+  if(NX_NAVH.length>1){NX_NAVH.pop();const prev=NX_NAVH[NX_NAVH.length-1];nav._pop=true;try{nav(prev,null)}finally{nav._pop=false}nxSentinel();return}
+  const now=Date.now();
+  if(now-NX_BACKTS<2000){NX_SENT=false;history.back();return}
+  NX_BACKTS=now;nxSentinel();nToast('再按一次返回即可離開');
+});
+// ── 全域錯誤與連線狀態 ──
+let NX_ERRTS=0;
+window.addEventListener('unhandledrejection',e=>{console.error('未處理的錯誤',e.reason);const t=Date.now();if(CU&&t-NX_ERRTS>3000){NX_ERRTS=t;nToast('操作沒有完成：'+((e.reason&&e.reason.message)||'請檢查網路後再試'))}});
+window.addEventListener('offline',()=>{if(CU)nToast('目前沒有網路，變更可能無法儲存')});
+window.addEventListener('online',()=>{if(CU)nToast('網路已恢復')});
+// ── 欄位整格可點（手機上不用精準點到小輸入框）──
+document.addEventListener('click',e=>{
+  const c=e.target&&e.target.closest?e.target.closest('.nx-fc'):null;
+  if(!c||e.target.closest('input,select,textarea,a,button'))return;
+  const i=c.querySelector('input,select,textarea');if(!i)return;
+  i.focus();try{if(i.showPicker&&(i.tagName==='SELECT'||['date','time'].includes(i.type)))i.showPicker()}catch(_){}
+});
+// ── 打卡：防連點、網路例外處理 ──
+async function attCommit(kind,method,pos,near,note){
+  if(ATT.inflight)return;ATT.inflight=true;
+  try{
+    const ok=near?near.dist<=near.site.radius_m:null;
+    const {data,error}=await sb.rpc('attendance_clock',{p_kind:kind,p_method:method,p_lat:pos?pos.lat:null,p_lng:pos?pos.lng:null,p_acc:pos?pos.acc:null,p_site:near?near.site.name:null,p_dist:near?near.dist:null,p_ok:ok,p_note:note||null});
+    if(error){nToast('打卡失敗：'+error.message);return}
+    const row=Array.isArray(data)?data[0]:data;if(row)attPut(row);
+    nToast(`${kind==='in'?'上班':'下班'}打卡成功 ${attHM(kind==='in'?row&&row.clock_in:row&&row.clock_out)}${row&&row.status!=='正常'?`（${row.status}）`:''}`);
+    nxRefresh();
+  }catch(e){nToast('打卡失敗：網路異常，請確認連線後再試一次')}
+  finally{ATT.inflight=false}
+}
+async function attWrite(row){
+  try{
+    const {data,error}=await sb.from('attendance_records').upsert(row,{onConflict:'user_id,work_date'}).select().single();
+    if(error){nToast('儲存失敗：'+error.message);return null}
+    if(data)attPut(data);return data;
+  }catch(e){nToast('儲存失敗：網路異常');return null}
+}
+// ── 登出：清除記憶體中的資料與畫面（共用裝置不殘留上一位使用者的內容）──
+function nxOnLogout(){
+  try{
+    ATT.ok=null;ATT.cache={};ATT.sites=[];ATT.edit=null;ATT.pend=null;ATT.inflight=false;ATT.busy=false;try{EXP.ok=null;EXP.list=[];EXP.detail={};EXP.draft=null;EXP.busy=false}catch(e){}try{CAL.custom=[];CAL.ev={};CAL.calId='';CAL.last={};CAL.g={state:'off',items:{},cover:[],name:'',last:0,msg:''};CAL._silent=0;gcalToken=null;try{localStorage.removeItem('cal_g');localStorage.removeItem('cal_last')}catch(e){}}catch(e){}
+    NX_NAVH.length=0;NX_SENT=false;nxSheetClose();closeM();closeP();
+    for(const k of Object.keys(STATE)){if(Array.isArray(STATE[k]))STATE[k]=[]}
+    ['today-c','today-m','more-c','inbox-c','wlog-c','me-c','tasks-c','cust-c','perf-c','att-c','attset-c','myatt-c','pj-m','sh-m','wl-m','mtg-c','clog-c','pdc'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=''});
+  }catch(e){console.warn('登出清除失敗',e)}
+}
+
+
+// ── 資料入口把關：任何方式載入 STATE.profiles，顏色一律驗證格式（輸出點多達 20 處，在入口統一處理最可靠）──
+(function(){let _pf=STATE.profiles||[];Object.defineProperty(STATE,'profiles',{get(){return _pf},set(v){_pf=v||[];_pf.forEach(p=>{p.color=safeColor(p.color)})},configurable:true,enumerable:true});_pf.forEach(p=>{p.color=safeColor(p.color)})})();
+
+// ════════════════ 專案行事曆（取代「拍攝排程」）＋ 公司 Google 日曆雙向同步 ════════════════
+const CAL={ym:nxToday().slice(0,7),sel:nxToday(),types:[],pj:'',custom:[],dbOk:null,calId:'',ev:{},busy:false,edit:null,
+  g:{state:'off',items:{},cover:[],name:'',last:0,msg:''},last:(()=>{try{return JSON.parse(localStorage.getItem('cal_last')||'{}')}catch(e){return {}}})(),_interactive:false};
+const CAL_C={'拍攝':'#9184d9','發布':'#5fbf92','截止':'#e0a35a','會議':'#6aa7e8','行程':'#b2b6ca','其他':'#b2b6ca','Google':'#e58a8a'};
+const CAL_TYPES=['拍攝','發布','截止','會議','行程','Google'];
+PERM_DEFS.push({key:'calendar_manage',label:'行事曆：設定公司 Google 日曆',desc:'設定要與專案行事曆同步的公司 Google 日曆 ID'});
+Object.assign(TITLES,{sh:'專案行事曆'});
+{const t=deptOf('plan').tabs.findIndex(x=>x[0]==='sh');if(t>=0)deptOf('plan').tabs[t]=['sh','行事曆','calendar-dots',['sh','cal']]}
+const calCanEdit=()=>hasPerm('tasks_edit')||hasPerm('projects_edit');
+const calCanSet=()=>hasPerm('calendar_manage')||isAdm();
+const calDates=(a,b)=>{const o=[],d=new Date(a+'T00:00:00'),e=new Date((b||a)+'T00:00:00');let n=0;while(d<=e&&n<62){o.push(nxISO(d));d.setDate(d.getDate()+1);n++}return o};
+const calGid=()=>encodeURIComponent(CAL.calId||'primary');
+const calLsGet=()=>{try{return localStorage.getItem('cal_gid')||''}catch(e){return ''}};
+
+// ── 載入：自訂行程與日曆設定（資料表不存在時仍可使用其餘功能）──
+async function calInit(){
+  CAL.calId=calLsGet();
+  try{
+    const s=await sb.from('calendar_settings').select('*').eq('id',1).maybeSingle();
+    if(s.error){CAL.dbOk=false}
+    else{CAL.dbOk=true;if(s.data&&s.data.google_calendar_id!=null)CAL.calId=s.data.google_calendar_id||calLsGet()}
+    if(CAL.dbOk){const d=new Date();d.setDate(d.getDate()-120);const e=await sb.from('calendar_events').select('*').gte('start_date',nxISO(d));if(e.error)CAL.dbOk=false;else CAL.custom=e.data||[]}
+  }catch(e){CAL.dbOk=false}
+  if(gcalToken)CAL.g.state='on';
+  if(document.querySelector('.pg.on')&&document.querySelector('.pg.on').id==='pg-sh')rCal();
+}
+// ── 事件彙整：任務／專案截止／會議／自訂行程／Google ──
+function calEvents(){
+  const out=[],pj=id=>STATE.projects.find(p=>p.id===id);
+  STATE.tasks.forEach(t=>{
+    if(!t.due_date)return;const p=pj(t.project_id),isV=t.content_type==='短影音',done=t.status==='已發布'||t.status==='已完成';
+    if(!done&&!taskLive(t))return;if(done&&p&&pjClosed(p))return;
+    const shoot=isV&&['企劃中','待拍攝'].includes(t.status),type=isV?(shoot?'拍攝':'發布'):'截止';
+    out.push({key:'task:'+t.id,type,short:t.name,title:`${p?p.client_name+' · ':''}${t.name}`,sub:`${t.status}${t.assignee_id?' · '+gU(t.assignee_id).name:''}`,date:t.due_date,allDay:true,pid:t.project_id,src:'task',ref:t,done});
+  });
+  STATE.projects.forEach(p=>{if(!pjRunning(p))return;const d=pDL(p);if(d)out.push({key:'prj:'+p.id,type:'截止',short:`${p.client_name} 截止`,title:`${p.client_name} 第${p.period}期截止`,sub:`${p.done_videos}/${p.total_videos} 片`,date:d,allDay:true,pid:p.id,src:'prj',ref:p})});
+  (STATE.clientLogs||[]).forEach(l=>{if(!l.log_date)return;const p=pj(l.project_id);out.push({key:'log:'+l.id,type:'會議',short:l.title,title:`${p?p.client_name+' · ':''}${l.title}`,sub:'會議紀錄',date:l.log_date,allDay:true,pid:l.project_id,src:'log',ref:l})});
+  CAL.custom.forEach(c=>{const p=pj(c.project_id);out.push({key:'evt:'+c.id,type:c.kind==='會議'?'會議':c.kind==='截止'?'截止':'行程',title:c.title,sub:[p?p.client_name:'',c.location].filter(Boolean).join(' · '),date:c.start_date,end:c.end_date||null,allDay:c.all_day!==false,time:c.all_day===false?String(c.start_time||'').slice(0,5):'',pid:c.project_id,src:'evt',ref:c})});
+  const known=new Set(out.map(e=>e.key));
+  Object.values(CAL.g.items).forEach(g=>{if(g.marker&&known.has(g.marker))return;out.push({key:'g:'+g.id,type:'Google',title:g.title,sub:[g.time,g.loc].filter(Boolean).join(' · '),date:g.date,end:g.end,allDay:g.allDay,time:g.time,src:'g',ref:g})});
+  CAL.ev={};out.forEach(e=>CAL.ev[e.key]=e);return out;
+}
+// ── Google：授權、讀取、寫入（日曆 ID 由管理員設定；未設定則使用個人主要日曆）──
+function initGCalClient(){
+  if(!window.google||!google.accounts||!GCAL_CLIENT_ID)return;
+  gcalTokenClient=google.accounts.oauth2.initTokenClient({client_id:GCAL_CLIENT_ID,scope:'https://www.googleapis.com/auth/calendar.events',callback:resp=>{
+    if(resp&&resp.access_token){gcalToken=resp.access_token;CAL.g.state='on';CAL._interactive=false;try{localStorage.setItem('cal_g','1')}catch(e){}if(CAL._res){CAL._res(gcalToken);CAL._res=null}else calSync()}
+    else{CAL.g.state=gcalToken?'on':'off';if(CAL._interactive)CAL.g.msg='Google 授權未完成';CAL._interactive=false;if(CAL._res){CAL._res(null);CAL._res=null}rCalSoft()}},error_callback:()=>{CAL.g.state=gcalToken?'on':'off';if(CAL._interactive)CAL.g.msg='Google 授權未完成';CAL._interactive=false;if(CAL._res){CAL._res(null);CAL._res=null}rCalSoft()}});
+}
+function connectGCal(){
+  if(!GCAL_CLIENT_ID){alert('Google 日曆同步尚未設定 Client ID，請聯絡系統管理員完成設定');return}
+  if(!window.google||!google.accounts){nToast('Google 元件尚未載入完成，請稍等幾秒再試一次');return}
+  if(!gcalTokenClient)initGCalClient();if(!gcalTokenClient){nToast('Google 日曆元件初始化失敗，請重新整理頁面再試');return}
+  CAL._interactive=true;CAL.g.msg='';gcalTokenClient.requestAccessToken({prompt:'consent'});
+}
+const calConnect=connectGCal;
+function calToken(){return new Promise(res=>{if(gcalToken)return res(gcalToken);if(!window.google||!google.accounts||!GCAL_CLIENT_ID)return res(null);if(!gcalTokenClient)initGCalClient();CAL._res=res;try{gcalTokenClient.requestAccessToken({prompt:''})}catch(e){CAL._res=null;res(null)}})}
+async function gcalFetch(path,opts={}){
+  if(!gcalToken){CAL.g.state='expired';throw new Error('AUTH_EXPIRED')}
+  const res=await fetch('https://www.googleapis.com/calendar/v3/'+path,{...opts,headers:{...(opts.headers||{}),Authorization:'Bearer '+gcalToken,'Content-Type':'application/json'}});
+  if(res.status===401){gcalToken=null;CAL.g.state='expired';throw new Error('AUTH_EXPIRED')}
+  if(!res.ok){let m='';try{const j=await res.json();m=(j.error&&j.error.message)||''}catch(_){}const err=new Error(res.status===403?'你的 Google 帳號沒有這個日曆的編輯權限（仍可查看）':res.status===404?'找不到這個日曆，請確認日曆 ID，並已將日曆分享給你的 Google 帳號':'Google 回應錯誤 '+res.status+(m?'：'+m:''));err.code=res.status;throw err}
+  return res.status===204?null:res.json();
+}
+function calNorm(e){
+  const sd=e.start&&(e.start.date||(e.start.dateTime||'').slice(0,10)),allDay=!!(e.start&&e.start.date);let ed=null;
+  if(allDay&&e.end&&e.end.date){const d=new Date(e.end.date+'T00:00:00');d.setDate(d.getDate()-1);ed=nxISO(d);if(ed<=sd)ed=null}else if(e.end&&e.end.dateTime){const x=e.end.dateTime.slice(0,10);if(x>sd)ed=x}
+  const tm=allDay?'':((e.start.dateTime||'').slice(11,16));
+  return {id:e.id,title:e.summary||'(無標題)',date:sd,end:ed,allDay,time:tm,loc:e.location||'',desc:e.description||'',link:e.htmlLink||'',marker:e.extendedProperties&&e.extendedProperties.private&&e.extendedProperties.private.pos||null,updated:e.updated||'',raw:e};
+}
+async function calList(a,b){
+  const out=[];let tok='';
+  do{const q=`timeMin=${encodeURIComponent(a+'T00:00:00+08:00')}&timeMax=${encodeURIComponent(b+'T23:59:59+08:00')}&singleEvents=true&orderBy=startTime&maxResults=250${tok?'&pageToken='+tok:''}`;
+    const r=await gcalFetch(`calendars/${calGid()}/events?${q}`);(r.items||[]).forEach(e=>{if(e.status!=='cancelled')out.push(calNorm(e))});tok=r.nextPageToken||''}while(tok&&out.length<1500);
+  return out;
+}
+async function calPullMonth(ym){
+  if(!gcalToken)return;const a=attShift(ym,0)+'-01',lastD=pad2(attLastDay(ym)),aa=nxISO(new Date(new Date(a+'T00:00:00').getTime()-7*864e5)),bb=nxISO(new Date(new Date(ym+'-'+lastD+'T00:00:00').getTime()+7*864e5));
+  if(CAL.g.cover.some(c=>c[0]<=aa&&c[1]>=bb))return;
+  try{const l=await calList(aa,bb);l.forEach(g=>{CAL.g.items[g.id]=g});CAL.g.cover.push([aa,bb])}catch(e){calErr(e)}
+}
+function calErr(e){
+  if(e.message==='AUTH_EXPIRED'){CAL.g.state='expired';CAL.g.msg='Google 連線已過期，請重新連結'}
+  else{CAL.g.msg=e.message;nToast(e.message)}rCalSoft();
+}
+// ── 要寫入 Google 的項目（拍攝／發布／截止／專案截止／自訂行程）──
+function calDesired(a,b){
+  const out=[];const inWin=d=>d>=a&&d<=b;
+  calEvents().forEach(e=>{
+    if(e.src==='log'||e.src==='g'||e.done||!inWin(e.date))return;
+    if(e.src==='evt'&&!e.ref.sync_google)return;
+    const pre=e.src==='evt'?'':`[${e.type}] `;
+    out.push({key:e.key,title:pre+e.title,date:e.date,end:e.end,allDay:e.allDay,time:e.time,time2:e.src==='evt'&&!e.allDay?String(e.ref.end_time||'').slice(0,5):'',loc:e.src==='evt'?e.ref.location||'':'',desc:`ProjectOS｜${e.type}${e.sub?'｜'+e.sub:''}${e.pid?'｜專案代碼：'+e.pid:''}`,src:e.src,ref:e.ref});
+  });
+  return out;
+}
+function calBody(d){
+  const b={summary:d.title,description:d.desc||'',extendedProperties:{private:{pos:d.key}}};if(d.loc)b.location=d.loc;
+  if(d.allDay!==false){const e=new Date((d.end||d.date)+'T00:00:00');e.setDate(e.getDate()+1);b.start={date:d.date};b.end={date:nxISO(e)}}
+  else{b.start={dateTime:`${d.date}T${d.time||'09:00'}:00+08:00`,timeZone:'Asia/Taipei'};b.end={dateTime:`${d.end||d.date}T${d.time2||d.time||'10:00'}:00+08:00`,timeZone:'Asia/Taipei'}}
+  return b;
+}
+async function calPool(items,n,fn){let i=0;await Promise.all(Array.from({length:Math.min(n,items.length)},async()=>{while(i<items.length){const it=items[i++];await fn(it)}}))}
+async function calSync(){
+  if(CAL.busy)return;
+  const tok=await calToken();if(!tok){CAL.g.state='off';rCalSoft();connectGCal();return}
+  CAL.busy=true;rCalSoft();
+  const stat={c:0,u:0,d:0,p:0};
+  try{
+    const today=new Date(),mA=CAL.ym+'-01',mB=CAL.ym+'-'+pad2(attLastDay(CAL.ym));
+    const w0=new Date(today);w0.setDate(w0.getDate()-30);const w1=new Date(today);w1.setDate(w1.getDate()+150);
+    const a=[nxISO(w0),attShift(CAL.ym,-1)+'-01'].sort()[0],b=[nxISO(w1),attShift(CAL.ym,1)+'-28'].sort().reverse()[0];
+    const all=await calList(a,b),byId={},byMk={};all.forEach(g=>{byId[g.id]=g;if(g.marker)byMk[g.marker]=g});
+    if(calCanEdit()){
+      const desired=calDesired(a,b),keys=new Set(desired.map(d=>d.key));
+      await calPool(desired,4,async d=>{
+        const ex=byMk[d.key]||(d.src==='task'&&d.ref.gcal_event_id&&byId[d.ref.gcal_event_id])||null,gid=ex&&ex.id,body=calBody(d);
+        if(!ex){const r=await gcalFetch(`calendars/${calGid()}/events`,{method:'POST',body:JSON.stringify(body)});stat.c++;if(r)byId[r.id]=calNorm(r);CAL.last[d.key]=d.date;return}
+        const diffDate=ex.date!==d.date,diffTitle=ex.title!==d.title,noMk=!ex.marker;
+        if(diffDate&&(d.src==='task'||d.src==='evt')){
+          // 三方比較：記住「上次同步時的日期」，只有一邊改就以改的那邊為準；兩邊都改才比較更新時間
+          const last=CAL.last[d.key],gNew=new Date(ex.updated||0).getTime(),local=new Date(d.ref.updated_at||0).getTime();
+          let pull;if(last){const lc=d.date!==last,gc=ex.date!==last;pull=gc&&!lc?true:lc&&!gc?false:gNew>local}else pull=gNew>local;
+          if(pull){
+            if(d.src==='task'){await sb.from('tasks').update({due_date:ex.date}).eq('id',d.ref.id);d.ref.due_date=ex.date}
+            else{await sb.from('calendar_events').update({start_date:ex.date,end_date:ex.end||null}).eq('id',d.ref.id);d.ref.start_date=ex.date;d.ref.end_date=ex.end||null}
+            stat.p++;CAL.last[d.key]=ex.date;if(noMk||diffTitle)await gcalFetch(`calendars/${calGid()}/events/${gid}`,{method:'PATCH',body:JSON.stringify({summary:d.title,extendedProperties:{private:{pos:d.key}}})});return;
+          }
+        }
+        if(diffDate||diffTitle||noMk){await gcalFetch(`calendars/${calGid()}/events/${gid}`,{method:'PATCH',body:JSON.stringify(body)});stat.u++}
+        CAL.last[d.key]=d.date;
+      });
+      const stale=all.filter(g=>g.marker&&!keys.has(g.marker)&&g.date>=a&&g.date<=b&&/^(task|prj|evt):/.test(g.marker));
+      await calPool(stale,4,async g=>{await gcalFetch(`calendars/${calGid()}/events/${g.id}`,{method:'DELETE'});delete byId[g.id];stat.d++});
+    }
+    const fresh=await calList(a,b);CAL.g.items={};fresh.forEach(g=>{CAL.g.items[g.id]=g});CAL.g.cover=[[a,b]];
+    try{localStorage.setItem('cal_last',JSON.stringify(CAL.last))}catch(e){}
+    CAL.g.last=Date.now();CAL.g.state='on';CAL.g.msg='';
+    try{const cal=await gcalFetch(`calendars/${calGid()}`);CAL.g.name=cal.summary||''}catch(e){}
+    nToast(`已與 Google 日曆同步：新增 ${stat.c}・更新 ${stat.u}・刪除 ${stat.d}${stat.p?`・從 Google 更新 ${stat.p}`:''}`);
+  }catch(e){calErr(e)}
+  finally{CAL.busy=false;rCalSoft();nxRefresh()}
+}
+function syncGCalNow(){calSync()}
+function syncGCal(){gcalToken?calSync():connectGCal()}
+async function calPushEvt(row,del){
+  if(!gcalToken||!calCanEdit())return;
+  try{
+    const key='evt:'+row.id,q=await gcalFetch(`calendars/${calGid()}/events?privateExtendedProperty=${encodeURIComponent('pos='+key)}&maxResults=5`),ex=(q.items||[])[0];
+    if(del||!row.sync_google){if(ex)await gcalFetch(`calendars/${calGid()}/events/${ex.id}`,{method:'DELETE'});return}
+    const p=STATE.projects.find(x=>x.id===row.project_id),body=calBody({key,title:row.title,date:row.start_date,end:row.end_date,allDay:row.all_day!==false,time:String(row.start_time||'').slice(0,5),time2:String(row.end_time||'').slice(0,5),loc:row.location||'',desc:`ProjectOS｜${row.kind}${p?'｜'+p.client_name:''}${row.notes?'\n'+row.notes:''}`});
+    if(ex)await gcalFetch(`calendars/${calGid()}/events/${ex.id}`,{method:'PATCH',body:JSON.stringify(body)});
+    else await gcalFetch(`calendars/${calGid()}/events`,{method:'POST',body:JSON.stringify(body)});
+    CAL.g.cover=[];
+  }catch(e){calErr(e)}
+}
+
+// ═══════════ 介面：月曆＋當日議程（手機／桌機共用）═══════════
+const calSortEv=(a,b)=>(b.allDay-a.allDay)||String(a.time||'').localeCompare(b.time||'')||CAL_TYPES.indexOf(a.type)-CAL_TYPES.indexOf(b.type);
+function calCells(ym){const y=+ym.slice(0,4),m=+ym.slice(5,7),first=new Date(y,m-1,1),last=new Date(y,m,0).getDate(),rows=Math.ceil((first.getDay()+last)/7),start=new Date(y,m-1,1-first.getDay()),c=[];for(let i=0;i<rows*7;i++){const d=new Date(start);d.setDate(start.getDate()+i);c.push(nxISO(d))}return c}
+function calFiltered(){
+  let l=calEvents();
+  if(CAL.types.length)l=l.filter(e=>CAL.types.includes(e.type));
+  if(CAL.pj)l=l.filter(e=>e.pid===CAL.pj||(e.src==='g'&&false));
+  return l;
+}
+function calIndex(l){const idx={};l.forEach(e=>calDates(e.date,e.end||e.date).forEach(ds=>(idx[ds]=idx[ds]||[]).push(e)));Object.values(idx).forEach(a=>a.sort(calSortEv));return idx}
+function rCalSoft(){const pg=document.querySelector('.pg.on');if(pg&&pg.id==='pg-sh')rCal()}
+function calGchip(){
+  const g=CAL.g,fmt=t=>{const d=new Date(t);return pad2(d.getHours())+':'+pad2(d.getMinutes())};
+  if(CAL.busy)return `<span class="cal-g"><i class="cal-spin"></i> 同步中…</span>`;
+  if(g.state==='on'){const nm=g.name||(CAL.calId?'公司日曆':'個人日曆');return `<span class="cal-g on"><i></i> Google · ${esc(nm)}</span><div class="nx-btn s cal-sb" onclick="calSync()" title="立即同步">${nxi('arrow-right','regular',14)} 同步</div>${g.last?`<span class="nx-cl">上次 ${fmt(g.last)}</span>`:''}`}
+  if(g.state==='expired')return `<span class="cal-g warn"><i></i> 連線已過期</span><div class="nx-btn p cal-sb" onclick="connectGCal()">重新連結 Google</div>`;
+  return `<div class="nx-btn p cal-sb" onclick="connectGCal()">${nxi('calendar-dots','regular',15)} 連結 Google 日曆</div><span class="nx-cl">連結後會與公司日曆雙向同步</span>`;
+}
+function rCal(){
+  const host=$n('sh-m');if(!host)return;
+  const mob=isMob(),ym=CAL.ym,today=nxToday();
+  if(gcalToken&&CAL.g.state!=='expired'&&!CAL.busy&&!CAL.g.cover.some(c=>c[0]<=ym+'-08'&&c[1]>=ym+'-24')&&CAL._pull!==ym){CAL._pull=ym;calPullMonth(ym).then(()=>{CAL._pull=null;rCalSoft()})}
+  else if(!gcalToken&&CAL.g.state==='off'&&!CAL._silent){CAL._silent=1;let on=false;try{on=localStorage.getItem('cal_g')==='1'}catch(e){}if(on)calToken().then(t=>{if(t){CAL.g.state='on';calPullMonth(CAL.ym).then(rCalSoft)}})}
+  const all=calFiltered(),idx=calIndex(all),cells=calCells(ym),sel=CAL.sel;
+  const nav=`<div class="cal-nav"><div class="nx-ib" onclick="calNav(-1)">${nxi('caret-left','regular',18)}</div><div class="cal-ttl">${ym.slice(0,4)} 年 ${+ym.slice(5)} 月</div><div class="nx-ib" onclick="calNav(1)">${nxi('caret-right','regular',18)}</div><div class="nx-btn s cal-today" onclick="calToday()">今天</div></div>`;
+  const chips=`<div class="cal-chips">${nxChip('全部',!CAL.types.length,'calType()')}${CAL_TYPES.map(t=>`<div class="nx-chip${CAL.types.includes(t)?' on':''}" onclick="calType('${t}')"><i class="cal-dot" style="background:${CAL_C[t]}"></i>${t}</div>`).join('')}<select class="nx-in cal-sel" onchange="CAL.pj=this.value;rCal()"><option value="">全部專案</option>${STATE.projects.filter(p=>!pjClosed(p)).map(p=>`<option value="${p.id}" ${CAL.pj===p.id?'selected':''}>${esc(p.client_name)}</option>`).join('')}</select></div>`;
+  const cell=ds=>{const evs=idx[ds]||[],d=+ds.slice(8),o=ds.slice(0,7)!==ym,dow=new Date(ds+'T00:00:00').getDay();
+    const dots=[...new Set(evs.map(e=>e.type))].slice(0,4).map(t=>`<i class="cal-dot" style="background:${CAL_C[t]}"></i>`).join('');
+    const chipsH=evs.slice(0,3).map(e=>`<div class="cal-ch${e.done?' dn':''}" style="--c:${CAL_C[e.type]}" title="${esc(e.title)}" onclick="event.stopPropagation();calOpen('${e.key}')">${e.time?e.time+' ':''}${esc(e.short||e.title)}</div>`).join('')+(evs.length>3?`<div class="cal-more">+${evs.length-3}</div>`:'');
+    return `<div class="cal-c${o?' o':''}${ds===today?' t':''}${ds===sel?' s':''}${dow%6===0?' w':''}" onclick="calPick('${ds}')"><span class="cal-n">${d}</span>${mob?`<span class="cal-dots">${dots}</span>`:chipsH}</div>`};
+  const grid=`<div class="cal-grid" ontouchstart="calTs(event)" ontouchend="calTe(event)"><div class="cal-wk">${['日','一','二','三','四','五','六'].map(x=>`<span>${x}</span>`).join('')}</div><div class="cal-body" style="grid-template-rows:repeat(${cells.length/7},${mob?'48px':'minmax(104px,auto)'})">${cells.map(cell).join('')}</div></div>`;
+  const dayEvs=idx[sel]||[],wd=NX_WK[new Date(sel+'T00:00:00').getDay()];
+  const und=STATE.tasks.filter(t=>t.content_type==='短影音'&&!t.due_date&&['企劃中','待拍攝'].includes(t.status)&&taskLive(t)).length;
+  const agenda=`<div class="cal-ag"><div style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:15px;font-weight:500">${+sel.slice(5,7)}/${+sel.slice(8)} 週${wd}${sel===today?' · 今天':''} <span style="color:var(--n500);font-size:13px">${dayEvs.length} 項</span></div>${calCanEdit()&&CAL.dbOk!==false?`<div class="nx-btn s" style="padding:4px 12px" onclick="calEditSheet(null,'${sel}')">${nxi('plus','bold',13)} 新增</div>`:''}</div>${dayEvs.map(e=>`<div class="cal-a${e.done?' dn':''}" style="--c:${CAL_C[e.type]}" onclick="calOpen('${e.key}')"><i class="cal-bar"></i><div style="flex:1;min-width:0"><div class="cal-at">${esc(e.title)}</div><div class="nx-cl">${esc(e.sub||'')}</div></div><div style="text-align:right"><span class="nx-tag">${e.type}</span><div class="nx-cl" style="margin-top:3px">${e.allDay?'全天':esc(e.time)}</div></div></div>`).join('')||`<div class="nx-empty" style="padding:22px"><div>這天沒有行程</div></div>`}${und?`<div class="nx-btn s" onclick="calUndated()">待排定日期的拍攝 ${und} 筆 →</div>`:''}</div>`;
+  const right=`<div style="display:flex;gap:6px">${calCanEdit()&&CAL.dbOk!==false?`<div class="nx-ib" style="color:var(--nac)" title="新增行程" onclick="calEditSheet(null,'${sel}')">${nxi('plus','bold',20)}</div>`:''}${calCanSet()?`<div class="nx-ib" style="color:var(--nac)" title="日曆設定" onclick="calSettings()">${nxi('gear-six','regular',20)}</div>`:''}</div>`;
+  const hint=CAL.g.state==='on'&&!CAL.calId&&!calLsGet()?`<div class="nx-al" onclick="${calCanSet()?'calSettings()':''}"><span style="color:var(--a300);margin-top:2px">${nxi('warning','regular',16)}</span><div style="flex:1;font-size:13px">尚未設定公司 Google 日曆，目前同步到你的個人日曆${calCanSet()?'（點此設定）':'，請管理員設定公司日曆'}</div></div>`:'';
+  host.innerHTML=`<div class="nxp cal${mob?'':' nx-full'}">${nxPH('專案行事曆','',null,right)}${nxDeptSeg()}<div class="cal-gr">${calGchip()}</div>${CAL.g.msg?`<div class="nx-cl" style="color:var(--a300)">${esc(CAL.g.msg)}</div>`:''}${hint}${nav}${chips}<div class="${mob?'':'cal-wrap'}"><div>${grid}</div>${agenda}</div></div>`;
+}
+function calType(t){if(!t)CAL.types=[];else{const i=CAL.types.indexOf(t);if(i>=0)CAL.types.splice(i,1);else CAL.types.push(t)}rCal()}
+async function calNav(n){CAL.ym=attShift(CAL.ym,n);const t=nxToday();CAL.sel=CAL.ym===t.slice(0,7)?t:CAL.ym+'-01';rCal()}
+function calToday(){CAL.ym=nxToday().slice(0,7);CAL.sel=nxToday();rCal()}
+function calPick(ds){CAL.sel=ds;if(ds.slice(0,7)!==CAL.ym)CAL.ym=ds.slice(0,7);rCal()}
+let _calX=0,_calY=0;
+function calTs(e){const t=e.touches[0];_calX=t.clientX;_calY=t.clientY}
+function calTe(e){const t=e.changedTouches[0],dx=t.clientX-_calX,dy=t.clientY-_calY;if(Math.abs(dx)>60&&Math.abs(dy)<45)calNav(dx<0?1:-1)}
+function rSH(){rCal()}
+function rSHm(){rCal()}
+// ── 事件詳情 ──
+function calOpen(key){
+  const e=CAL.ev[key];if(!e)return;NX_SHEET={type:'cal',key};
+  const p=STATE.projects.find(x=>x.id===e.pid),tag=`<span class="nx-tag">${e.type}</span>`,when=`${fd(e.date)}${e.end?' – '+fd(e.end):''} ${e.allDay?'· 全天':'· '+esc(e.time||'')}`;
+  let body='';
+  if(e.src==='task'){const t=e.ref,ce=hasPerm('tasks_edit');body=`<div class="nx-cl">${esc(when)}</div>${ce?`<div class="nx-fg"><div class="nx-fc"><div class="k">${e.type==='拍攝'?'拍攝日':e.type==='發布'?'發布日':'截止日'}（可改期）</div><input type="date" value="${t.due_date||''}" onchange="calTaskDate('${t.id}',this.value)"></div></div>`:''}<div class="nx-cl" style="line-height:1.7">${esc(e.sub)}</div><div style="display:flex;gap:8px"><div class="nx-btn p" style="flex:1" onclick="nxSheetClose();openTaskSheet('${t.id}')">開啟任務</div>${p?`<div class="nx-btn s" style="flex:1" onclick="nxSheetClose();oPD('${p.id}')">開啟專案</div>`:''}</div>`}
+  else if(e.src==='prj'){body=`<div class="nx-cl">${esc(when)}</div><div class="nx-cl">${esc(e.sub)}</div><div class="nx-btn p" onclick="nxSheetClose();oPD('${e.ref.id}')">開啟專案</div>`}
+  else if(e.src==='log'){body=`<div class="nx-cl">${esc(when)}</div><div style="font-size:14px;line-height:1.7;white-space:pre-wrap">${esc(e.ref.body||'')}</div><div class="nx-btn s" onclick="nxSheetClose();nav('mtg',null)">前往會議紀錄</div>`}
+  else if(e.src==='evt'){const c=e.ref,can=c.created_by===CU.id||hasPerm('projects_edit');body=`<div class="nx-cl">${esc(when)}${c.end_time&&!e.allDay?'–'+esc(String(c.end_time).slice(0,5)):''}</div>${c.location?`<div style="font-size:14px">${nxi('lightning','regular',13)} ${esc(c.location)}</div>`:''}${c.notes?`<div style="font-size:14px;line-height:1.7;white-space:pre-wrap">${esc(c.notes)}</div>`:''}<div class="nx-cl">${c.sync_google?'已同步到 Google 日曆':'不同步到 Google'} · 建立者 ${esc(gU(c.created_by).name)}</div>${can?`<div style="display:flex;gap:8px"><div class="nx-btn p" style="flex:1" onclick="calEditSheet('${c.id}')">編輯</div><div class="nx-btn s" style="flex:1;color:var(--a300)" onclick="calDel('${c.id}')">刪除</div></div>`:''}`}
+  else{const g=e.ref;body=`<div class="nx-cl">${esc(when)}</div>${g.loc?`<div style="font-size:14px">${esc(g.loc)}</div>`:''}${g.desc?`<div style="font-size:14px;line-height:1.7;white-space:pre-wrap;max-height:180px;overflow:auto">${esc(g.desc)}</div>`:''}${g.link?`<a class="nx-btn s" href="${safeUrl(g.link)}" target="_blank" rel="noopener">在 Google 日曆開啟</a>`:''}`}
+  nxSheet(`<div>${tag}<div style="font-size:19px;font-weight:500;line-height:1.35;margin-top:8px">${esc(e.title)}</div></div>${body}`);
+}
+async function calTaskDate(id,v){await uT(id,'due_date',v||null);nToast('已改期。按「同步」即可更新到 Google 日曆');CAL.sel=v||CAL.sel;if(v)CAL.ym=v.slice(0,7);nxSheetClose();rCal()}
+function calUndated(){
+  const l=STATE.tasks.filter(t=>t.content_type==='短影音'&&!t.due_date&&['企劃中','待拍攝'].includes(t.status)&&taskLive(t));
+  NX_SHEET={type:'calund'};nxSheet(`<div style="font-size:18px;font-weight:500">待排定日期的拍攝 <span style="color:var(--n500);font-size:14px">${l.length}</span></div><div class="nx-list">${l.map(t=>{const p=STATE.projects.find(x=>x.id===t.project_id);return `<div class="nx-arow"><div style="flex:1;min-width:0"><div class="nx-cl">${esc(p?p.client_name:'未歸專案')} · ${esc(t.status)}</div><div style="font-size:14.5px;font-weight:500">${esc(t.name)}</div></div>${hasPerm('tasks_edit')?`<div class="nx-btn p" style="padding:6px 12px" onclick="openDateSheet('${t.id}')">排定</div>`:''}</div>`}).join('')||'<div class="nx-empty"><div>全部都已排定</div></div>'}</div>`);
+}
+// ── 新增／編輯自訂行程 ──
+function calEditSheet(id,date){
+  if(CAL.dbOk===false){nToast('尚未建立行程資料表，請先在 Supabase 執行 calendar.sql');return}
+  const c=id?CAL.custom.find(x=>x.id===id):null;
+  CAL.edit={id:c?c.id:null,kind:c?c.kind:'行程',allDay:c?c.all_day!==false:true,sync:c?c.sync_google!==false:true};NX_SHEET={type:'caledit'};
+  const v=(f,d)=>esc(c&&c[f]!=null?String(c[f]).slice(0,f.includes('time')?5:99):d||'');
+  nxSheet(`<div style="font-size:18px;font-weight:500">${c?'編輯行程':'新增行程'}</div><div><div class="nx-lb">標題</div><input id="ce-t" class="nx-in" style="min-height:44px" placeholder="例：客戶提案會議" value="${v('title')}"></div><div>${nxLbl('類型')}<div id="ce-k" style="display:flex;flex-wrap:wrap;gap:6px">${['行程','會議','截止','其他'].map(k=>nxChip(k,CAL.edit.kind===k,`calEK('${k}')`)).join('')}</div></div><div><div class="nx-lb">關聯專案（選填）</div><select id="ce-pj" class="nx-in" style="min-height:42px"><option value="">無</option>${STATE.projects.filter(p=>!pjClosed(p)||(c&&c.project_id===p.id)).map(p=>`<option value="${p.id}" ${c&&c.project_id===p.id?'selected':''}>${esc(p.client_name)}</option>`).join('')}</select></div><div class="nx-fg"><div class="nx-fc"><div class="k">開始日</div><input id="ce-d" type="date" value="${v('start_date',date||CAL.sel)}"></div><div class="nx-fc"><div class="k">結束日（選填）</div><input id="ce-d2" type="date" value="${v('end_date')}"></div></div><label class="nx-row" style="padding:2px 0;min-height:0"><span style="flex:1">全天</span><label class="tog"><input type="checkbox" id="ce-ad" ${CAL.edit.allDay?'checked':''} onchange="calAD(this.checked)"><span class="tsl"></span></label></label><div class="nx-fg" id="ce-tm" style="${CAL.edit.allDay?'display:none':''}"><div class="nx-fc"><div class="k">開始時間</div><input id="ce-ts" type="time" value="${v('start_time','09:00')}"></div><div class="nx-fc"><div class="k">結束時間</div><input id="ce-te" type="time" value="${v('end_time','10:00')}"></div></div><div><div class="nx-lb">地點（選填）</div><input id="ce-loc" class="nx-in" value="${v('location')}"></div><div><div class="nx-lb">備註（選填）</div><textarea id="ce-nt" class="nx-in" style="min-height:64px">${v('notes')}</textarea></div><label class="nx-row" style="padding:2px 0;min-height:0"><span style="flex:1">同步到 Google 日曆${gcalToken?'':'（連結後生效）'}</span><label class="tog"><input type="checkbox" id="ce-sy" ${CAL.edit.sync?'checked':''} onchange="CAL.edit.sync=this.checked"><span class="tsl"></span></label></label><div style="display:flex;gap:8px"><div class="nx-btn s" style="flex:1" onclick="nxSheetClose()">取消</div><div class="nx-btn p" style="flex:2;min-height:46px" onclick="calSave()">儲存</div></div>`);
+}
+function calEK(k){CAL.edit.kind=k;const e=$n('ce-k');if(e)e.innerHTML=['行程','會議','截止','其他'].map(x=>nxChip(x,k===x,`calEK('${x}')`)).join('')}
+function calAD(on){CAL.edit.allDay=on;const e=$n('ce-tm');if(e)e.style.display=on?'none':''}
+async function calSave(){
+  const e=CAL.edit,title=$n('ce-t').value.trim(),d1=$n('ce-d').value,d2=$n('ce-d2').value;
+  if(!title){nToast('請輸入標題');return}if(!d1){nToast('請選擇開始日');return}if(d2&&d2<d1){nToast('結束日不能早於開始日');return}
+  const row={title,kind:e.kind,project_id:$n('ce-pj').value||null,start_date:d1,end_date:d2||null,all_day:e.allDay,start_time:e.allDay?null:($n('ce-ts').value||null),end_time:e.allDay?null:($n('ce-te').value||null),location:$n('ce-loc').value.trim()||null,notes:$n('ce-nt').value.trim()||null,sync_google:e.sync};
+  if(!e.allDay&&row.start_time&&row.end_time&&row.end_time<=row.start_time&&(!d2||d2===d1)){nToast('結束時間要晚於開始時間');return}
+  try{
+    const r=e.id?await sb.from('calendar_events').update(row).eq('id',e.id).select().single():await sb.from('calendar_events').insert({...row,created_by:CU.id}).select().single();
+    if(r.error){nToast('儲存失敗：'+r.error.message);return}
+    const i=CAL.custom.findIndex(x=>x.id===r.data.id);if(i>=0)CAL.custom[i]=r.data;else CAL.custom.push(r.data);
+    CAL.sel=d1;CAL.ym=d1.slice(0,7);nxSheetClose();rCal();nToast(e.id?'已更新行程':'已新增行程');
+    await calPushEvt(r.data,false);rCal();
+  }catch(x){nToast('儲存失敗：網路異常')}
+}
+async function calDel(id){
+  const c=CAL.custom.find(x=>x.id===id);if(!c||!confirm(`刪除行程「${c.title}」？${gcalToken?'（Google 日曆上的對應事件也會一併刪除）':''}`))return;
+  try{const r=await sb.from('calendar_events').delete().eq('id',id);if(r&&r.error){nToast('刪除失敗：'+r.error.message);return}
+    CAL.custom=CAL.custom.filter(x=>x.id!==id);nxSheetClose();rCal();nToast('已刪除行程');await calPushEvt(c,true)}catch(x){nToast('刪除失敗：網路異常')}
+}
+// ── 日曆設定（公司 Google 日曆 ID）──
+function calSettings(){
+  NX_SHEET={type:'calset'};
+  nxSheet(`<div style="font-size:18px;font-weight:500">Google 日曆設定</div><div class="nx-cl" style="line-height:1.7">專案行事曆會與這個日曆雙向同步：專案系統的拍攝、發布、截止與自訂行程會寫入，日曆上的其他事件會顯示出來。留空則使用每位成員自己的主要日曆。</div><div><div class="nx-lb">公司 Google 日曆 ID</div><input id="cs-id" class="nx-in" style="min-height:44px" placeholder="例：abc123@group.calendar.google.com" value="${esc(CAL.calId||'')}"></div><div class="nx-cl" style="line-height:1.7">找法：Google 日曆 → 該日曆「設定與共用」→「整合日曆」→「日曆 ID」。記得把日曆分享給要同步的成員，並給予「變更活動」權限。</div><div id="cs-res" style="font-size:13px"></div><div style="display:flex;gap:8px"><div class="nx-btn s" style="flex:1" onclick="calTestId()">測試連線</div><div class="nx-btn p" style="flex:1" onclick="calSaveId()">儲存</div></div>`);
+}
+async function calTestId(){
+  const id=$n('cs-id').value.trim(),out=$n('cs-res');out.textContent='測試中…';
+  const tok=await calToken();if(!tok){out.textContent='請先連結 Google 日曆（按頁面上的「連結 Google 日曆」）';return}
+  try{const r=await gcalFetch(`calendars/${encodeURIComponent(id||'primary')}`);out.style.color='var(--a300)';out.textContent=`✓ 連線成功：${r.summary||id}`}catch(e){out.style.color='var(--a300)';out.textContent='✗ '+e.message}
+}
+async function calSaveId(){
+  const id=$n('cs-id').value.trim();let err=null;
+  if(CAL.dbOk!==false){try{const r=await sb.from('calendar_settings').upsert({id:1,google_calendar_id:id||null,updated_at:new Date().toISOString()},{onConflict:'id'});if(r.error)err=r.error.message}catch(e){err='網路異常'}}
+  if(err){nToast('儲存失敗：'+err);return}
+  try{localStorage.setItem('cal_gid',id)}catch(e){}
+  CAL.calId=id;CAL.g.items={};CAL.g.cover=[];CAL.g.name='';nxSheetClose();nToast(id?'已儲存公司日曆':'已改回個人日曆');rCal();if(gcalToken)calSync()
+}
+
+// 在專案系統編輯任務後，立即更新本機的 updated_at（同步時才能正確判斷誰改得比較晚）
+(function(){const _u=uT;uT=async function(id,f,v){const r=await _u(id,f,v);const t=STATE.tasks.find(x=>x.id===id);if(t)t.updated_at=new Date().toISOString();return r}})();
+
+
+// ════════════════ 差旅請款：員工申請 → 行政審核 → 核准 → 撥款 ════════════════
+const EXP={ok:null,list:[],seg:'todo',my:'all',q:'',draft:null,detail:{},busy:false};
+const EXP_CAT=['交通','住宿','餐費','雜支','其他'];
+const EXP_FLOW=['申請','行政審核','核准','撥款'];
+PERM_DEFS.push({key:'expense_review',label:'請款：行政審核（第一關）',desc:'審核員工的差旅請款，可通過或退回'},{key:'expense_approve',label:'請款：核准與撥款（第二關）',desc:'最終核准請款並標記撥款；同時擁有兩項權限者可「直接核准」'});
+Object.assign(TITLES,{myexp:'我的請款',expedit:'請款申請',exp:'請款審核'});['myexp','expedit','exp'].forEach(k=>NX_OWN.add(k));
+const expRev=()=>hasPerm('expense_review'),expApr=()=>hasPerm('expense_approve'),expAny=()=>expRev()||expApr();
+function deptPermOK(d){return !d.perm||(Array.isArray(d.perm)?d.perm.some(k=>hasPerm(k)):hasPerm(d.perm))}
+// 行政部：出缺勤＋請款，依各自權限顯示分頁
+{const a=deptOf('adm');a.perm=['hr_manage','expense_review','expense_approve'];a.pages=['att','attset','exp'];
+ a.tabs=[['att','出缺勤','clock',['att','attset'],['hr_manage']],['exp','請款','file-text',['exp'],['expense_review','expense_approve']]];
+ a.menu=()=>nxGrp('行政部',[hasPerm('hr_manage')?nxRow('clock','出缺勤',"nav('att',null)"):'',hasPerm('hr_manage')?nxRow('gear-six','出缺勤設定',"nav('attset',null)"):'',expAny()?nxRow('file-text','請款審核',"nav('exp',null)"):''])}
+NX_PDEPT.exp='adm';
+function nxApplyDept(){
+  const sb0=$n('sb');if(sb0)sb0.dataset.dept=curDept();
+  NX_DEPTS.forEach(d=>{const c=$n(d.sb);if(c&&deptPermOK(d))c.style.display=d.id===curDept()?'block':'none'});
+  const sh=(id,on)=>{const e=$n(id);if(e)e.style.display=on?'':'none'};sh('si-att',hasPerm('hr_manage'));sh('si-attset',hasPerm('hr_manage'));sh('si-exp',expAny());
+  nxDeptSwitchDesktop();nxTabbar();
+}
+function nxTabbar(p){
+  const el=$n('tabbar');if(!el||!CU)return;p=p||(document.querySelector('.pg.on')||{id:'pg-today'}).id.slice(3);
+  const d=deptOf(curDept());if(!d)return;
+  const dt=d.tabs.filter(t=>!t[4]||t[4].some(k=>hasPerm(k)));
+  const tabs=[['today','今日','calendar-check',nxOverdueN(),['today','db']],...dt.map(([id,lb,ic,pg])=>[id,lb,ic,0,pg]),['inbox','收件匣','tray',nxInboxN(),['inbox']],['more','更多','dots-three-circle',0,[]]];
+  const k=(tabs.find(t=>t[4].includes(p))||tabs[tabs.length-1])[0];
+  el.innerHTML=tabs.map(([id,lb,ic,b])=>{const on=k===id;return `<div class="tb-i${on?' on':''}" data-k="${id}" onclick="nav('${id}',null)"><div class="ln"></div>${nxi(ic,on?'fill':'regular',23)}${lb}${b?`<div class="tb-b">${b}</div>`:''}</div>`}).join('');
+}
+// CSV 欄位：以 = + - @ 開頭的內容前面加上單引號，避免用 Excel 開啟時被當成公式執行
+function csvQ(v){let t=String(v==null?'':v);if(/^[=+\-@\t\r]/.test(t))t="'"+t;return '"'+t.replace(/"/g,'""')+'"'}
+// ── 載入 ──
+async function expInit(){
+  try{const r=await sb.from('expense_claims').select('*').order('created_at',{ascending:false}).limit(500);if(r.error){EXP.ok=false;return}EXP.list=r.data||[];EXP.ok=true}catch(e){EXP.ok=false}
+  nxRefresh();
+}
+async function expLoad(id){
+  const [a,b]=await Promise.all([sb.from('expense_items').select('*').eq('claim_id',id).order('item_date',{ascending:true}),sb.from('expense_log').select('*').eq('claim_id',id).order('created_at',{ascending:true})]);
+  EXP.detail[id]={items:(a&&a.data)||[],log:(b&&b.data)||[]};return EXP.detail[id];
+}
+const expMine=()=>EXP.list.filter(c=>c.user_id===CU.id);
+const expStageIdx=s=>({'草稿':0,'待行政審核':1,'待核准':2,'已核准':3,'已撥款':4,'已退回':1}[s]||0);
+const expTicks=s=>{const n=expStageIdx(s);return `<div class="exp-tk">${EXP_FLOW.map((_,i)=>`<i class="${i<n?'on':''}${s==='已退回'&&i===1?' rj':''}"></i>`).join('')}</div>`};
+const expTag=s=>`<span class="nx-tag${['待行政審核','待核准','已退回'].includes(s)?' a':''}">${esc(s)}</span>`;
+function expTodo(){return EXP.list.filter(c=>(c.user_id!==CU.id||isAdm())&&((c.status==='待行政審核'&&expRev())||(c.status==='待核准'&&expApr())||(c.status==='已核准'&&expApr())))}
+function expCard(c,showWho){
+  const u=gU(c.user_id);
+  return `<div class="nx-card" style="cursor:pointer" onclick="expOpen('${c.id}')"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="nx-cl">${esc(c.no||'')}${showWho?' · '+esc(u.name):''}</span>${expTag(c.status)}</div><div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:4px 0 8px"><div style="font-size:15.5px;font-weight:500;line-height:1.35;min-width:0">${esc(c.title)}</div><div style="font-size:16px;font-weight:500;white-space:nowrap">${fmt$$(c.total)}</div></div>${expTicks(c.status)}<div class="nx-cl" style="margin-top:8px">${esc(fd(c.trip_start))}${c.trip_end!==c.trip_start?' – '+esc(fd(c.trip_end)):''}${c.destination?' · '+esc(c.destination):''}</div></div>`;
+}
+// ═══════════ 我的請款（個人層）═══════════
+function rMyExp(){
+  const host=$n('myexp-c');if(!host)return;
+  if(!EXP.ok){host.innerHTML=`<div class="nxp">${nxPH('我的請款','',['更多',"nav('more',null)"])}<div class="nx-empty"><div>請款功能尚未啟用，請管理員先在資料庫執行 expense.sql</div></div></div>`;return}
+  const all=expMine(),F={all:()=>true,draft:c=>c.status==='草稿',wait:c=>['待行政審核','待核准'].includes(c.status),ok:c=>['已核准','已撥款'].includes(c.status),back:c=>c.status==='已退回'};
+  const list=all.filter(F[EXP.my]||F.all),sum=f=>all.filter(f).reduce((a,c)=>a+Number(c.total||0),0);
+  const cell=(l,n,hot)=>`<div class="nx-c" style="cursor:default"><div class="l">${l}</div><div class="n${hot?' hot':''}" style="font-size:20px">${n}</div></div>`;
+  host.innerHTML=`<div class="nxp">${nxPH('我的請款','',['更多',"nav('more',null)"],`<div class="nx-btn p" style="padding:6px 12px" onclick="expNew()">${nxi('plus','bold',13)} 新增請款</div>`)}<div class="nx-cnt" style="grid-template-columns:repeat(3,minmax(0,1fr))">${cell('審核中',all.filter(F.wait).length+' 筆')}${cell('待撥款',fmt$$(sum(c=>c.status==='已核准')))}${cell('已退回',all.filter(F.back).length+' 筆',all.some(F.back))}</div><div class="cal-chips">${[['all','全部'],['draft','草稿'],['wait','審核中'],['ok','已核准／撥款'],['back','已退回']].map(([k,l])=>nxChip(l,EXP.my===k,`EXP.my='${k}';rMyExp()`)).join('')}</div>${list.map(c=>expCard(c,false)).join('')||`<div class="nx-empty"><div>${all.length?'沒有符合的請款':'還沒有請款紀錄'}</div><div class="nx-btn p" onclick="expNew()">新增差旅請款</div></div>`}</div>`;
+}
+// ═══════════ 新增／編輯 ═══════════
+const expBlank=()=>({id:null,title:'',destination:'',project_id:'',trip_start:nxToday(),trip_end:nxToday(),items:[],status:'草稿'});
+function expNew(){EXP.draft=expBlank();EXP.draft.items.push({item_date:nxToday(),category:'交通',description:'',amount:'',receipt_path:'',_url:''});nav('expedit',null)}
+async function expEdit(id){
+  const c=EXP.list.find(x=>x.id===id);if(!c)return;const d=await expLoad(id);
+  EXP.draft={id,title:c.title,destination:c.destination||'',project_id:c.project_id||'',trip_start:c.trip_start,trip_end:c.trip_end,status:c.status,items:d.items.map(i=>({item_date:i.item_date,category:i.category,description:i.description||'',amount:String(i.amount),receipt_path:i.receipt_path||'',_url:''}))};
+  nxSheetClose();nav('expedit',null);
+}
+function rExpEdit(){
+  const host=$n('expedit-c');if(!host)return;const d=EXP.draft;if(!d){nav('myexp',null);return}
+  const tot=d.items.reduce((a,i)=>a+(parseInt(i.amount)||0),0);
+  const it=(i,k)=>`<div class="nx-card exp-it"><div class="exp-r"><input type="date" class="nx-in" style="flex:1;min-height:40px" value="${esc(i.item_date)}" onchange="expItemSet(${k},'item_date',this.value)"><div class="nx-ib" style="color:var(--a300)" title="刪除這筆" onclick="expItemDel(${k})">${nxi('x','regular',18)}</div></div><div style="display:flex;flex-wrap:wrap;gap:6px">${EXP_CAT.map(c=>nxChip(c,i.category===c,`expItemSet(${k},'category','${c}',1)`)).join('')}</div><input class="nx-in" style="min-height:42px" placeholder="說明（例：高鐵 台北→高雄）" value="${esc(i.description)}" oninput="expItemSet(${k},'description',this.value)"><div class="exp-r"><div class="nx-fc" style="flex:1;border-radius:8px"><div class="k">金額（元）</div><input inputmode="numeric" placeholder="0" value="${esc(i.amount)}" oninput="expItemSet(${k},'amount',this.value.replace(/[^0-9]/g,''))"></div><div class="nx-btn s" style="min-height:48px" onclick="expPick(${k})">${i.receipt_path?nxi('check-circle','regular',16)+' 單據已附':nxi('plus','regular',16)+' 拍單據'}</div></div><input type="file" accept="image/*,application/pdf" style="display:none" id="exf-${k}" onchange="expOnFile(${k},this.files[0])"></div>`;
+  host.innerHTML=`<div class="nxp">${nxPH(d.id?'編輯請款':'新增請款','',['我的請款',"nav('myexp',null)"])}${d.status==='已退回'?`<div class="nx-al"><span style="color:var(--a300);margin-top:2px">${nxi('warning','regular',16)}</span><div style="flex:1;font-size:13px">這筆請款被退回，請依退回原因修改後重新送出</div></div>`:''}<div><div class="nx-lb">事由</div><input class="nx-in" style="min-height:44px" placeholder="例：高雄客戶拜訪" value="${esc(d.title)}" oninput="EXP.draft.title=this.value"></div><div class="nx-fg"><div class="nx-fc"><div class="k">出差開始日</div><input type="date" value="${esc(d.trip_start)}" onchange="EXP.draft.trip_start=this.value"></div><div class="nx-fc"><div class="k">出差結束日</div><input type="date" value="${esc(d.trip_end)}" onchange="EXP.draft.trip_end=this.value"></div></div><div class="nx-fg"><div class="nx-fc"><div class="k">地點</div><input placeholder="例：高雄" value="${esc(d.destination)}" oninput="EXP.draft.destination=this.value"></div><div class="nx-fc"><div class="k">關聯專案（選填）</div><select onchange="EXP.draft.project_id=this.value"><option value="">無</option>${STATE.projects.filter(p=>!pjClosed(p)||p.id===d.project_id).map(p=>`<option value="${p.id}" ${d.project_id===p.id?'selected':''}>${esc(p.client_name)}</option>`).join('')}</select></div></div><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:15px;font-weight:500">費用明細 <span style="color:var(--n500);font-size:13px">${d.items.length}</span></div><div class="nx-btn s" style="padding:6px 12px" onclick="expItemAdd()">${nxi('plus','bold',13)} 新增一筆</div></div>${d.items.map(it).join('')||'<div class="nx-cl">還沒有明細，請按「新增一筆」</div>'}<div class="exp-bar"><div style="flex:1"><div class="nx-cl">合計</div><div id="exp-tot" style="font-size:20px;font-weight:500">${fmt$$(tot)}</div></div><div class="nx-btn s" style="min-height:46px" onclick="expSave(false)">存草稿</div><div class="nx-btn p" style="min-height:46px;padding:0 18px" onclick="expSave(true)">送出審核</div></div></div>`;
+}
+function expItemAdd(){const d=EXP.draft,l=d.items[d.items.length-1];d.items.push({item_date:l?l.item_date:d.trip_start,category:'交通',description:'',amount:'',receipt_path:'',_url:''});rExpEdit();setTimeout(()=>{const c=document.querySelectorAll('#expedit-c .exp-it');if(c.length)c[c.length-1].scrollIntoView({block:'center'})},50)}
+function expItemDel(k){EXP.draft.items.splice(k,1);rExpEdit()}
+function expItemSet(k,f,v,re){EXP.draft.items[k][f]=v;if(re)rExpEdit();else if(f==='amount'){const t=EXP.draft.items.reduce((a,i)=>a+(parseInt(i.amount)||0),0),e=$n('exp-tot');if(e)e.textContent=fmt$$(t)}}
+function expPick(k){const e=$n('exf-'+k);if(e)e.click()}
+async function expCompress(file){
+  if(!file||!/^image\//.test(file.type))return file;
+  try{const bm=await createImageBitmap(file),sc=Math.min(1,1600/Math.max(bm.width,bm.height)),cv=document.createElement('canvas');cv.width=Math.round(bm.width*sc);cv.height=Math.round(bm.height*sc);cv.getContext('2d').drawImage(bm,0,0,cv.width,cv.height);
+    const b=await new Promise(r=>cv.toBlob(r,'image/jpeg',.8));return b&&b.size<file.size?b:file}catch(e){return file}
+}
+async function expOnFile(k,file){
+  if(!file)return;nToast('上傳單據中…');
+  try{const f=await expCompress(file),ext=/pdf/.test(file.type)?'pdf':'jpg',path=`${CU.id}/${Date.now()}_${k}.${ext}`;
+    const r=await sb.storage.from('receipts').upload(path,f,{contentType:f.type||file.type,upsert:false});
+    if(r.error){nToast('單據上傳失敗：'+r.error.message);return}
+    EXP.draft.items[k].receipt_path=path;rExpEdit();nToast('單據已附上')}catch(e){nToast('單據上傳失敗：網路異常')}
+}
+async function expSave(submit){
+  const d=EXP.draft;if(!d||EXP.busy)return;
+  if(!d.title.trim()){nToast('請填寫事由');return}if(!d.trip_start||!d.trip_end){nToast('請選擇出差日期');return}if(d.trip_end<d.trip_start){nToast('結束日不能早於開始日');return}
+  if(submit&&!d.items.length){nToast('請至少新增一筆費用明細');return}
+  for(const [i,x] of d.items.entries()){if(submit||x.amount!==''){if(!(parseInt(x.amount)>0)){nToast(`第 ${i+1} 筆明細請填寫金額`);return}}if(!x.item_date){nToast(`第 ${i+1} 筆明細請選擇日期`);return}}
+  EXP.busy=true;
+  try{
+    const row={title:d.title.trim(),destination:d.destination.trim()||null,project_id:d.project_id||null,trip_start:d.trip_start,trip_end:d.trip_end};
+    let id=d.id,r;
+    if(id){r=await sb.from('expense_claims').update(row).eq('id',id).select().single()}else{r=await sb.from('expense_claims').insert(row).select().single();if(r.data)id=r.data.id}
+    if(r.error){nToast('儲存失敗：'+r.error.message);return}
+    const del=await sb.from('expense_items').delete().eq('claim_id',id);if(del&&del.error){nToast('儲存失敗：'+del.error.message);return}
+    const items=d.items.filter(x=>parseInt(x.amount)>0).map(x=>({claim_id:id,item_date:x.item_date,category:x.category,description:x.description.trim()||null,amount:parseInt(x.amount),receipt_path:x.receipt_path||null}));
+    if(items.length){const ins=await sb.from('expense_items').insert(items);if(ins&&ins.error){nToast('儲存明細失敗：'+ins.error.message);return}}
+    if(submit){const s=await sb.rpc('expense_submit',{p_id:id});if(s.error){nToast('已存成草稿，但送出失敗：'+s.error.message);EXP.draft.id=id;await expInit();return}}
+    EXP.draft=null;await expInit();nav('myexp',null);nToast(submit?'已送出審核':'已儲存草稿');
+  }catch(e){nToast('儲存失敗：網路異常')}finally{EXP.busy=false}
+}
+// ═══════════ 詳情與審核 ═══════════
+async function expOpen(id){
+  const c=EXP.list.find(x=>x.id===id);if(!c)return;NX_SHEET={type:'exp',id};
+  nxSheet(`<div class="nx-cl">${esc(c.no||'')}</div><div class="nx-empty" style="padding:30px"><div>載入中…</div></div>`);
+  let d;try{d=await expLoad(id)}catch(e){nxSheetClose();nToast('讀取失敗：網路異常');return}
+  const u=gU(c.user_id),p=STATE.projects.find(x=>x.id===c.project_id),own=c.user_id===CU.id,self=own&&!isAdm();
+  const acts=[];
+  if(own&&['草稿','已退回'].includes(c.status)){acts.push(`<div class="nx-btn p" style="flex:1" onclick="expEdit('${id}')">${c.status==='已退回'?'修改並重送':'編輯'}</div>`);if(c.status==='草稿')acts.push(`<div class="nx-btn s" style="color:var(--a300)" onclick="expDel('${id}')">刪除</div>`)}
+  if(own&&c.status==='待行政審核')acts.push(`<div class="nx-btn s" style="flex:1" onclick="expWithdraw('${id}')">撤回修改</div>`);
+  const rv=[];
+  if(!self){
+    if(c.status==='待行政審核'&&expRev())rv.push(['review_ok','通過（送交核准）','p'],['review_reject','退回','s']);
+    if(c.status==='待核准'&&expApr())rv.push(['approve','核准','p'],['approve_reject','退回','s']);
+    if(['待行政審核','待核准'].includes(c.status)&&expRev()&&expApr())rv.push(['direct','直接核准（兩關一次完成）','s']);
+    if(c.status==='已核准'&&expApr())rv.push(['pay','標記已撥款','p']);
+  }
+  const catSum={};d.items.forEach(i=>catSum[i.category]=(catSum[i.category]||0)+Number(i.amount));
+  const html=`<div style="display:flex;justify-content:space-between;align-items:center"><span class="nx-cl">${esc(c.no||'')} · ${esc(u.name)}</span>${expTag(c.status)}</div><div><div style="font-size:19px;font-weight:500;line-height:1.35">${esc(c.title)}</div><div class="nx-cl" style="margin-top:4px">${esc(fd(c.trip_start))}${c.trip_end!==c.trip_start?' – '+esc(fd(c.trip_end)):''}${c.destination?' · '+esc(c.destination):''}${p?' · '+esc(p.client_name):''}</div></div>${expTicks(c.status)}<div class="nx-list">${d.items.map(i=>`<div style="padding:11px 14px;display:flex;gap:10px;align-items:center"><div style="flex:1;min-width:0"><div style="display:flex;gap:8px;align-items:center"><span class="nx-tag">${esc(i.category)}</span><span class="nx-cl">${esc(fd(i.item_date))}</span></div><div style="font-size:14px;margin-top:3px">${esc(i.description||'—')}</div></div><div style="text-align:right"><div style="font-size:15px;font-weight:500">${fmt$$(i.amount)}</div>${i.receipt_path?`<span class="nx-btn g" style="padding:0;min-height:0" onclick="expReceipt('${esc(i.receipt_path)}')">看單據</span>`:`<span class="nx-cl">無單據</span>`}</div></div>`).join('')||'<div class="nx-cl" style="padding:12px 14px">沒有明細</div>'}<div style="padding:12px 14px;display:flex;justify-content:space-between;background:var(--sf2)"><span>合計</span><b style="font-weight:600;font-size:17px">${fmt$$(c.total)}</b></div></div>${Object.keys(catSum).length>1?`<div class="nx-cl">${Object.entries(catSum).map(([k,v])=>k+' '+fmt$$(v)).join('　')}</div>`:''}`+
+   (d.log.length?`<div>${nxLbl('處理紀錄')}<div class="nx-list">${d.log.map(l=>`<div style="padding:10px 14px"><div style="display:flex;justify-content:space-between;font-size:13px"><span><b style="font-weight:500">${esc(l.step)}</b> · ${esc(l.action)}</span><span class="nx-cl">${esc(gU(l.actor_id).name)} · ${esc(String(l.created_at||'').slice(5,16).replace('T',' '))}</span></div>${l.comment?`<div style="font-size:13.5px;color:var(--a200);margin-top:3px;line-height:1.5">${esc(l.comment)}</div>`:''}</div>`).join('')}</div></div>`:'')+
+   (c.status==='已撥款'?`<div class="nx-cl">已於 ${esc(String(c.paid_at||'').slice(0,10))} 撥款${c.paid_note?'：'+esc(c.paid_note):''}</div>`:'')+
+   (self&&expAny()&&['待行政審核','待核准'].includes(c.status)?`<div class="nx-cl" style="color:var(--a300)">這是你自己的請款，不能自己審核，需由其他審核者處理</div>`:'')+
+   (rv.length?`<div><div class="nx-lb">審核意見${rv.some(r=>/reject/.test(r[0]))?'（退回時必填）':'（選填）'}</div><textarea id="ex-cm" class="nx-in" style="min-height:64px" placeholder="${c.status==='已核准'?'撥款備註（例：10/30 匯款）':'例：資料齊全／缺少高鐵車票'}"></textarea></div><div style="display:flex;flex-direction:column;gap:8px">${rv.map(([a,l,k])=>`<div class="nx-btn ${k}" style="min-height:46px" onclick="expAct('${id}','${a}')">${l}</div>`).join('')}</div>`:'')+
+   (acts.length?`<div style="display:flex;gap:8px">${acts.join('')}</div>`:'');
+  NX_SHEET={type:'exp',id};nxSheet(html);
+}
+async function expAct(id,action){
+  if(EXP.busy)return;const cm=($n('ex-cm')||{}).value||'';
+  if(/reject/.test(action)&&!cm.trim()){nToast('退回時請填寫原因');return}
+  if(action==='direct'&&!confirm('直接核准會一次完成「行政審核」與「核准」兩關，並在紀錄中註明。確定嗎？'))return;
+  EXP.busy=true;
+  try{const r=await sb.rpc('expense_act',{p_id:id,p_action:action,p_comment:cm.trim()||null});
+    if(r.error){nToast('操作失敗：'+r.error.message);return}
+    const row=Array.isArray(r.data)?r.data[0]:r.data;if(row){const i=EXP.list.findIndex(x=>x.id===id);if(i>=0)EXP.list[i]=row}
+    nxSheetClose();nToast({review_ok:'已通過，送交核准',review_reject:'已退回',approve:'已核准',approve_reject:'已退回',direct:'已直接核准',pay:'已標記撥款'}[action]||'完成');nxRefresh();
+  }catch(e){nToast('操作失敗：網路異常')}finally{EXP.busy=false}
+}
+async function expWithdraw(id){
+  if(EXP.busy)return;EXP.busy=true;
+  try{const r=await sb.rpc('expense_withdraw',{p_id:id});if(r.error){nToast('撤回失敗：'+r.error.message);return}
+    const row=Array.isArray(r.data)?r.data[0]:r.data;if(row){const i=EXP.list.findIndex(x=>x.id===id);if(i>=0)EXP.list[i]=row}nxSheetClose();nToast('已撤回，可修改後再送出');nxRefresh()}
+  catch(e){nToast('撤回失敗：網路異常')}finally{EXP.busy=false}
+}
+async function expDel(id){
+  const c=EXP.list.find(x=>x.id===id);if(!c||!confirm(`刪除草稿「${c.title}」？`))return;
+  try{const r=await sb.from('expense_claims').delete().eq('id',id);if(r&&r.error){nToast('刪除失敗：'+r.error.message);return}EXP.list=EXP.list.filter(x=>x.id!==id);nxSheetClose();nToast('已刪除草稿');nxRefresh()}catch(e){nToast('刪除失敗：網路異常')}
+}
+async function expReceipt(path){
+  try{const r=await sb.storage.from('receipts').createSignedUrl(path,300);if(r.error||!r.data){nToast('無法開啟單據：'+(r.error?r.error.message:'找不到檔案'));return}window.open(r.data.signedUrl,'_blank','noopener')}catch(e){nToast('無法開啟單據：網路異常')}
+}
+// ═══════════ 行政部：請款審核 ═══════════
+function rExp(){
+  const host=$n('exp-c');if(!host)return;
+  if(!expAny()){host.innerHTML='';nav(isMob()?'today':'db',null);return}
+  if(!EXP.ok){host.innerHTML=`<div class="nxp">${nxPH('請款審核')}<div class="nx-empty"><div>請款資料表尚未建立<br>請在 Supabase 執行 expense.sql</div></div></div>`;return}
+  const todo=expTodo(),done=EXP.list.filter(c=>c.status==='已撥款'),q=EXP.q.trim().toLowerCase();
+  const base=EXP.seg==='todo'?todo:EXP.seg==='done'?done:EXP.list.filter(c=>c.status!=='草稿'||c.user_id===CU.id);
+  const list=base.filter(c=>!q||[c.title,c.no,c.destination,gU(c.user_id).name].some(v=>(v||'').toLowerCase().includes(q)));
+  const sum=EXP.list.filter(c=>c.status==='已核准').reduce((a,c)=>a+Number(c.total||0),0);
+  host.innerHTML=`<div class="nxp nx-wide">${nxPH('請款審核','',null,`<div class="nx-ib" style="color:var(--nac)" title="匯出 CSV" onclick="expExport()">${nxi('file-text','regular',20)}</div>`)}${nxDeptSeg()}<div class="nx-cnt" style="grid-template-columns:repeat(3,minmax(0,1fr))"><div class="nx-c${todo.length?' hot':''}" style="cursor:default"><div class="l">待我處理</div><div class="n${todo.length?' hot':''}">${todo.length}</div></div><div class="nx-c" style="cursor:default"><div class="l">待撥款金額</div><div class="n" style="font-size:19px">${fmt$$(sum)}</div></div><div class="nx-c" style="cursor:default"><div class="l">已撥款</div><div class="n">${done.length}</div></div></div><div class="nx-search">${nxi('magnifying-glass','regular',18)}<input id="exq" placeholder="搜尋單號、事由、申請人" value="${esc(EXP.q)}" oninput="EXP.q=this.value;rExp();const e=document.getElementById('exq');e.focus();e.setSelectionRange(e.value.length,e.value.length)"></div><div class="nx-seg">${[['todo','待我處理 '+todo.length],['all','全部'],['done','已撥款']].map(([k,l])=>`<div class="nx-so${EXP.seg===k?' on':''}" onclick="EXP.seg='${k}';rExp()">${l}</div>`).join('')}</div>${list.map(c=>expCard(c,true)).join('')||`<div class="nx-empty"><div>${EXP.seg==='todo'?'目前沒有需要你處理的請款':'沒有符合的請款'}</div></div>`}</div>`;
+}
+async function expExport(){
+  const ids=EXP.list.filter(c=>c.status!=='草稿').map(c=>c.id);if(!ids.length){nToast('沒有可匯出的請款');return}
+  try{const r=await sb.from('expense_items').select('*').in('claim_id',ids);if(r.error){nToast('匯出失敗：'+r.error.message);return}
+    const by={};(r.data||[]).forEach(i=>(by[i.claim_id]=by[i.claim_id]||[]).push(i));
+    const L=[['單號','申請人','事由','出差起','出差迄','地點','狀態','總額','撥款日','日期','類別','說明','金額','有單據']];
+    EXP.list.filter(c=>c.status!=='草稿').forEach(c=>{const it=by[c.id]||[{}];it.forEach(i=>L.push([c.no,gU(c.user_id).name,c.title,c.trip_start,c.trip_end,c.destination||'',c.status,c.total,String(c.paid_at||'').slice(0,10),i.item_date||'',i.category||'',i.description||'',i.amount||'',i.receipt_path?'是':'否']))});
+    const csv='\ufeff'+L.map(r=>r.map(csvQ).join(',')).join('\n');
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='差旅請款.csv';document.body.appendChild(a);a.click();a.remove();nToast('已匯出 '+(L.length-1)+' 筆明細')}
+  catch(e){nToast('匯出失敗：網路異常')}
+}
+NX_RENDER.myexp=rMyExp;NX_RENDER.expedit=rExpEdit;NX_RENDER.exp=rExp;
+// ── 提醒：被退回、待我處理 ──
+function expReminderCards(){
+  if(!EXP.ok)return [];const a=[];
+  expMine().filter(c=>c.status==='已退回').forEach(c=>a.push(`<div class="nx-al" onclick="expOpen('${c.id}')"><span style="color:var(--a300);margin-top:2px">${nxi('warning','regular',16)}</span><div style="flex:1"><span style="font-weight:500">請款被退回</span><span style="color:var(--n300)"> — ${esc(c.title)}，點此查看原因並修改</span></div><span style="color:var(--n600);margin-top:3px">${nxi('caret-right','regular',14)}</span></div>`));
+  const n=expAny()?expTodo().length:0;
+  if(n)a.push(`<div class="nx-al" onclick="nav('exp',null)"><span style="color:var(--a300);margin-top:2px">${nxi('file-text','regular',16)}</span><div style="flex:1"><span style="font-weight:500">${n} 筆請款待處理</span><span style="color:var(--n300)"> — 等你審核、核准或撥款</span></div><span style="color:var(--n600);margin-top:3px">${nxi('caret-right','regular',14)}</span></div>`);
+  return a;
+}
+(function(){const _r=nxRemList;nxRemList=function(plan){const a=_r(plan);expReminderCards().forEach(c=>a.push(c));return a}})();
+
 </script>
 </body>
 </html>
