@@ -565,7 +565,7 @@ textarea.nx-in{resize:vertical;line-height:1.6}
 .nx-aside-c{background:var(--sf);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px}
 @media (min-width:821px){.nx-adv{display:inline-flex}.nx-under{display:none}.nx-tc{cursor:default}#nxt{left:auto;right:24px;bottom:24px;width:380px}
  .nx-sh{left:50%;right:auto;bottom:auto;top:50%;transform:translate(-50%,-50%);width:540px;max-height:86vh;border-radius:14px}.nx-grab{display:none}
- #pg-today,#pg-inbox,#pg-more,#pg-biz,#pg-wlog,#pg-me,#pj-m,#sh-m,#wl-m,#mhd{display:none!important}.nx-gr{font-size:26px}}
+ #pg-today,#pg-more,#pg-biz,#pj-m,#sh-m,#wl-m,#mhd{display:none!important}.nx-gr{font-size:26px}}
 /* 手機：Nocturne 色票覆寫（舊 class 沿用）*/
 @media (max-width:820px){
  :root{--bg:#161826;--sf:#232532;--sf2:#292b31;--sf3:#3f424d;--bd:#3f424d;--bd2:rgba(233,233,237,.16);--tx:#e9e9ed;--tx2:#b2b6ca;--tx3:#9397ab;--ac:#9184d9;--acd:#2b2741;--acs:#796cbf;--nac:#9184d9;--sn:'Inter','Noto Sans TC',sans-serif;--ui:var(--sn);
@@ -692,6 +692,16 @@ body.nx-lock #ct{overflow:hidden}
 .exp-bar{position:sticky;bottom:calc(68px + env(safe-area-inset-bottom));background:var(--sf2);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;box-shadow:0 -8px 20px rgba(0,0,0,.35);z-index:5}
 @media (min-width:821px){.exp-bar{bottom:12px}}
 @media (max-width:820px){#pg-myexp,#pg-expedit,#pg-exp{padding:0 0 calc(96px + env(safe-area-inset-bottom))!important}}
+
+/* ═══ 電腦版對齊 ═══ */
+.nx-sbb{margin-left:auto;background:var(--a700);color:var(--a100);font-size:11px;font-weight:500;padding:1px 7px;border-radius:10px}
+@media (min-width:821px){#pg-inbox .nxp,#pg-wlog .nxp,#pg-me .nxp,#pg-myatt .nxp,#pg-myexp .nxp,#pg-expedit .nxp{max-width:760px;margin:0}}
+
+/* ═══ 行事曆顏色 ═══ */
+.cal-pal{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.cal-sw{width:28px;height:28px;border-radius:50%;cursor:pointer;box-shadow:inset 0 0 0 2px rgba(255,255,255,.08)}
+.cal-sw.on{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--tx)}
+.cal-cp{width:34px;height:30px;padding:0;border:0;background:none;cursor:pointer}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -2408,7 +2418,7 @@ function nxRefresh(){
 }
 
 // ════════════════ 其他頁面（手機版 Nocturne）════════════════
-const nxPH=(title,sub,back,right)=>`<div class="nx-ph">${back?`<div class="nx-bk" onclick="${back[1]}">${nxi('caret-left','regular',16)}${back[0]}</div>`:''}<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px"><div><div class="nx-t1">${title}</div>${sub?`<div class="nx-sub">${sub}</div>`:''}</div>${right||''}</div></div>`;
+const nxPH=(title,sub,back,right)=>`<div class="nx-ph">${back&&!(back[0]==='更多'&&!isMob())?`<div class="nx-bk" onclick="${back[1]}">${nxi('caret-left','regular',16)}${back[0]}</div>`:''}<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px"><div><div class="nx-t1">${title}</div>${sub?`<div class="nx-sub">${sub}</div>`:''}</div>${right||''}</div></div>`;
 const nxRow=(icon,label,fn,sub)=>`<div class="nx-row" onclick="${fn}"><span style="color:var(--n400)">${nxi(icon,'regular',20)}</span><span style="flex:1;display:flex;flex-direction:column"><span>${label}</span>${sub?`<span style="font-size:12px;color:var(--n500)">${sub}</span>`:''}</span><span style="color:var(--n600)">${nxi('caret-right','regular',16)}</span></div>`;
 const nxGrp=(t,rows)=>{rows=rows.filter(Boolean);return rows.length?`<div><div class="nx-gt">${t}</div><div class="nx-list">${rows.join('')}</div></div>`:''};
 
@@ -3453,7 +3463,7 @@ async function attWrite(row){
 // ── 登出：清除記憶體中的資料與畫面（共用裝置不殘留上一位使用者的內容）──
 function nxOnLogout(){
   try{
-    ATT.ok=null;ATT.cache={};ATT.sites=[];ATT.edit=null;ATT.pend=null;ATT.inflight=false;ATT.busy=false;try{EXP.ok=null;EXP.list=[];EXP.detail={};EXP.draft=null;EXP.busy=false}catch(e){}try{CAL.custom=[];CAL.ev={};CAL.calId='';CAL.last={};CAL.g={state:'off',items:{},cover:[],name:'',last:0,msg:''};CAL._silent=0;gcalToken=null;try{localStorage.removeItem('cal_g');localStorage.removeItem('cal_last')}catch(e){}}catch(e){}
+    ATT.ok=null;ATT.cache={};ATT.sites=[];ATT.edit=null;ATT.pend=null;ATT.inflight=false;ATT.busy=false;try{EXP.ok=null;EXP.list=[];EXP.detail={};EXP.draft=null;EXP.busy=false}catch(e){}try{CAL.custom=[];CAL.ev={};CAL.calId='';CAL.last={};CAL.imp={on:false,kw:'拍攝'};CAL.col.co={};CAL.g={state:'off',items:{},cover:[],name:'',last:0,msg:''};CAL._silent=0;gcalToken=null;try{localStorage.removeItem('cal_g');localStorage.removeItem('cal_last')}catch(e){}}catch(e){}
     NX_NAVH.length=0;NX_SENT=false;nxSheetClose();closeM();closeP();
     for(const k of Object.keys(STATE)){if(Array.isArray(STATE[k]))STATE[k]=[]}
     ['today-c','today-m','more-c','inbox-c','wlog-c','me-c','tasks-c','cust-c','perf-c','att-c','attset-c','myatt-c','pj-m','sh-m','wl-m','mtg-c','clog-c','pdc'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=''});
@@ -3654,10 +3664,10 @@ function rCal(){
   const grid=`<div class="cal-grid" ontouchstart="calTs(event)" ontouchend="calTe(event)"><div class="cal-wk">${['日','一','二','三','四','五','六'].map(x=>`<span>${x}</span>`).join('')}</div><div class="cal-body" style="grid-template-rows:repeat(${cells.length/7},${mob?'48px':'minmax(104px,auto)'})">${cells.map(cell).join('')}</div></div>`;
   const dayEvs=idx[sel]||[],wd=NX_WK[new Date(sel+'T00:00:00').getDay()];
   const und=STATE.tasks.filter(t=>t.content_type==='短影音'&&!t.due_date&&['企劃中','待拍攝'].includes(t.status)&&taskLive(t)).length;
-  const agenda=`<div class="cal-ag"><div style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:15px;font-weight:500">${+sel.slice(5,7)}/${+sel.slice(8)} 週${wd}${sel===today?' · 今天':''} <span style="color:var(--n500);font-size:13px">${dayEvs.length} 項</span></div>${calCanEdit()&&CAL.dbOk!==false?`<div class="nx-btn s" style="padding:4px 12px" onclick="calEditSheet(null,'${sel}')">${nxi('plus','bold',13)} 新增</div>`:''}</div>${dayEvs.map(e=>`<div class="cal-a${e.done?' dn':''}" style="--c:${CAL_C[e.type]}" onclick="calOpen('${e.key}')"><i class="cal-bar"></i><div style="flex:1;min-width:0"><div class="cal-at">${esc(e.title)}</div><div class="nx-cl">${esc(e.sub||'')}</div></div><div style="text-align:right"><span class="nx-tag">${e.type}</span><div class="nx-cl" style="margin-top:3px">${e.allDay?'全天':esc(e.time)}</div></div></div>`).join('')||`<div class="nx-empty" style="padding:22px"><div>這天沒有行程</div></div>`}${und?`<div class="nx-btn s" onclick="calUndated()">待排定日期的拍攝 ${und} 筆 →</div>`:''}</div>`;
-  const right=`<div style="display:flex;gap:6px">${calCanEdit()&&CAL.dbOk!==false?`<div class="nx-ib" style="color:var(--nac)" title="新增行程" onclick="calEditSheet(null,'${sel}')">${nxi('plus','bold',20)}</div>`:''}${calCanSet()?`<div class="nx-ib" style="color:var(--nac)" title="日曆設定" onclick="calSettings()">${nxi('gear-six','regular',20)}</div>`:''}</div>`;
+  const agenda=`<div class="cal-ag"><div style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:15px;font-weight:500">${+sel.slice(5,7)}/${+sel.slice(8)} 週${wd}${sel===today?' · 今天':''} <span style="color:var(--n500);font-size:13px">${dayEvs.length} 項</span></div>${calCanEdit()&&CAL.dbOk!==false?`<div class="nx-btn s" style="padding:4px 12px" onclick="calEditSheet(null,'${sel}')">${nxi('plus','bold',13)} 新增</div>`:''}</div>${dayEvs.map(e=>`<div class="cal-a${e.done?' dn':''}" style="--c:${CAL_C[e.type]}" onclick="calOpen('${e.key}')"><i class="cal-bar"></i><div style="flex:1;min-width:0"><div class="cal-at">${esc(e.title)}</div><div class="nx-cl">${esc(e.sub||'')}</div></div><div style="text-align:right"><span class="nx-tag">${e.type}</span><div class="nx-cl" style="margin-top:3px">${e.allDay?'全天':esc(e.time)}</div></div></div>`).join('')||`<div class="nx-empty" style="padding:22px"><div>這天沒有行程</div></div>`}${und?`<div class="nx-btn s" onclick="calUndated()">待排定日期的拍攝 ${und} 筆 →</div>`:''}${calCanEdit()&&calPending().length?`<div class="nx-btn s" onclick="calPendSheet()">Google 上有 ${calPending().length} 個拍攝活動可轉成任務 →</div>`:''}</div>`;
+  const right=`<div style="display:flex;gap:6px"><div class="nx-ib" style="color:var(--nac)" title="事件顏色" onclick="calColorSheet()">${nxi('sliders-horizontal','regular',20)}</div>${calCanEdit()&&CAL.dbOk!==false?`<div class="nx-ib" style="color:var(--nac)" title="新增行程" onclick="calEditSheet(null,'${sel}')">${nxi('plus','bold',20)}</div>`:''}${calCanSet()?`<div class="nx-ib" style="color:var(--nac)" title="日曆設定" onclick="calSettings()">${nxi('gear-six','regular',20)}</div>`:''}</div>`;
   const hint=CAL.g.state==='on'&&!CAL.calId&&!calLsGet()?`<div class="nx-al" onclick="${calCanSet()?'calSettings()':''}"><span style="color:var(--a300);margin-top:2px">${nxi('warning','regular',16)}</span><div style="flex:1;font-size:13px">尚未設定公司 Google 日曆，目前同步到你的個人日曆${calCanSet()?'（點此設定）':'，請管理員設定公司日曆'}</div></div>`:'';
-  host.innerHTML=`<div class="nxp cal${mob?'':' nx-full'}">${nxPH('專案行事曆','',null,right)}${nxDeptSeg()}<div class="cal-gr">${calGchip()}</div>${CAL.g.msg?`<div class="nx-cl" style="color:var(--a300)">${esc(CAL.g.msg)}</div>`:''}${hint}${nav}${chips}<div class="${mob?'':'cal-wrap'}"><div>${grid}</div>${agenda}</div></div>`;
+  host.innerHTML=`<div class="nxp cal${mob?'':' nx-full'}">${nxPH('專案行事曆','',null,right)}${nxDeptSeg()}<div class="cal-gr">${calGchip()}</div>${CAL.g.msg?`<div class="nx-al" style="align-items:flex-start"><span style="color:var(--a300);margin-top:2px">${nxi(CAL.g.msgKind==='busy'?'clock':'warning','regular',16)}</span><div style="flex:1;font-size:13px;line-height:1.7">${esc(CAL.g.msg)}${CAL.g.msgKind==='busy'?'':' <span class="nx-btn g" style="padding:0;min-height:0" onclick="calDiag()">連線診斷</span>'}</div></div>`:''}${hint}${nav}${chips}<div class="${mob?'':'cal-wrap'}"><div>${grid}</div>${agenda}</div></div>`;
 }
 function calType(t){if(!t)CAL.types=[];else{const i=CAL.types.indexOf(t);if(i>=0)CAL.types.splice(i,1);else CAL.types.push(t)}rCal()}
 async function calNav(n){CAL.ym=attShift(CAL.ym,n);const t=nxToday();CAL.sel=CAL.ym===t.slice(0,7)?t:CAL.ym+'-01';rCal()}
@@ -3919,6 +3929,295 @@ function expReminderCards(){
   return a;
 }
 (function(){const _r=nxRemList;nxRemList=function(plan){const a=_r(plan);expReminderCards().forEach(c=>a.push(c));return a}})();
+
+
+// ════════════════ Google 連結：每個失敗環節都要「看得見、說得清楚、告訴你怎麼辦」════════════════
+CAL.waitMs=6000;CAL.toMs=15000;
+function calStatus(msg,kind){CAL.g.msg=msg;CAL.g.msgKind=kind||'err';rCalSoft()}
+function calWaitGoogle(ms){return new Promise(res=>{if(window.google&&google.accounts)return res(true);const t0=Date.now(),iv=setInterval(()=>{if(window.google&&google.accounts){clearInterval(iv);res(true)}else if(Date.now()-t0>=ms){clearInterval(iv);res(false)}},150)})}
+const CAL_ERR_HINT={access_denied:'Google 拒絕了這次授權。如果你的 Google 帳號不是「測試使用者」，請管理員到 Google Cloud Console →「OAuth 同意畫面」把你的 Gmail 加入測試使用者，或把應用程式發布為正式版。',popup_failed_to_open:'瀏覽器封鎖了彈出視窗。請允許本網站的彈出視窗（網址列右側的封鎖圖示），再按一次「連結 Google 日曆」。',popup_closed:'授權視窗被關閉了，尚未完成連結。請再按一次，並在視窗中選擇帳號後按「允許」。'};
+function initGCalClient(){
+  if(!window.google||!google.accounts||!GCAL_CLIENT_ID)return;
+  const fail=(code,desc)=>{CAL.g.state=gcalToken?'on':'off';clearTimeout(CAL._to);const inter=CAL._interactive;CAL._interactive=false;if(CAL._res){CAL._res(null);CAL._res=null}
+    if(inter)calStatus(CAL_ERR_HINT[code]||('Google 授權失敗'+(code?'（'+code+'）':'')+(desc?'：'+desc:'')+'。'),'err');else rCalSoft()};
+  gcalTokenClient=google.accounts.oauth2.initTokenClient({client_id:GCAL_CLIENT_ID,scope:'https://www.googleapis.com/auth/calendar.events',
+    callback:resp=>{if(resp&&resp.access_token){clearTimeout(CAL._to);gcalToken=resp.access_token;CAL.g.state='on';CAL._interactive=false;CAL.g.msg='';try{localStorage.setItem('cal_g','1')}catch(e){}if(CAL._res){CAL._res(gcalToken);CAL._res=null}else calSync()}else fail(resp&&resp.error,resp&&resp.error_description)},
+    error_callback:err=>fail(err&&err.type,err&&err.message)});
+}
+async function connectGCal(){
+  if(!GCAL_CLIENT_ID){calStatus('這個系統還沒有設定 Google Client ID，請系統管理員完成設定。','err');return}
+  calStatus('正在連線 Google…','busy');
+  if(!(window.google&&google.accounts)){const ok=await calWaitGoogle(CAL.waitMs);if(!ok){calStatus('Google 登入元件沒有載入。常見原因：瀏覽器的廣告攔截或隱私擴充功能擋住了 accounts.google.com，或網路無法連到 Google。請暫時關閉攔截後重新整理頁面再試。','err');return}}
+  if(!gcalTokenClient)initGCalClient();
+  if(!gcalTokenClient){calStatus('Google 元件初始化失敗，請重新整理頁面再試。','err');return}
+  CAL._interactive=true;calStatus('請在跳出的 Google 視窗完成授權…','busy');
+  clearTimeout(CAL._to);CAL._to=setTimeout(()=>{if(CAL._interactive&&!gcalToken){CAL._interactive=false;calStatus('超過 '+Math.round(CAL.toMs/1000)+' 秒沒有收到 Google 的回應。如果跳出的視窗顯示「錯誤 400：origin_mismatch」，表示管理員需要到 Google Cloud Console →「憑證」→ OAuth 用戶端，把 '+location.origin+' 加入「已授權的 JavaScript 來源」。另一個可能是彈出視窗被瀏覽器封鎖。','err')}},CAL.toMs);
+  try{gcalTokenClient.requestAccessToken({prompt:'consent'})}catch(e){CAL._interactive=false;clearTimeout(CAL._to);calStatus('無法開啟 Google 授權視窗：'+e.message,'err')}
+}
+(function(){const _g=calGchip;calGchip=function(){return _g()+'<span class="nx-btn g" style="padding:0;min-height:0;margin-left:auto" onclick="calHelp()">怎麼同步？</span>'}})();
+function calHelp(){
+  NX_SHEET={type:'calhelp'};
+  nxSheet(`<div style="font-size:18px;font-weight:500">怎麼同步 Google 日曆</div><div style="font-size:14px;line-height:1.8"><b style="font-weight:500">一般成員</b><br>① 按頁面上的「連結 Google 日曆」<br>② 在跳出的視窗，用公司的 Google 帳號登入並按「允許」<br>③ 連結成功後會自動同步，狀態會變成「Google · 日曆名稱」，之後想更新就按「同步」</div><div style="font-size:14px;line-height:1.8"><b style="font-weight:500">同步的內容</b><br>• 專案系統 → Google：拍攝、發布、截止、專案截止、自訂行程<br>• Google → 專案系統：日曆上的其他事件會顯示在行事曆；在 Google 上改期，同步後會寫回任務日期<br>• 會議紀錄只顯示，不寫入 Google</div><div style="font-size:14px;line-height:1.8"><b style="font-weight:500">管理員要先做</b><br>① 在行事曆右上角齒輪填入公司日曆 ID<br>② 把該日曆分享給成員（權限：變更活動）<br>③ Google Cloud Console →「憑證」→ OAuth 用戶端：「已授權的 JavaScript 來源」加入 <code>${esc(location.origin)}</code><br>④「OAuth 同意畫面」若是「測試中」，要把成員的 Gmail 加入測試使用者（或發布為正式版）</div><div class="nx-btn p" style="min-height:46px" onclick="calDiag()">連線診斷（檢查哪一步有問題）</div>`);
+}
+async function calDiag(){
+  const rows=[],R=(ok,t,h)=>rows.push(`<div style="padding:10px 14px"><div style="display:flex;gap:8px;font-size:14px"><span style="color:${ok?'var(--a300)':'var(--n400)'}">${ok?'✓':'✗'}</span><span style="flex:1">${t}</span></div>${h?`<div class="nx-cl" style="margin:4px 0 0 22px;line-height:1.6">${h}</div>`:''}</div>`);
+  const show=()=>{NX_SHEET={type:'caldiag'};nxSheet(`<div style="font-size:18px;font-weight:500">連線診斷</div><div class="nx-list">${rows.join('')}</div><div class="nx-btn s" onclick="calDiag()">重新檢查</div>`)};
+  R(!!GCAL_CLIENT_ID,'Google Client ID 已設定',GCAL_CLIENT_ID?'':'請系統管理員設定');
+  const lib=!!(window.google&&google.accounts);R(lib,'Google 登入元件已載入',lib?'':'被廣告攔截或隱私擴充功能擋住，或無法連到 accounts.google.com');
+  R(!!gcalToken,'已完成 Google 授權',gcalToken?'':'請按「連結 Google 日曆」');
+  R(true,'目前網址：'+esc(location.origin),'必須已加入 Google Cloud 的「已授權的 JavaScript 來源」');
+  R(!!CAL.calId,'公司日曆 ID：'+esc(CAL.calId||'（未設定，使用個人主要日曆）'),CAL.calId?'':'管理員可在行事曆右上角齒輪設定');
+  show();
+  if(gcalToken){try{const c=await gcalFetch('calendars/'+calGid());R(true,'可讀取日曆：'+esc(c.summary||''),'');await gcalFetch('calendars/'+calGid()+'/events?maxResults=1');R(true,'可讀取事件','')}catch(e){R(false,'讀取日曆失敗',esc(e.message))}show()}
+}
+
+
+// ════════════════ 電腦版／手機版對齊：同一份「個人」清單同時產生兩邊的入口 ════════════════
+const NX_PERS=[
+  {id:'wlog',label:'工作日誌',icon:'notebook',emoji:'📓',show:()=>true,pre:"NX_WLOG_FROM='more';"},
+  {id:'me',label:'我的產能／考核',icon:'target',emoji:'🎯',show:()=>deptAvail('plan')},
+  {id:'myatt',label:'我的出勤',icon:'clock',emoji:'🕘',show:()=>ATT.ok===true},
+  {id:'myexp',label:'我的請款',icon:'file-text',emoji:'🧾',show:()=>EXP.ok===true},
+  {id:'inbox',label:'收件匣',icon:'tray',emoji:'📥',show:()=>true,badge:()=>nxInboxN()}
+];
+function nxRenderPers(){
+  if(isMob()||!CU)return;const anchor=$n('si-db');if(!anchor)return;
+  let box=$n('nx-pers');if(!box){box=document.createElement('div');box.id='nx-pers';anchor.insertAdjacentElement('afterend',box)}
+  const cur=(document.querySelector('.pg.on')||{id:''}).id.slice(3);
+  box.innerHTML=NX_PERS.filter(x=>x.show()).map(x=>{const b=x.badge?x.badge():0;return `<div class="si${cur===x.id?' on':''}" data-pers="${x.id}" onclick="${x.pre||''}nav('${x.id}',this)"><span>${x.emoji}</span>${x.label}${b?`<span class="nx-sbb">${b}</span>`:''}</div>`}).join('')+'<div class="sbdv"></div>';
+  const sw=$n('nx-dsw');if(sw&&sw.previousElementSibling!==box)box.insertAdjacentElement('afterend',sw);
+}
+(function(){
+  const a=nxApplyDept;nxApplyDept=function(){a();nxRenderPers()};
+  const r=nxRefresh;nxRefresh=function(){r();nxRenderPers()};
+  const n=nav;nav=function(p,el){n(p,el);nxRenderPers()};
+})();
+function rMore(){
+  const host=$n('more-c');if(!host)return;
+  const d=deptOf(curDept()),roleLb=CU.role==='admin'?'管理員':CU.role==='manager'?'主管':(CU.dept||'成員');
+  host.innerHTML=`<div class="nxp"><div style="display:flex;align-items:center;gap:12px"><div class="nx-ib nx-av" style="width:52px;height:52px;font-size:20px">${esc((CU.name||'?').slice(0,1))}</div><div><div style="font-size:18px;font-weight:500">${esc(CU.name)}</div><div class="nx-sub">${esc(roleLb)} · 指名度行銷</div></div></div>`+
+   nxGrp('個人',NX_PERS.filter(x=>x.id!=='inbox'&&x.show()).map(x=>nxRow(x.icon,x.label,(x.pre||'')+`nav('${x.id}',null)`)))+
+   (nxDeptSeg()?`<div>${nxLbl('工作區（個人＋部門）')}${nxDeptSeg()}</div>`:'')+(d?d.menu():'')+
+   nxGrp('其他',[nxRow('megaphone','公告欄',"nav('an',null)"),hasPerm('members_manage')?nxRow('gear-six','帳號管理',"nav('ac',null)"):'',hasPerm('audit_view')?nxRow('list-bullets','操作紀錄',"nav('au',null)"):'',nxRow('sign-out','登出','doLogout(event)')])+`</div>`;
+}
+// ── 工作區切換鈕上的待處理數量（讓行政部的待辦一眼看得到）──
+deptOf('adm').badge=()=>(EXP.ok&&expAny())?expTodo().length:0;
+function nxDeptSeg(withAll){
+  const L=deptList();if(L.length<2)return '';
+  const all=withAll&&todayAll(),cur=curDept();
+  return `<div class="nx-seg nx-dseg">${withAll?`<div class="nx-so${all?' on':''}" onclick="setTodayAll(true)">全部</div>`:''}${L.map(d=>{const b=d.badge?d.badge():0;return `<div class="nx-so${!all&&cur===d.id?' on':''}" onclick="setDept('${d.id}')">${nxi(d.icon,'regular',14)}${d.name}${b?`<span class="nx-sbb" style="margin-left:6px">${b}</span>`:''}</div>`}).join('')}</div>`;
+}
+
+
+// ════════════════ 行事曆：顏色設定 ＋ Google 拍攝活動自動轉任務 ════════════════
+CAL_TYPES.splice(0,CAL_TYPES.length,'拍攝','發布','任務','截止','會議','行程','Google');
+const CAL_DEF={'拍攝':'#9184d9','發布':'#5fbf92','任務':'#6aa7e8','截止':'#e0a35a','會議':'#4fc3c8','行程':'#b2b6ca','其他':'#b2b6ca','Google':'#e58a8a'};
+const CAL_DESC={'拍攝':'企劃中／待拍攝的影片任務','發布':'排程中／已排程／已發布的影片','任務':'其他任務（剪輯、審核、貼文…）','截止':'專案截止、自訂「截止」','會議':'會議紀錄、自訂「會議」','行程':'自訂行程','Google':'Google 日曆上的其他事件'};
+const CAL_PAL=['#9184d9','#6aa7e8','#4fc3c8','#5fbf92','#a6c85a','#e0c04a','#e0a35a','#e58a6a','#e58a8a','#e58ab4','#b78ae0','#b2b6ca'];
+const calLs=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||d)}catch(e){return JSON.parse(d)}};
+CAL.col={me:calLs('cal_colors','{}'),co:{}};
+CAL.imp={on:false,kw:'拍攝'};
+CAL.ign=new Set(calLs('cal_ign','[]'));
+function calApplyColors(){Object.keys(CAL_DEF).forEach(t=>{CAL_C[t]=CAL.col.me[t]||CAL.col.co[t]||CAL_DEF[t]})}
+calApplyColors();
+// ── 載入（含新欄位；資料表欄位尚未更新時使用本機設定）──
+async function calInit(){
+  CAL.calId=calLsGet();CAL.col.me=calLs('cal_colors','{}');
+  try{
+    const s=await sb.from('calendar_settings').select('*').eq('id',1).maybeSingle();
+    if(s.error){CAL.dbOk=false}
+    else{CAL.dbOk=true;if(s.data){if(s.data.google_calendar_id!=null)CAL.calId=s.data.google_calendar_id||calLsGet();CAL.col.co=(s.data.colors&&typeof s.data.colors==='object')?s.data.colors:{};CAL.imp={on:!!s.data.import_shoots,kw:s.data.import_keywords||'拍攝'}}}
+    if(CAL.dbOk){const d=new Date();d.setDate(d.getDate()-120);const e=await sb.from('calendar_events').select('*').gte('start_date',nxISO(d));if(e.error)CAL.dbOk=false;else CAL.custom=e.data||[]}
+  }catch(e){CAL.dbOk=false}
+  calApplyColors();if(gcalToken)CAL.g.state='on';
+  if(document.querySelector('.pg.on')&&document.querySelector('.pg.on').id==='pg-sh')rCal();
+}
+// ── 事件類型：拍攝／發布／任務 ──
+function calTaskType(t){const v=t.content_type==='短影音';if(v&&['企劃中','待拍攝'].includes(t.status))return '拍攝';if(v&&['排程中','已排程','已發布'].includes(t.status))return '發布';return '任務'}
+function calEvents(){
+  const out=[],pj=id=>STATE.projects.find(p=>p.id===id);
+  STATE.tasks.forEach(t=>{
+    if(!t.due_date)return;const p=pj(t.project_id),done=t.status==='已發布'||t.status==='已完成';
+    if(!done&&!taskLive(t))return;if(done&&p&&pjClosed(p))return;
+    const type=calTaskType(t);
+    out.push({key:'task:'+t.id,type,short:t.name,title:`${p?p.client_name+' · ':''}${t.name}`,sub:`${t.status}${t.assignee_id?' · '+gU(t.assignee_id).name:''}`,date:t.due_date,allDay:true,pid:t.project_id,src:'task',ref:t,done});
+  });
+  STATE.projects.forEach(p=>{if(!pjRunning(p))return;const d=pDL(p);if(d)out.push({key:'prj:'+p.id,type:'截止',short:`${p.client_name} 截止`,title:`${p.client_name} 第${p.period}期截止`,sub:`${p.done_videos}/${p.total_videos} 片`,date:d,allDay:true,pid:p.id,src:'prj',ref:p})});
+  (STATE.clientLogs||[]).forEach(l=>{if(!l.log_date)return;const p=pj(l.project_id);out.push({key:'log:'+l.id,type:'會議',short:l.title,title:`${p?p.client_name+' · ':''}${l.title}`,sub:'會議紀錄',date:l.log_date,allDay:true,pid:l.project_id,src:'log',ref:l})});
+  CAL.custom.forEach(c=>{const p=pj(c.project_id);out.push({key:'evt:'+c.id,type:c.kind==='會議'?'會議':c.kind==='截止'?'截止':'行程',title:c.title,sub:[p?p.client_name:'',c.location].filter(Boolean).join(' · '),date:c.start_date,end:c.end_date||null,allDay:c.all_day!==false,time:c.all_day===false?String(c.start_time||'').slice(0,5):'',pid:c.project_id,src:'evt',ref:c})});
+  const known=new Set(out.map(e=>e.key));
+  Object.values(CAL.g.items).forEach(g=>{if(g.marker&&known.has(g.marker))return;out.push({key:'g:'+g.id,type:'Google',title:g.title,sub:[g.time,g.loc].filter(Boolean).join(' · '),date:g.date,end:g.end,allDay:g.allDay,time:g.time,src:'g',ref:g})});
+  CAL.ev={};out.forEach(e=>CAL.ev[e.key]=e);return out;
+}
+// ── Google 的 11 種內建事件顏色：挑最接近的，讓 Google 上的顏色也跟著分類 ──
+const CAL_GCOL={1:'#a4bdfc',2:'#7ae7bf',3:'#dbadff',4:'#ff887c',5:'#fbd75b',6:'#ffb878',7:'#46d6db',8:'#e1e1e1',9:'#5484ed',10:'#51b749',11:'#dc2127'};
+// 各類別依優先順序，各自挑「最接近且尚未被使用」的 Google 顏色，保證不同類別在 Google 上顏色不同
+function calGColorMap(){
+  const used=new Set(),m={};
+  CAL_TYPES.forEach(t=>{
+    const h=String(CAL_C[t]||CAL_DEF[t]||'#b2b6ca').replace('#',''),r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);let best=8,bd=1e9;
+    Object.entries(CAL_GCOL).forEach(([id,x])=>{if(used.has(+id))return;const d=(r-parseInt(x.slice(1,3),16))**2+(g-parseInt(x.slice(3,5),16))**2+(b-parseInt(x.slice(5,7),16))**2;if(d<bd){bd=d;best=+id}});
+    used.add(best);m[t]=best;
+  });
+  return m;
+}
+const calGColorId=type=>calGColorMap()[type]||8;
+function calBody(d){
+  const b={summary:d.title,description:d.desc||'',extendedProperties:{private:{pos:d.key}}};if(d.loc)b.location=d.loc;if(d.type)b.colorId=String(calGColorId(d.type));
+  if(d.allDay!==false){const e=new Date((d.end||d.date)+'T00:00:00');e.setDate(e.getDate()+1);b.start={date:d.date};b.end={date:nxISO(e)}}
+  else{b.start={dateTime:`${d.date}T${d.time||'09:00'}:00+08:00`,timeZone:'Asia/Taipei'};b.end={dateTime:`${d.end||d.date}T${d.time2||d.time||'10:00'}:00+08:00`,timeZone:'Asia/Taipei'}}
+  return b;
+}
+function calDesired(a,b){
+  const out=[];const inWin=d=>d>=a&&d<=b;
+  calEvents().forEach(e=>{
+    if(e.src==='log'||e.src==='g'||e.done||!inWin(e.date))return;
+    if(e.src==='evt'&&!e.ref.sync_google)return;
+    const pre=e.src==='evt'?'':`[${e.type}] `;
+    out.push({key:e.key,type:e.type,title:pre+e.title,date:e.date,end:e.end,allDay:e.allDay,time:e.time,time2:e.src==='evt'&&!e.allDay?String(e.ref.end_time||'').slice(0,5):'',loc:e.src==='evt'?e.ref.location||'':'',desc:`ProjectOS｜${e.type}${e.sub?'｜'+e.sub:''}${e.pid?'｜專案代碼：'+e.pid:''}`,src:e.src,ref:e.ref});
+  });
+  return out;
+}
+async function calPushEvt(row,del){
+  if(!gcalToken||!calCanEdit())return;
+  try{
+    const key='evt:'+row.id,q=await gcalFetch(`calendars/${calGid()}/events?privateExtendedProperty=${encodeURIComponent('pos='+key)}&maxResults=5`),ex=(q.items||[])[0];
+    if(del||!row.sync_google){if(ex)await gcalFetch(`calendars/${calGid()}/events/${ex.id}`,{method:'DELETE'});return}
+    const p=STATE.projects.find(x=>x.id===row.project_id),type=row.kind==='會議'?'會議':row.kind==='截止'?'截止':'行程';
+    const body=calBody({key,type,title:row.title,date:row.start_date,end:row.end_date,allDay:row.all_day!==false,time:String(row.start_time||'').slice(0,5),time2:String(row.end_time||'').slice(0,5),loc:row.location||'',desc:`ProjectOS｜${row.kind}${p?'｜'+p.client_name:''}${row.notes?'\n'+row.notes:''}`});
+    if(ex)await gcalFetch(`calendars/${calGid()}/events/${ex.id}`,{method:'PATCH',body:JSON.stringify(body)});
+    else await gcalFetch(`calendars/${calGid()}/events`,{method:'POST',body:JSON.stringify(body)});
+    CAL.g.cover=[];
+  }catch(e){calErr(e)}
+}
+// ═══════════ Google 拍攝活動 → 拍攝任務 ═══════════
+const calIsImp=g=>!!(g.raw&&g.raw.extendedProperties&&g.raw.extendedProperties.private&&g.raw.extendedProperties.private.imp==='1');
+function calIsShoot(g){const kws=String(CAL.imp.kw||'拍攝').split(/[,，、;；\s]+/).filter(Boolean),t=String(g.title||'').toLowerCase();return kws.some(k=>t.includes(k.toLowerCase()))}
+function calCandList(items){
+  const today=nxToday();
+  return items.filter(g=>!g.marker&&!calIsImp(g)&&g.date>=today&&!(g.raw&&g.raw.recurringEventId)&&calIsShoot(g)&&!CAL.ign.has(g.id)&&!STATE.tasks.some(t=>t.gcal_event_id===g.id));
+}
+function calMatchProject(g){
+  const text=(String(g.title||'')+' '+String(g.desc||'')).toLowerCase();
+  const c=STATE.projects.filter(p=>pjRunning(p)&&p.client_name&&(text.includes(String(p.client_name).toLowerCase())||text.includes(String(p.id).toLowerCase())));
+  if(!c.length)return null;c.sort((a,b)=>b.client_name.length-a.client_name.length);
+  if(c.length>1&&c[0].client_name.length===c[1].client_name.length)return null;return c[0];
+}
+function calTaskName(g,p){
+  let n=String(g.title||'');String(CAL.imp.kw||'拍攝').split(/[,，、;；\s]+/).filter(Boolean).forEach(k=>{n=n.split(k).join(' ')});
+  if(p&&p.client_name)n=n.split(p.client_name).join(' ');
+  n=n.replace(/[\[\]【】()（）]/g,' ').replace(/^[\s\-–—:：·|｜]+|[\s\-–—:：·|｜]+$/g,'').replace(/\s{2,}/g,' ').trim();
+  return n||String(g.title||'拍攝');
+}
+async function calMakeTask(g,p){
+  const att=((g.raw&&g.raw.attendees)||[]).map(x=>String(x.email||'').toLowerCase()),asg=STATE.profiles.find(u=>u.active!==false&&u.email&&att.includes(String(u.email).toLowerCase()));
+  const row={name:calTaskName(g,p),task_type:'單項',content_type:'短影音',project_id:p?p.id:null,period:p?p.period:null,assignee_id:asg?asg.id:((p&&p.planner_id)||CU.id),priority:'中',status:'待拍攝',due_date:g.date,created_by:CU.id,gcal_event_id:g.id,
+    notes:`來自 Google 日曆活動：${g.title}\n日期：${g.date}${g.time?' '+g.time:''}${g.loc?'\n地點：'+g.loc:''}${g.link?'\n'+g.link:''}${g.desc?'\n\n'+g.desc:''}`};
+  let r=await sb.from('tasks').insert(row).select().single();
+  if(r.error&&/gcal_event_id/.test(r.error.message||'')&&!/duplicate|unique/i.test(r.error.message||'')){delete row.gcal_event_id;r=await sb.from('tasks').insert(row).select().single()}
+  if(r.error)return null;                                  // 例如另一位成員剛建立（唯一索引擋下）→ 略過
+  STATE.tasks.push(r.data);
+  await gcalFetch(`calendars/${calGid()}/events/${g.id}`,{method:'PATCH',body:JSON.stringify({extendedProperties:{private:{pos:'task:'+r.data.id,imp:'1'}},colorId:String(calGColorId('拍攝'))})});
+  try{await aLog('由 Google 日曆建立任務',`建立拍攝任務 ${esc(r.data.name)}`)}catch(e){}
+  return r.data;
+}
+async function calImportShoots(all){
+  let n=0;
+  for(const g of calCandList(all)){const p=calMatchProject(g);if(!p)continue;try{if(await calMakeTask(g,p))n++}catch(e){}}
+  return n;
+}
+// ── 同步（含顏色、拍攝活動轉任務）──
+async function calSync(){
+  if(CAL.busy)return;
+  const tok=await calToken();if(!tok){CAL.g.state='off';rCalSoft();connectGCal();return}
+  CAL.busy=true;rCalSoft();
+  const stat={c:0,u:0,d:0,p:0,i:0};
+  try{
+    const today=new Date(),w0=new Date(today);w0.setDate(w0.getDate()-30);const w1=new Date(today);w1.setDate(w1.getDate()+150);
+    const a=[nxISO(w0),attShift(CAL.ym,-1)+'-01'].sort()[0],b=[nxISO(w1),attShift(CAL.ym,1)+'-28'].sort().reverse()[0];
+    let all=await calList(a,b);
+    if(calCanEdit()&&CAL.imp.on){const n=await calImportShoots(all);if(n){stat.i=n;all=await calList(a,b)}}
+    const byId={},byMk={};all.forEach(g=>{byId[g.id]=g;if(g.marker)byMk[g.marker]=g});
+    if(calCanEdit()){
+      const desired=calDesired(a,b),keys=new Set(desired.map(d=>d.key));
+      await calPool(desired,4,async d=>{
+        const ex=byMk[d.key]||(d.src==='task'&&d.ref.gcal_event_id&&byId[d.ref.gcal_event_id])||null,gid=ex&&ex.id,imp=!!(ex&&calIsImp(ex)),body=calBody(d);
+        body.extendedProperties={private:Object.assign({pos:d.key},imp?{imp:'1'}:{})};if(imp)delete body.summary;
+        if(!ex){const r=await gcalFetch(`calendars/${calGid()}/events`,{method:'POST',body:JSON.stringify(body)});stat.c++;if(r)byId[r.id]=calNorm(r);CAL.last[d.key]=d.date;return}
+        const diffDate=ex.date!==d.date,diffTitle=!imp&&ex.title!==d.title,diffColor=String((ex.raw&&ex.raw.colorId)||'')!==String(calGColorId(d.type)),noMk=!ex.marker;
+        if(diffDate&&(d.src==='task'||d.src==='evt')){
+          const last=CAL.last[d.key],gNew=new Date(ex.updated||0).getTime(),local=new Date(d.ref.updated_at||0).getTime();
+          let pull;if(last){const lc=d.date!==last,gc=ex.date!==last;pull=gc&&!lc?true:lc&&!gc?false:gNew>local}else pull=gNew>local;
+          if(pull){
+            if(d.src==='task'){await sb.from('tasks').update({due_date:ex.date}).eq('id',d.ref.id);d.ref.due_date=ex.date}
+            else{await sb.from('calendar_events').update({start_date:ex.date,end_date:ex.end||null}).eq('id',d.ref.id);d.ref.start_date=ex.date;d.ref.end_date=ex.end||null}
+            stat.p++;CAL.last[d.key]=ex.date;if(noMk||diffTitle||diffColor){const pb={extendedProperties:body.extendedProperties,colorId:body.colorId};if(!imp)pb.summary=d.title;await gcalFetch(`calendars/${calGid()}/events/${gid}`,{method:'PATCH',body:JSON.stringify(pb)})}return;
+          }
+        }
+        if(diffDate||diffTitle||diffColor||noMk){await gcalFetch(`calendars/${calGid()}/events/${gid}`,{method:'PATCH',body:JSON.stringify(body)});stat.u++}
+        CAL.last[d.key]=d.date;
+      });
+      const stale=all.filter(g=>g.marker&&!keys.has(g.marker)&&!calIsImp(g)&&g.date>=a&&g.date<=b&&/^(task|prj|evt):/.test(g.marker));
+      await calPool(stale,4,async g=>{await gcalFetch(`calendars/${calGid()}/events/${g.id}`,{method:'DELETE'});delete byId[g.id];stat.d++});
+    }
+    try{localStorage.setItem('cal_last',JSON.stringify(CAL.last))}catch(e){}
+    const fresh=await calList(a,b);CAL.g.items={};fresh.forEach(g=>{CAL.g.items[g.id]=g});CAL.g.cover=[[a,b]];
+    CAL.g.last=Date.now();CAL.g.state='on';CAL.g.msg='';
+    try{const cal=await gcalFetch(`calendars/${calGid()}`);CAL.g.name=cal.summary||''}catch(e){}
+    nToast(`已與 Google 日曆同步：新增 ${stat.c}・更新 ${stat.u}・刪除 ${stat.d}${stat.p?`・從 Google 更新 ${stat.p}`:''}${stat.i?`・從 Google 建立 ${stat.i} 個拍攝任務`:''}`);
+  }catch(e){calErr(e)}
+  finally{CAL.busy=false;rCalSoft();nxRefresh()}
+}
+// ── 待轉成任務的清單／單筆轉換／忽略 ──
+const calPending=()=>calCandList(Object.values(CAL.g.items));
+function calPendSheet(only){
+  const l=only?calCandList(Object.values(CAL.g.items)).filter(g=>g.id===only):calPending();NX_SHEET={type:'calpend'};
+  const pj=STATE.projects.filter(p=>pjRunning(p));
+  nxSheet(`<div style="font-size:18px;font-weight:500">Google 上的拍攝活動 <span style="color:var(--n500);font-size:14px">${l.length}</span></div><div class="nx-cl" style="line-height:1.7">選好專案後按「轉為任務」，會建立一筆「待拍攝」的影片任務，日期沿用活動日期，Google 上的活動標題不會被改動。</div><div class="nx-list">${l.map(g=>{const m=calMatchProject(g);return `<div style="padding:12px 14px;display:flex;flex-direction:column;gap:8px"><div><div style="font-size:14.5px;font-weight:500;line-height:1.4">${esc(g.title)}</div><div class="nx-cl">${esc(fd(g.date))}${g.time?' '+esc(g.time):''}${g.loc?' · '+esc(g.loc):''}</div></div><select id="cp-${esc(g.id)}" class="nx-in" style="min-height:42px"><option value="">未歸專案</option>${pj.map(p=>`<option value="${p.id}" ${m&&m.id===p.id?'selected':''}>${esc(p.client_name)}</option>`).join('')}</select><div style="display:flex;gap:8px"><div class="nx-btn p" style="flex:1" onclick="calConv('${esc(g.id)}')">轉為任務</div><div class="nx-btn s" onclick="calIgn('${esc(g.id)}')">忽略</div></div></div>`}).join('')||'<div class="nx-empty"><div>沒有待轉的拍攝活動</div></div>'}</div>`);
+}
+async function calConv(id){
+  const g=CAL.g.items[id];if(!g)return;const pid=($n('cp-'+id)||{}).value||'',p=pid?STATE.projects.find(x=>x.id===pid):null;
+  try{const t=await calMakeTask(g,p);if(!t){nToast('沒有建立（可能已被其他人轉過）');return}
+    nToast('已建立拍攝任務：'+t.name);CAL.g.cover=[];await calSync()}catch(e){calErr(e)}
+}
+function calIgn(id){CAL.ign.add(id);try{localStorage.setItem('cal_ign',JSON.stringify([...CAL.ign]))}catch(e){}nToast('已忽略這個活動');if(calPending().length)calPendSheet();else nxSheetClose();rCal()}
+// ═══════════ 顏色設定 ═══════════
+function calColorSheet(scope){
+  scope=scope||CAL._cs||'me';if(scope==='co'&&!calCanSet())scope='me';CAL._cs=scope;NX_SHEET={type:'calcolor'};
+  const cur=scope==='co'?CAL.col.co:CAL.col.me;
+  nxSheet(`<div style="font-size:18px;font-weight:500">事件顏色</div>${calCanSet()?`<div class="nx-seg"><div class="nx-so${scope==='me'?' on':''}" onclick="calColorSheet('me')">我的顏色</div><div class="nx-so${scope==='co'?' on':''}" onclick="calColorSheet('co')">全公司預設</div></div>`:''}<div class="nx-cl" style="line-height:1.7">${scope==='co'?'設定後，沒有自訂顏色的同事都會用這組顏色。':'只影響你自己這台裝置；沒設定的類別使用公司預設。'}同步到 Google 時，會自動挑最接近的 Google 內建顏色。</div>${CAL_TYPES.map(t=>`<div style="display:flex;flex-direction:column;gap:8px;padding:6px 0"><div style="display:flex;align-items:center;gap:8px"><i class="cal-dot" style="background:${CAL_C[t]};width:12px;height:12px"></i><span style="font-size:15px;font-weight:500">${t}</span><span class="nx-cl">${CAL_DESC[t]}</span></div><div class="cal-pal">${CAL_PAL.map(h=>`<i class="cal-sw${(cur[t]||(scope==='co'?CAL_DEF[t]:CAL_C[t]))===h?' on':''}" style="background:${h}" title="${h}" onclick="calSetColor('${t}','${h}')"></i>`).join('')}<input type="color" class="cal-cp" value="${cur[t]||CAL_C[t]}" title="自訂顏色" onchange="calSetColor('${t}',this.value)"></div></div>`).join('')}<div class="nx-btn s" onclick="calColorReset()">還原${scope==='co'?'公司':'我的'}預設顏色</div>`);
+}
+async function calSetColor(t,hex){
+  const scope=CAL._cs||'me';
+  if(scope==='co'){
+    CAL.col.co[t]=hex;
+    if(CAL.dbOk!==false){try{const r=await sb.from('calendar_settings').upsert({id:1,colors:CAL.col.co,updated_at:new Date().toISOString()},{onConflict:'id'});if(r.error){nToast('儲存全公司顏色失敗：'+(/colors/.test(r.error.message)?'請先重新執行 calendar.sql':r.error.message));delete CAL.col.co[t];return}}catch(e){nToast('儲存失敗：網路異常');delete CAL.col.co[t];return}}
+  }else{CAL.col.me[t]=hex;try{localStorage.setItem('cal_colors',JSON.stringify(CAL.col.me))}catch(e){}}
+  calApplyColors();calColorSheet(scope);rCal();
+}
+async function calColorReset(){
+  const scope=CAL._cs||'me';
+  if(scope==='co'){const old=CAL.col.co;CAL.col.co={};if(CAL.dbOk!==false){try{const r=await sb.from('calendar_settings').upsert({id:1,colors:{},updated_at:new Date().toISOString()},{onConflict:'id'});if(r.error){CAL.col.co=old;nToast('還原失敗：'+r.error.message);return}}catch(e){CAL.col.co=old;nToast('還原失敗：網路異常');return}}}
+  else{CAL.col.me={};try{localStorage.removeItem('cal_colors')}catch(e){}}
+  calApplyColors();calColorSheet(scope);rCal();nToast('已還原預設顏色');
+}
+// ── 日曆設定：公司日曆 ID＋拍攝活動自動轉任務 ──
+function calSettings(){
+  NX_SHEET={type:'calset'};
+  nxSheet(`<div style="font-size:18px;font-weight:500">Google 日曆設定</div><div class="nx-cl" style="line-height:1.7">專案行事曆會與這個日曆雙向同步。留空則使用每位成員自己的主要日曆。</div><div><div class="nx-lb">公司 Google 日曆 ID</div><input id="cs-id" class="nx-in" style="min-height:44px" placeholder="例：abc123@group.calendar.google.com" value="${esc(CAL.calId||'')}"></div><div class="nx-cl" style="line-height:1.7">找法：Google 日曆 → 該日曆「設定與共用」→「整合日曆」→「日曆 ID」。記得把日曆分享給成員（權限：變更活動）。</div><div style="border-top:1px solid var(--bd);padding-top:12px;display:flex;flex-direction:column;gap:10px"><label class="nx-row" style="padding:0;min-height:0"><span style="flex:1;font-size:14.5px">把 Google 上新增的「拍攝」活動自動轉成拍攝任務</span><label class="tog"><input type="checkbox" id="cs-imp" ${CAL.imp.on?'checked':''}><span class="tsl"></span></label></label><div><div class="nx-lb">判斷為拍攝活動的關鍵字（標題含任一個，用逗號分隔）</div><input id="cs-kw" class="nx-in" style="min-height:42px" value="${esc(CAL.imp.kw||'拍攝')}"></div><div class="nx-cl" style="line-height:1.7">活動標題或說明裡提到客戶名稱或專案代碼，系統就會自動建立任務並歸到該專案；對不到專案的會放進「待轉任務」清單讓你手動選擇。只處理今天以後、非重複的活動。</div></div><div id="cs-res" style="font-size:13px"></div><div style="display:flex;gap:8px"><div class="nx-btn s" style="flex:1" onclick="calTestId()">測試連線</div><div class="nx-btn p" style="flex:1" onclick="calSaveId()">儲存</div></div>`);
+}
+async function calSaveId(){
+  const id=$n('cs-id').value.trim(),on=$n('cs-imp').checked,kw=($n('cs-kw').value||'').trim()||'拍攝';let err=null;
+  if(CAL.dbOk!==false){try{const r=await sb.from('calendar_settings').upsert({id:1,google_calendar_id:id||null,import_shoots:on,import_keywords:kw,updated_at:new Date().toISOString()},{onConflict:'id'});if(r.error)err=/import_|colors/.test(r.error.message)?'請先重新執行 calendar.sql（新增欄位）':r.error.message}catch(e){err='網路異常'}}
+  if(err){nToast('儲存失敗：'+err);return}
+  try{localStorage.setItem('cal_gid',id)}catch(e){}
+  const changed=id!==CAL.calId;CAL.calId=id;CAL.imp={on,kw};if(changed){CAL.g.items={};CAL.g.cover=[];CAL.g.name=''}
+  nxSheetClose();nToast(on?'已儲存。拍攝活動會在下次同步時自動轉成任務':'已儲存');rCal();if(gcalToken)calSync();
+}
+// 事件詳情：Google 事件可手動轉成拍攝任務
+(function(){const _o=calOpen;calOpen=function(key){_o(key);const e=CAL.ev[key];if(e&&e.src==='g'&&calCanEdit()&&!calIsImp(e.ref)){const sh=$n('nxsp');if(sh)sh.insertAdjacentHTML('beforeend',`<div class="nx-btn p" onclick="calPendSheetOne('${esc(e.ref.id)}')">轉為拍攝任務</div>`)}}})();
+function calPendSheetOne(id){const g=CAL.g.items[id];if(!g)return;const pj=STATE.projects.filter(p=>pjRunning(p)),m=calMatchProject(g);NX_SHEET={type:'calpend'};
+  nxSheet(`<div style="font-size:18px;font-weight:500">轉為拍攝任務</div><div><div style="font-size:14.5px;font-weight:500">${esc(g.title)}</div><div class="nx-cl">${esc(fd(g.date))}${g.time?' '+esc(g.time):''}</div></div><div><div class="nx-lb">歸屬專案</div><select id="cp-${esc(g.id)}" class="nx-in" style="min-height:42px"><option value="">未歸專案</option>${pj.map(p=>`<option value="${p.id}" ${m&&m.id===p.id?'selected':''}>${esc(p.client_name)}</option>`).join('')}</select></div><div class="nx-cl">會建立一筆「待拍攝」影片任務，日期沿用活動日期；Google 上的活動標題不會被改動。</div><div class="nx-btn p" style="min-height:46px" onclick="calConv('${esc(g.id)}')">轉為任務</div>`)}
 
 </script>
 </body>
