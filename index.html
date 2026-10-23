@@ -42,6 +42,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ac)}
 .lt{font-family:var(--ui);font-weight:700;font-size:16px}.lt span{display:block;font-size:11px;font-weight:400;color:var(--tx3)}
 .lb{width:100%;padding:10px;background:var(--acs);color:#fff;border-radius:8px;font-size:14px;font-weight:600;font-family:var(--ui);margin-top:8px;cursor:pointer;border:none;transition:background .12s}
 .lb:hover{background:#4a79e0}.le{color:var(--rd);font-size:12px;margin-top:8px;display:none}
+.lrm{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx3);margin:2px 0 6px;cursor:pointer;user-select:none}.lrm input{width:auto;margin:0}.lb:disabled{opacity:.6;cursor:default}
 #app{display:none;height:100vh;flex-direction:row}#app.on{display:flex}
 #sb{width:230px;min-width:230px;background:var(--sf);border-right:1px solid var(--bd);display:flex;flex-direction:column;overflow-y:auto}
 #sb-toggle{display:none;font-size:20px;cursor:pointer;padding:4px 8px;margin-right:4px;color:var(--tx2);flex-shrink:0}
@@ -730,19 +731,22 @@ body.nx-lock #ct{overflow:hidden}
 <body>
 <div id="loading"><div class="spinner"></div><div style="font-family:var(--ui);font-size:13px;color:var(--tx3)">載入中...</div></div>
 <div id="ls"><div class="lc">
-  <div class="ll"><div class="lm">指</div><div class="lt">指名度行銷<span>ProjectOS v4 · 線上版</span></div></div>
+  <div class="ll"><div class="lm">指</div><div class="lt">指名度行銷<span>ProjectOS v4 · 線上版 · <span class="appv">v53</span></span></div></div>
   <div style="font-family:var(--ui);font-size:20px;font-weight:700;margin-bottom:4px">歡迎回來</div>
   <div style="font-size:13px;color:var(--tx3);margin-bottom:24px">請輸入 Email 與密碼登入</div>
-  <div class="fr"><label class="fl">Email</label><input id="lu" type="email" placeholder="name@company.com"></div>
-  <div class="fr"><label class="fl">密碼</label><input id="lp" type="password" placeholder="輸入密碼" onkeydown="if(event.key==='Enter')doLogin()"></div>
-  <button class="lb" onclick="doLogin()">登入</button>
+  <form id="lf" autocomplete="on" onsubmit="return doLogin(event)" novalidate>
+  <div class="fr"><label class="fl" for="lu">Email</label><input id="lu" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="name@company.com"></div>
+  <div class="fr"><label class="fl" for="lp">密碼</label><input id="lp" name="password" type="password" autocomplete="current-password" placeholder="輸入密碼"></div>
+  <label class="lrm"><input type="checkbox" id="lrm" checked> 記住帳號</label>
+  <button class="lb" id="lbtn" type="submit">登入</button>
   <div class="le" id="le">帳號或密碼錯誤</div>
+  </form>
   <div style="margin-top:16px;font-size:12px;color:var(--tx3)">首次登入請聯繫系統管理員確認帳號已建立</div>
 </div></div>
 <div id="share-view"></div>
 <div id="app">
 <nav id="sb">
-  <div class="sbl"><div class="sbm">指</div><div style="font-family:var(--ui);font-weight:600;font-size:13px;line-height:1.2">指名度行銷<span style="display:block;font-weight:400;font-size:10px;color:var(--tx3)">ProjectOS v4 · 線上版</span></div></div>
+  <div class="sbl"><div class="sbm">指</div><div style="font-family:var(--ui);font-weight:600;font-size:13px;line-height:1.2">指名度行銷<span style="display:block;font-weight:400;font-size:10px;color:var(--tx3)">ProjectOS v4 · 線上版 · <span class="appv">v53</span></span></div></div>
   <div class="si on" id="si-db" onclick="nav('db',this)"><span>⬛</span>今日總覽</div><div class="sb-dept-hd sb-plan" onclick="toggleDept('plan')"><span>📋 企劃部</span><span id="plan-arr">▾</span></div>
   <div id="dept-plan">
     
@@ -1083,32 +1087,44 @@ let _realtimeSetup=false;
 function setupRealtime(){
   if(_realtimeSetup)return;
   _realtimeSetup=true;sb.channel('db-changes').on('postgres_changes',{event:'*',schema:'public',table:'projects'},async()=>{const {data}=await sb.from('projects').select('*');STATE.projects=data||[];if(document.getElementById('pg-pj').classList.contains('on'))rPJ();rSPJ();}).on('postgres_changes',{event:'*',schema:'public',table:'tasks'},async()=>{const {data}=await sb.from('tasks').select('*').order('due_date');STATE.tasks=data||[];if(document.getElementById('pg-tk').classList.contains('on'))rTK();{const on=id=>document.getElementById(id).classList.contains('on');if(on('pg-wl'))rWL();if(on('pg-kp'))rKP();if(on('pg-db'))rDB();}rSPJ();}).on('postgres_changes',{event:'*',schema:'public',table:'notifications'},async()=>{const {data}=await sb.from('notifications').select('*').order('created_at',{ascending:false}).limit(50);STATE.notifications=data||[];uNB();rNL();}).subscribe()}
-async function doLogin(){
-  const email=document.getElementById('lu').value.trim();
-  const pw=document.getElementById('lp').value;
-  const le=document.getElementById('le');
-  le.style.display='none';
-  le.textContent='登入中...';
-  le.style.color='var(--am)';
-  le.style.display='block';
-  try {
+// 記住帳號：只存 Email（不是機密）。密碼交給瀏覽器／手機的密碼管理員，不會存進本系統。
+function lgRestore(){
+  try{
+    const lu=document.getElementById('lu'),lp=document.getElementById('lp'),rm=document.getElementById('lrm');if(!lu)return;
+    rm.checked=localStorage.getItem('login_remember')!=='0';
+    if(!lu.value&&rm.checked)lu.value=localStorage.getItem('login_email')||'';
+    setTimeout(()=>{(lu.value?lp:lu).focus()},50);
+  }catch(e){}
+}
+function lgSave(email){
+  try{
+    const rm=document.getElementById('lrm');
+    if(rm&&rm.checked){localStorage.setItem('login_email',email);localStorage.setItem('login_remember','1')}
+    else{localStorage.removeItem('login_email');localStorage.setItem('login_remember','0')}
+  }catch(e){}
+}
+let _lgBusy=false;
+async function doLogin(ev){
+  if(ev&&ev.preventDefault)ev.preventDefault();
+  if(_lgBusy)return false;
+  const lu=document.getElementById('lu'),lp=document.getElementById('lp'),le=document.getElementById('le'),btn=document.getElementById('lbtn');
+  const email=lu.value.trim(),pw=lp.value;
+  const show=(m,c)=>{le.textContent=m;le.style.color=c;le.style.display='block'};
+  if(!email||!pw){show(!email?'請輸入 Email':'請輸入密碼','var(--rd)');(!email?lu:lp).focus();return false}
+  lgSave(email);
+  _lgBusy=true;if(btn)btn.disabled=true;show('登入中...','var(--am)');
+  try{
     const {data,error}=await sb.auth.signInWithPassword({email,password:pw});
     if(error){
-      le.textContent='錯誤：'+error.message;
-      le.style.color='var(--rd)';
-      return;
-    }
-    if(data?.session){
-      le.style.display='none';
-      await handleSignIn(data.session);
-    } else {
-      le.textContent='登入失敗，請再試一次';
-      le.style.color='var(--rd)';
-    }
-  } catch(e){
-    le.textContent='連線錯誤：'+e.message;
-    le.style.color='var(--rd)';
-  }
+      const bad=/invalid login credentials/i.test(error.message||'');
+      show(bad?'帳號或密碼錯誤，請重新輸入密碼':'錯誤：'+error.message,'var(--rd)');
+      lp.value='';lp.focus();
+    }else if(data?.session){
+      le.style.display='none';await handleSignIn(data.session);lp.value='';
+    }else{show('登入失敗，請再試一次','var(--rd)');lp.value='';lp.focus()}
+  }catch(e){show('連線錯誤：'+e.message,'var(--rd)');lp.focus()}
+  finally{_lgBusy=false;if(btn)btn.disabled=false}
+  return false;
 }
 async function doLogout(e){e.stopPropagation();await sb.auth.signOut()}
 let _signingIn=false;
@@ -1292,14 +1308,14 @@ async function initApp() {
     await handleSignIn(session);
   } else {
     document.getElementById('loading').style.display='none';
-    document.getElementById('ls').classList.add('on');
+    document.getElementById('ls').classList.add('on');lgRestore();
   }
 }
 sb.auth.onAuthStateChange(async(event,session)=>{
   if(SHARE_TOKEN)return;
   if((event==='SIGNED_IN'||event==='INITIAL_SESSION')&&session){
     await handleSignIn(session);
-  }else if(event==='SIGNED_OUT'){nxOnLogout();CU=null;document.getElementById('app').classList.remove('on');document.getElementById('ls').classList.add('on');document.getElementById('loading').style.display='none';}
+  }else if(event==='SIGNED_OUT'){nxOnLogout();CU=null;document.getElementById('app').classList.remove('on');document.getElementById('ls').classList.add('on');lgRestore();document.getElementById('loading').style.display='none';}
 });
 // 初始化
 initApp();
@@ -1307,7 +1323,7 @@ initApp();
 setTimeout(()=>{
   if(!SHARE_TOKEN&&document.getElementById('loading').style.display!=='none'){
     document.getElementById('loading').style.display='none';
-    document.getElementById('ls').classList.add('on');
+    document.getElementById('ls').classList.add('on');lgRestore();
   }
 },8000);
 function applyDeptState(){['plan','biz'].forEach(d=>{const c=document.getElementById('dept-'+d),a=document.getElementById(d+'-arr');if(!c||!a)return;if(c.dataset.perm&&!hasPerm(c.dataset.perm))return;c.style.display=deptOpen[d]?'block':'none';a.textContent=deptOpen[d]?'▾':'▸'})}
@@ -2634,6 +2650,8 @@ const NX_DEPTS=[
   menu:()=>nxGrp('業務部',[nxRow('target','潛在客戶名單',"NX_CUSTF='lead';nav('cust',null)"),nxRow('chat-circle-dots','洽談中客戶',"NX_CUSTF='talk';nav('cust',null)"),nxRow('handshake','合作客戶',"NX_CUSTF='contract';nav('cust',null)"),nxRow('chats-circle','客戶互動紀錄',"nav('clog',null)")])}
 ];
 const NX_PDEPT=(()=>{const m={};NX_DEPTS.forEach(d=>d.pages.forEach(p=>m[p]=d.id));return m})();
+const APP_VERSION='53';
+document.querySelectorAll('.appv').forEach(e=>e.textContent='v'+APP_VERSION);
 let NX_DEPT=(()=>{try{return localStorage.getItem('NX_DEPT')}catch(e){return null}})();
 const canBiz=()=>!!CU&&deptList().some(d=>d.id==='biz');
 const curDept=()=>{const L=deptList();if(!L.length)return 'plan';const s=NX_DEPT&&L.find(d=>d.id===NX_DEPT);if(s)return s.id;const m=L.find(d=>d.myDept.includes(CU.dept));return (m||L[0]).id};
@@ -4020,7 +4038,7 @@ function rMore(){
   host.innerHTML=`<div class="nxp"><div style="display:flex;align-items:center;gap:12px"><div class="nx-ib nx-av" style="width:52px;height:52px;font-size:20px">${esc((CU.name||'?').slice(0,1))}</div><div><div style="font-size:18px;font-weight:500">${esc(CU.name)}</div><div class="nx-sub">${esc(roleLb)} · 指名度行銷</div></div></div>`+
    nxGrp('個人',NX_PERS.filter(x=>x.id!=='inbox'&&x.show()).map(x=>nxRow(x.icon,x.label,(x.pre||'')+`nav('${x.id}',null)`)))+
    (nxDeptSeg()?`<div>${nxLbl('工作區（個人＋部門）')}${nxDeptSeg()}</div>`:'')+(d?d.menu():'')+
-   nxGrp('其他',[nxRow('megaphone','公告欄',"nav('an',null)"),hasPerm('members_manage')?nxRow('gear-six','帳號管理',"nav('ac',null)"):'',hasPerm('audit_view')?nxRow('list-bullets','操作紀錄',"nav('au',null)"):'',nxRow('sign-out','登出','doLogout(event)')])+`</div>`;
+   nxGrp('其他',[nxRow('megaphone','公告欄',"nav('an',null)"),hasPerm('members_manage')?nxRow('gear-six','帳號管理',"nav('ac',null)"):'',hasPerm('audit_view')?nxRow('list-bullets','操作紀錄',"nav('au',null)"):'',nxRow('sign-out','登出','doLogout(event)')])+`<div class="nx-cl" style="text-align:center">ProjectOS v${APP_VERSION}</div></div>`;
 }
 // ── 工作區切換鈕上的待處理數量（讓行政部的待辦一眼看得到）──
 deptOf('adm').badge=()=>(EXP.ok&&expAny())?expTodo().length:0;
